@@ -60,9 +60,9 @@ Aplikacja do zarządzania wizytami w gabinecie lekarskim
 `Git push` - wysyła zmiany<br/>
 
 - Jesli nie poszło, prawdopodobnie ktoś dodał zmiany od momentu twojego pobrania. Trzeba: (to jeszcze uszczegółowimy, narazie nie wiemy)<br/>
-`Git pull`
+`Git pull`<br/>
 `Git push`
 
 ## 9. Rozwiązania różnych problemów
-- kiedy przy `git add` wyskakuje błąd "permission denied"- zamknij Visuala i spróbuj jeszcze raz
-- z wszystkimi innymi problemami pisać natychmiast na grupę. Byle nie stać w miejscu
+- Kiedy przy `git add` wyskakuje błąd "permission denied"- zamknij Visuala i spróbuj jeszcze raz.
+- Z wszystkimi innymi problemami pisać natychmiast na grupę albo do kogoś. Nawet jeśli są banalne i głupie- ktoś może już przez to przebrnął i będzie szybciej niż szukanie po Stackach Overflowach. Byle nie stać w miejscu.
