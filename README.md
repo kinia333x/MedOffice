@@ -21,7 +21,7 @@ Aplikacja do zarządzania wizytami w gabinecie lekarskim
 - Każdy commituje na swojego brancha.
 - Reviewer sprawdza kod, czy trzyma się konwencji, czy jest generalnie poprawny.
 - Następnie pobiera tego brancha i sprawdza czy aplikacja działa.
-- Jeśli ok, reviewer łączy brancha użytkownika z branchem Sprint.
+- Jeśli ok, reviewer łączy brancha użytkownika z branchem Sprint. (Kinga napisze jak to zrobić)
 
 **Kto jest reviewerem dla kogo:**<br/>
 - Kinga<->Wojtek
