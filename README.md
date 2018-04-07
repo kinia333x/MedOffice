@@ -44,8 +44,10 @@ Aplikacja do zarządzania wizytami w gabinecie lekarskim
     - [tworzenie użytkowników](https://docs.microsoft.com/en-us/aspnet/mvc/overview/security/create-an-aspnet-mvc-5-web-app-with-email-confirmation-and-password-reset)
     - [tworzenie roli użytkowników](https://code.msdn.microsoft.com/ASPNET-MVC-5-Security-And-44cbdb97)
 
+## 7. Podglądanie bazy danych w Visual Studio
+`View` -> `Server Explorer` -> `Data Connection` -> `DefaultConnection` -> `Tables` <br/>
 
-## 7. Git z konsoli (można to samo robic w GitHub Desktop):
+## 8. Git z konsoli (można to samo robic w GitHub Desktop):
 
 - Pobieranie pierwszy raz:<br/>
 `Git clone adres_url_repozytorium`
@@ -61,6 +63,6 @@ Aplikacja do zarządzania wizytami w gabinecie lekarskim
 `Git pull`
 `Git push`
 
-## 8. Rozwiązania różnych problemów
+## 9. Rozwiązania różnych problemów
 - kiedy przy `git add` wyskakuje błąd "permission denied"- zamknij Visuala i spróbuj jeszcze raz
 - z wszystkimi innymi problemami pisać natychmiast na grupę. Byle nie stać w miejscu
