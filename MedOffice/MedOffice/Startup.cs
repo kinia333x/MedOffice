@@ -36,7 +36,7 @@ namespace MedOffice
                 user.UserName = "admin";
                 user.Email = "admin@hotmail.com";
 
-                string userPWD = "Admin123!";
+                string userPWD = "!Admin123";
 
                 var chkUser = UserManager.Create(user, userPWD);
 

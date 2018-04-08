@@ -139,10 +139,21 @@ namespace MedOffice.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrator, Manager")]
         public ActionResult Register()
         {
-            ViewBag.Name = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
+            if (User.IsInRole("Administrator"))
+            {
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
+                                            .ToList(), "Name", "Name");
+            }
+            else if (User.IsInRole("Manager"))
+            {
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
+                               .ToList(), "Name", "Name");
+            }
+
+            ViewBag.Spec = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
                                             .ToList(), "Name", "Name");
 
             return View();
@@ -151,7 +162,7 @@ namespace MedOffice.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrator, Manager")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
@@ -161,7 +172,8 @@ namespace MedOffice.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    // Wyłączenie automatycznego logowania po rejestracji:
+                    // await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -169,12 +181,28 @@ namespace MedOffice.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
+                    // Dodanie roli dla nowego użytkownika:
+                    
                     await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
 
+                    // Należy też dodać użytkownikowi specjalizację:
+       
                     return RedirectToAction("Index", "Home");
                 }
-                ViewBag.Name = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
-                          .ToList(), "Name", "Name");
+
+                if (User.IsInRole("Administrator"))
+                {
+                    ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
+                                                .ToList(), "Name", "Name");
+                }
+                else if (User.IsInRole("Manager"))
+                {
+                    ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
+                                   .ToList(), "Name", "Name");
+                }
+
+                ViewBag.Spec = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
+                                .ToList(), "Name", "Name");
 
                 AddErrors(result);
             }
