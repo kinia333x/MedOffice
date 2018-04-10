@@ -23,17 +23,18 @@ https://docs.google.com/document/d/1OrL3krDmn4ZKPcQ2hZ8aEffAenilBgcOQ6aSVMeS94w/
 
 ## 3. Zasady code review:
 - Każdy commituje swoje zmiany na swojego imiennego brancha.
-- Nikt nie wprowadza zmian bezpośrednio do mastera/sprintu/cudzych branchy.
+- Nikt nie wprowadza zmian bezpośrednio do mastera/PRODUCTU/cudzych branchy.
 - Gdy ktoś uzna że jego kod działa, jest poprawnywny i nadaje się do wcielenia do projektu:<br>
-  należy otworzyć pull request ze swojego brancha immiennego -> do brancha sprint.
+  należy otworzyć pull request ze swojego brancha <b>imiennego</b> -> do brancha <b>master</b>.
 - Wtedy reviewer pobiera brancha do siebie i sprawdza kod:<br>
   czy się kompiluje, czy działa i czy trzyma się konwencji.
-- Jeżeli reviewer stwierdzi że kod jest w porządku robi merge: z brancha imiennego ->  do sprintu.<br>
+- Jeżeli reviewer stwierdzi że kod jest w porządku robi merge: z brancha <b>imiennego</b> ->  do <b>mastera</b>.<br>
   W przeciwnym wypadku robi close pull request, a autor poprawia kod.
 - Jeżeli przy próbie mergowania branchy pojawi się konflikt niech rozwiąże go:<br>
   1.autor kodu, 2.reviewer, 3.ktokolwiek z grupy gdy pojawiają się jakiekolwiek wątpliwości.
 - Po rozwiązaniu konfliktu należy sprawdzić czy aplikacja na pewno się kompiluje i czy działa jak powinna.
-
+<br><br>
+Co środę będziemy na zajęciach mergować mastera z branchem PRODUCT, gdzie ostatecznie będzie gotowy system. 
 
 **Kto jest reviewerem dla kogo:**<br/>
 - Kinga<->Wojtek
