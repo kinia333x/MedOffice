@@ -18,8 +18,11 @@ namespace MedOffice.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
+        ApplicationDbContext context;
+    
         public AccountController()
         {
+            context = new ApplicationDbContext();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -75,7 +78,7 @@ namespace MedOffice.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -136,35 +139,71 @@ namespace MedOffice.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrator, Manager")]
         public ActionResult Register()
         {
+            if (User.IsInRole("Administrator"))
+            {
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
+                                            .ToList(), "Name", "Name");
+            }
+            else if (User.IsInRole("Manager"))
+            {
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
+                               .ToList(), "Name", "Name");
+            }
+
+            ViewBag.Spec = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
+                                            .ToList(), "Name", "Name");
+
             return View();
         }
 
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrator, Manager")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    // Wyłączenie automatycznego logowania po rejestracji:
+                    // await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
+                    // Dodanie roli dla nowego użytkownika:
+                    
+                    await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
+
+                    // Należy też dodać użytkownikowi specjalizację:
+       
                     return RedirectToAction("Index", "Home");
                 }
+
+                if (User.IsInRole("Administrator"))
+                {
+                    ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
+                                                .ToList(), "Name", "Name");
+                }
+                else if (User.IsInRole("Manager"))
+                {
+                    ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
+                                   .ToList(), "Name", "Name");
+                }
+
+                ViewBag.Spec = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
+                                .ToList(), "Name", "Name");
+
                 AddErrors(result);
             }
 
