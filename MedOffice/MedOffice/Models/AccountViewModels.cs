@@ -110,7 +110,7 @@ namespace MedOffice.Models
 
         [Required(ErrorMessage = "Insert specialization of the employee.")]
         [Display(Name = "Specialization")]
-        public string Specializations { get; set; }
+        public string Specialization { get; set; }
     }
 
     public class ResetPasswordViewModel
