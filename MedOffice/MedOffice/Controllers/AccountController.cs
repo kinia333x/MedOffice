@@ -83,7 +83,7 @@ namespace MedOffice.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                        return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -140,7 +140,7 @@ namespace MedOffice.Controllers
 
         //
         // GET: /Account/Register
-        [Authorize(Roles = "Administrator, Manager")]
+        [Authorize(Roles = "Administrator, Kierownik")]
         public ActionResult Register()
         {
             if (User.IsInRole("Administrator"))
@@ -156,7 +156,7 @@ namespace MedOffice.Controllers
 
             List<SelectListItem> Specializations = new List<SelectListItem>()
             {
-                new SelectListItem { Text = "- Proszę wybrać jedno -" }, 
+                new SelectListItem { Text = "- Wybierz jedno -" }, 
                 new SelectListItem { Text = "Alergologia" },
                 new SelectListItem { Text = "Anestezjologia i intensywna terapia" },
                 new SelectListItem { Text = "Angiologia" },
@@ -251,7 +251,7 @@ namespace MedOffice.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [Authorize(Roles = "Administrator, Manager")]
+        [Authorize(Roles = "Administrator, Kierownik")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
@@ -273,13 +273,22 @@ namespace MedOffice.Controllers
                     // Dodanie roli dla nowego użytkownika:
                     await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
                     // Dodanie specjalizacji: 
-                    if (model.Specialization != "- Proszę wybrać jedno -")
+                    if (model.Specialization != "- Wybierz jedno -")
                     {
                         user.Specialization = model.Specialization;
                         await this.UserManager.UpdateAsync(user);
                     }
 
-                    return RedirectToAction("Index", "Home");
+                    user.Name = model.Name;
+                    user.Surname = model.Surname;
+                    user.Seniority = model.Seniority;
+                    user.Experience = model.Experience;
+                    await this.UserManager.UpdateAsync(user);
+
+                    await this.UserManager.AddClaimAsync(user.Id, new Claim("FirstName", user.Name));
+                    await this.UserManager.AddClaimAsync(user.Id, new Claim("LastName", user.Surname));
+
+                    return RedirectToAction("ConfirmRegistration", "Account");
                 }
 
                 if (User.IsInRole("Administrator"))
@@ -295,7 +304,7 @@ namespace MedOffice.Controllers
 
                 List<SelectListItem> Specializations = new List<SelectListItem>()
                 {
-                    new SelectListItem { Text = "- Proszę wybrać jedno -" },
+                    new SelectListItem { Text = "- Wybierz jedno -" },
                     new SelectListItem { Text = "Alergologia" },
                     new SelectListItem { Text = "Alergologia" },
                     new SelectListItem { Text = "Anestezjologia i intensywna terapia" },
@@ -403,6 +412,13 @@ namespace MedOffice.Controllers
             }
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
+        }
+
+        // GET: /Account/ConfirmRegistration
+        [Authorize(Roles = "Administrator, Kierownik")]
+        public ActionResult ConfirmRegistration()
+        {
+            return View();
         }
 
         //

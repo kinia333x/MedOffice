@@ -199,6 +199,10 @@
     <Compile Include="Migrations\201804061834571_InitialCreate.Designer.cs">
       <DependentUpon>201804061834571_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804140935596_Rejestracja.cs" />
+    <Compile Include="Migrations\201804140935596_Rejestracja.Designer.cs">
+      <DependentUpon>201804140935596_Rejestracja.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -263,9 +267,11 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Account\ConfirmRegistration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\ClaimsPrincipalExtension\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -283,6 +289,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201804061834571_InitialCreate.resx">
       <DependentUpon>201804061834571_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804140935596_Rejestracja.resx">
+      <DependentUpon>201804140935596_Rejestracja.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -9,7 +9,7 @@ namespace MedOffice.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             ContextKey = "MedOffice.Models.ApplicationDbContext";
         }
 
