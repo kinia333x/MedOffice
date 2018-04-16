@@ -32,7 +32,7 @@ namespace MedOffice
                 roleManager.Create(role);
 
                 // tworzymy usera                 
-                var user = new ApplicationUser();       /* Trzeba uzgodnić login i hasło dla admina */
+                var user = new ApplicationUser();       
                 user.UserName = "admin";
                 user.Email = "admin@hotmail.com";
 
@@ -48,31 +48,31 @@ namespace MedOffice
             }
 
             // Pozostałe role:
-            if (!roleManager.RoleExists("Manager"))
+            if (!roleManager.RoleExists("Kierownik"))
             {
                 var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Manager";
+                role.Name = "Kierownik";
                 roleManager.Create(role);
             }
 
-            if (!roleManager.RoleExists("Doctor"))
+            if (!roleManager.RoleExists("Lekarz"))
             {
                 var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Doctor";
+                role.Name = "Lekarz";
                 roleManager.Create(role);
             }
 
-            if (!roleManager.RoleExists("Accountant"))
+            if (!roleManager.RoleExists("Księgowa"))
             {
                 var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Accountant";
+                role.Name = "Księgowa";
                 roleManager.Create(role);
             }
 
-            if (!roleManager.RoleExists("Registrant"))
+            if (!roleManager.RoleExists("Rejestrujący"))
             {
                 var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Registrant";
+                role.Name = "Rejestrujący";
                 roleManager.Create(role);
             }
         }
