@@ -8,7 +8,7 @@ https://docs.google.com/document/d/1y662gQPYb_3-R6Bz5RXJw_ghvIDmWGRx8x4K-bRzWdg/
 https://docs.google.com/document/d/1uNUYRBC8jlA_VWNYqrqetDmsL_LsP-AVHQMjIRt9M7M/edit
 - Produkt Backlog<br>
 https://docs.google.com/document/d/1_Lq5d2hyQl01RMG5Yn_n8R8bdRPZnOx4fb5GYlJ5xw0/edit
-- Dokument analizy wymagań
+- Dokument analizy wymagań<br>
 https://docs.google.com/document/d/1_jgzJ1696wAgdxjbADbQU4wZOmXTf-qWF2P2xqXf6tY/edit
 - Grupa na facebooku - SI - (prywatna)
 - Trello (prywatne)
