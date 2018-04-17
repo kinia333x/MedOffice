@@ -58,7 +58,10 @@ html {
 }
 
 body {
-  margin: 0;
+    margin: 0;
+    background-image: url('~/Content/Images/background.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 a:focus {
