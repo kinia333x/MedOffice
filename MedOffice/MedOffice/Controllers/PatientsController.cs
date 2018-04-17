@@ -10,7 +10,7 @@ using MedOffice.Models;
 
 namespace MedOffice.Controllers
 {
-    [Authorize(Roles = "Administrator, Manager, Registrant")]
+    [Authorize(Roles = "Administrator, Kierownik, Rejestrujący")]
     public class PatientsController : Controller
     {
         private PatientDBContext db = new PatientDBContext();

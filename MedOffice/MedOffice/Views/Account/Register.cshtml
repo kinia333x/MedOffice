@@ -2,101 +2,106 @@
 @{
     /**/
 
-    ViewBag.Title = "Register new employee";
+    ViewBag.Title = "Zarejestruj pracownika";
 }
-
-<h2>@ViewBag.Title.</h2>
+<div class="col-md-offset-0-5 col-md-4regt">
+    <h2>@ViewBag.Title.</h2>
+</div>
 
 @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    <h4>Create a new employee account.</h4>
+    <br style="clear: both;">
+    <div class="col-md-offset-0-5 col-md-4regst">
+        <h4>Stwórz nowe konto dla pracownika.</h4>
+    </div>
+    <br style="clear: both;">
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
-        @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
+        @Html.LabelFor(m => m.Name, new { @class = "col-md-3 control-label" })
+        <div class="col-md-9">
             @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Surname, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
+        @Html.LabelFor(m => m.Surname, new { @class = "col-md-3 control-label" })
+        <div class="col-md-9">
             @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.YearsOfExperience, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.YearsOfExperience, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.YearsOfWork, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.YearsOfWork, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
+        @Html.LabelFor(m => m.UserName, new { @class = "col-md-3 control-label" })
+        <div class="col-md-9">
             @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-3 control-label" })
+        <div class="col-md-9">
             @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @Value = "Email@email.com" })
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
+        @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
+        <div class="col-md-9">
             @Html.PasswordFor(m => m.Password, new { @class = "form-control", @Value = "Passwd" })
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-3 control-label" })
+        <div class="col-md-9">
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
-        @Html.Label("Profession", new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
+        @Html.LabelFor(m => m.Experience, new { @class = "col-md-3 control-label" })
+        <div class="col-md-9">
+            @Html.EditorFor(m => m.Experience, "{0:dd/MM/yyyy}", new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Seniority, new { @class = "col-md-3 control-label" })
+        <div class="col-md-9">
+            @Html.EditorFor(m => m.Seniority, "{0:dd/MM/yyyy}", new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Zawód", new { @class = "col-md-3 control-label" })
+        <div class="col-md-9">
             @*@Html.DropDownList("UserRoles")*@
             @Html.DropDownList("UserRoles", (SelectList)ViewBag.UserRoles)
         </div>
     </div>
     <div class="form-group">
-        @Html.Label("Specialization", new { style = "display: none;", id = "Specialization", @class = "col-md-2 control-label" })
-        <div class="col-md-10">
+        @Html.Label("Specialization", new { style = "display: none;", id = "Specialization", @class = "col-md-3 control-label" })
+        <div class="col-md-9">
             @*@Html.DropDownList("Specializations")*@
-            @Html.DropDownList("Specializations", (SelectList)ViewBag.Spec, new { style = "display: none;", onchange = "ShowHideSpec()" })
+            @Html.DropDownListFor(m => m.Specialization, (IEnumerable<SelectListItem>)ViewBag.Spec, new { style = "display: none;", id = "Specializations", onchange = "ShowHideSpec()" })
         </div>
     </div>
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
+        <div class="col-md-offset-3 col-md-9">
             <input type="submit" class="btn btn-default" value="Register" />
         </div>
     </div>
 }
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
 
-    <script type="text/javascript">
-        $(function ShowHideSpec() {
-            $('#UserRoles').on('change', function () {
-                if ($(this).val() == "Doctor") {
-                    $('#Specialization').show();
-                    $('#Specializations').show();
-                }
-                else {
-                    $('#Specializations').hide();
-                    $('#Specialization').hide();
-                }
+        <script type="text/javascript">
+            $(function ShowHideSpec() {
+                $('#UserRoles').on('change', function () {
+                    if ($(this).val() == "Lekarz") {
+                        $('#Specialization').show();
+                        $('#Specializations').show();
+                    }
+                    else {
+                        $('#Specializations').hide();
+                        $('#Specialization').hide();
+                    }
+                });
             });
-        });
-    </script>
-}
+        </script>
+    }

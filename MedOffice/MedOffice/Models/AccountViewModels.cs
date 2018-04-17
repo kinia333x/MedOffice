@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace MedOffice.Models
 {
@@ -64,53 +65,56 @@ namespace MedOffice.Models
     
     public class RegisterViewModel
     {
-        [Required(ErrorMessage = "Insert name of the employee.")]
-        [Display(Name = "Name")]
+        [Required(ErrorMessage = "Wprowadź imię pracownika.")]
+        [Display(Name = "Imię")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Insert surname of the employee.")]
-        [Display(Name = "Surname")]
+        [Required(ErrorMessage = "Wprowadź nazwisko pracownika.")]
+        [Display(Name = "Nazwisko")]
         public string Surname { get; set; }
 
-        [Required(ErrorMessage = "Insert how many years of experience the employee has.")]
-        [RegularExpression("([0-9]*)", ErrorMessage = "The Years of Experience field may only contain digits.")]
-        [Display(Name = "Years of Experience")]
-        public string YearsOfExperience { get; set; }
+        [Required(ErrorMessage = "Wprowadź datę pozyskania odpowiednich kwalifikacji do wykonywania zawodu przez pracownika.")]
+        //[RegularExpression("([0-9]*)", ErrorMessage = "The Years of Experience field may only contain digits.")]
+        [Display(Name = "Data uzyskania kwalifikacji")]
+        [DataType(DataType.Date, ErrorMessage = "siema")]
+        public DateTime Experience { get; set; }
 
-        [Required(ErrorMessage = "Insert how many years the employee works for the firm.")]
-        [RegularExpression("([0-9]*)", ErrorMessage = "The Current job seniority field may only contain digits.")]
-        [Display(Name = "Current job seniority")] // Pole 'Ile lat w firmie' przetłumaczyłem na mniej więcej 'Staż pracy w obecnym miejscu zatrudnienia'.
-        public string YearsOfWork { get; set; }
+        [Required(ErrorMessage = "Wprowadź datę rozpoczęcia przez pracownika pracy w obecnym miejscu zatrudnienia.")]
+        //[RegularExpression("([0-9]*)", ErrorMessage = "The Current job seniority field may only contain digits.")]
+        [Display(Name = "Data zatrudnienia")] // Pole 'Ile lat w firmie' przetłumaczyłem na mniej więcej 'Staż pracy w obecnym miejscu zatrudnienia'.
+        [DataType(DataType.Date, ErrorMessage = "DATA")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
+        public DateTime Seniority { get; set; }
 
-        [Required(ErrorMessage = "Enter email address of the employee.")]
-        [EmailAddress(ErrorMessage = "Enter proper email address.")]
+        [Required(ErrorMessage = "Wprowadź adres email pracownika.")]
+        [EmailAddress(ErrorMessage = "Wprowadź poprawny adres email pracownika.")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Enter the ID of the employee.")]
-        [StringLength(11, ErrorMessage = "The {0} field must contain {2} digits.", MinimumLength = 11)] // Możliwe, że można zrobić to w bardziej elegancki sposób.
-        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "The ID field may only contain digits.")]
-        [Display(Name = "ID")] // Login będący peselem lub ID (w zależności od języka, który wybierzemy).
+        [Required(ErrorMessage = "Wprowadź pesel pracownika.")]
+        [StringLength(11, ErrorMessage = "Pole Pesel musi zawierać dokładnie {2} cyfr.", MinimumLength = 11)] // Możliwe, że można zrobić to w bardziej elegancki sposób.
+        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Pole Pesel może zawierać wyłącznie cyfry.")]
+        [Display(Name = "Pesel")] // Login będący peselem lub ID (w zależności od języka, który wybierzemy).
         public string UserName { get; set; }
 
-        [Required(ErrorMessage = "Enter password.")]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessage = "Wprowadź hasło.")]
+        [StringLength(100, ErrorMessage = "Hasło musi zawierać przynajmniej {2} znaków.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Hasło")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Potwierdź hasło")]
+        [Compare("Password", ErrorMessage = "Wprowadzone hasła różnią się od siebie. ")]
         public string ConfirmPassword { get; set; }
         
-        [Required(ErrorMessage = "Insert profession of the employee.")]
-        [Display(Name = "Profession")]
+        [Required(ErrorMessage = "Wprowadź zawód pracownika.")]
+        [Display(Name = "Zawód")]
         public string UserRoles { get; set; }
 
-        [Required(ErrorMessage = "Insert specialization of the employee.")]
-        [Display(Name = "Specialization")]
-        public string Specializations { get; set; }
+        [Required(ErrorMessage = "Wprowadź specjalizację pracownika.")]
+        [Display(Name = "Specjalizacja")]
+        public string Specialization { get; set; }
     }
 
     public class ResetPasswordViewModel
