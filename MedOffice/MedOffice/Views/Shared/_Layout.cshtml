@@ -8,7 +8,8 @@
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
-<body background="https://cdn.pixabay.com/photo/2018/03/29/09/24/document-3271743_1280.jpg">
+<body style="background-image: url('/Content/Images/background.jpg'); 
+    background-size: cover;">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -29,7 +30,7 @@
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content" style="background-color:rgb(255, 255, 255, 0.5);">
         @RenderBody()
         <hr />
         <footer>
