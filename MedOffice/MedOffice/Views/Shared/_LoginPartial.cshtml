@@ -24,6 +24,13 @@
             <li>@Html.ActionLink("Zarejestruj pracownika", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
         </ul>
     }
+
+    if (User.IsInRole("Administrator") || User.IsInRole("Kierownik") || User.IsInRole("Rejestrujący"))
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li>@Html.ActionLink("Wyszukaj pracownika", "WorkerSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
+        </ul>
+    }
 }
 else
 {
