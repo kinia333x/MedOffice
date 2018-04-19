@@ -12,7 +12,7 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink("Witaj, " + User.Identity.Name + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                @Html.ActionLink("Witaj, " + user.Name + " " + user.Surname + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
             </li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Wyloguj się</a></li>
         </ul>
@@ -21,7 +21,45 @@
     if (User.IsInRole("Administrator"))
     {
         <ul class="nav navbar-nav navbar-right">
-            <li>@Html.ActionLink("Zarejestruj pracownika", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+            <li>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                    Pracownicy
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Wyszukaj", "WorkerSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
+                    <li>@Html.ActionLink("Zarejestruj", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+                </ul>
+            </li>
+        </ul>
+    }
+    if (User.IsInRole("Kierownik") || User.IsInRole("Rejestrujący"))
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                    Pracownicy
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                   <li>@Html.ActionLink("Wyszukaj", "WorkerSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
+                </ul>
+            </li>
+        </ul>
+    }
+    if (User.IsInRole("Administrator") || User.IsInRole("Kierownik") || User.IsInRole("Rejestrujący"))
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                    Pacjenci
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Wyświetl", "Index", "Patients", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
+                    <li>@Html.ActionLink("Zarejestruj", "Create", "Patients", routeValues: null, htmlAttributes: new { id = "patientCreateLink" })</li>
+                </ul>
+            </li>
         </ul>
     }
 }

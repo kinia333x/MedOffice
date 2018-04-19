@@ -192,6 +192,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PatientsController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -203,16 +205,31 @@
     <Compile Include="Migrations\201804140935596_Rejestracja.Designer.cs">
       <DependentUpon>201804140935596_Rejestracja.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804171655392_NextMigration.cs" />
+    <Compile Include="Migrations\201804171655392_NextMigration.Designer.cs">
+      <DependentUpon>201804171655392_NextMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\PatientDBContext\201804161815080_InitialCreate.cs" />
+    <Compile Include="Migrations\PatientDBContext\201804161815080_InitialCreate.Designer.cs">
+      <DependentUpon>201804161815080_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\PatientDBContext\201804172031458_Pacjenci.cs" />
+    <Compile Include="Migrations\PatientDBContext\201804172031458_Pacjenci.Designer.cs">
+      <DependentUpon>201804172031458_Pacjenci.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\PatientDBContext\PatientConf.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Patient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\background.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -233,7 +250,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -267,7 +286,13 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Patients\Create.cshtml" />
+    <Content Include="Views\Patients\Delete.cshtml" />
+    <Content Include="Views\Patients\Details.cshtml" />
+    <Content Include="Views\Patients\Edit.cshtml" />
+    <Content Include="Views\Patients\Index.cshtml" />
     <Content Include="Views\Account\ConfirmRegistration.cshtml" />
+    <Content Include="Views\Search\WorkerSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -292,6 +317,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804140935596_Rejestracja.resx">
       <DependentUpon>201804140935596_Rejestracja.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804171655392_NextMigration.resx">
+      <DependentUpon>201804171655392_NextMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\PatientDBContext\201804161815080_InitialCreate.resx">
+      <DependentUpon>201804161815080_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\PatientDBContext\201804172031458_Pacjenci.resx">
+      <DependentUpon>201804172031458_Pacjenci.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
