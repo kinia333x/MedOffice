@@ -611,7 +611,7 @@ dd {
 @media (min-width: 768px) {
   .dl-horizontal dt {
     float: left;
-    width: 160px;
+    width: 120px;
     overflow: hidden;
     clear: left;
     text-align: right;
@@ -866,27 +866,40 @@ pre code {
     width: 33.33333333333333%;
     min-height: 1px;
     height: 55px;
-    padding-right: 5px;
-    padding-left: 5px;
     position: relative;
 }
+
+.col-md-4tittlewst {
+    float: left;
+    width: 33.33333333333333%;
+    min-height: 1px;
+    height: 45px;
+    position: relative;
+}
+
 .col-md-4regst {
     float: left;
     width: 33.33333333333333%;
     min-height: 1px;
     height: 25px;
-    padding-right: 5px;
-    padding-left: 5px;
     position: relative;
 }
+
+.col-md-4regpt {
+    float: left;
+    width: 33.33333333333333%;
+    min-height: 1px;
+    height: 25px;
+    padding-top: 4px;
+    position: relative;
+}
+
 .col-md-8regcon {
     float: left;
     width: 66.66666666666666%;
     min-height: 1px;
     height: 25px;
     padding-top: 8px;
-    padding-right: 5px;
-    padding-left: 5px;
     position: relative;
 }
 .col-xs-1,
@@ -1236,6 +1249,10 @@ pre code {
   .col-md-offset-0-5 {
     margin-left: 4.111111111111112%;
   }
+
+.col-md-offset-0-7 {
+    margin-left: 6.221111111111112%;
+}
   .col-md-offset-1 {
     margin-left: 8.333333333333332%;
   }
@@ -5441,11 +5458,14 @@ a.list-group-item:focus {
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 }
+.kfooter {
+    height: 28px;
+}
 
 .panel-group .panel {
-  margin-bottom: 0;
-  overflow: hidden;
-  border-radius: 4px;
+    margin-bottom: 0;
+    overflow: hidden;
+    border-radius: 4px;
 }
 
 .panel-group .panel + .panel {

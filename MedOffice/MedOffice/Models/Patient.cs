@@ -13,26 +13,29 @@ namespace MedOffice.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Imię jest wymagane.")]
+        [Required(ErrorMessage = "Pole Imię jest wymagane.")]
+        [RegularExpression(@"^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+$", ErrorMessage = "Pole Imię może zawierać wyłącznie litery. Dopuszczalne są polskie znaki.")]
         [Display(Name = "Imię:")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Nazwisko jest wymagane.")]
+        [Required(ErrorMessage = "Pole Nazwisko jest wymagane.")]
+        [RegularExpression(@"^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+(?:[\s\-][A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+)?$", ErrorMessage = "Pole Nazwisko może zawierać wyłącznie litery. Dopuszczalne są nazwiska dwuczłonowe i zawierające polskie znaki.")]
         [Display(Name = "Nazwisko:")]
         public string Surname { get; set; }
 
-        [Required(ErrorMessage = "Wiek jest wymagany.")]
+        [Required(ErrorMessage = "Pole Pesel jest wymagane.")]
         [Display(Name = "Pesel:")]
         [RegularExpression("([0-9]{11})", ErrorMessage = "Pole Pesel musi zawierać 11 cyfr.")]
         public string Age { get; set; }
 
-        [Required(ErrorMessage = "Pesel jest wymagany.")]
+        [Required(ErrorMessage = "Pole Wiek jest wymagane.")]
         [Display(Name = "Wiek:")]
-        [RegularExpression("([0-9]*)", ErrorMessage = "Pole Wiek może zawierać wyłącznie cyfry.")]
+        [RegularExpression("([0-9]+)", ErrorMessage = "Pole Wiek może zawierać wyłącznie cyfry.")]
         public string Pesel { get; set; }
 
-        [Required(ErrorMessage = "Adres jest wymagany.")]
+        [Required(ErrorMessage = "Pole Adres jest wymagane.")]
         [Display(Name = "Adres:")]
+        [RegularExpression(@"^[0-9]{2}[\-][0-9]{3}[\s][A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+\,[\s][A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+([\s\-][A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+){0,}\s[0-9]+(?:\/[0-9]*)?$", ErrorMessage = "Pole Adres musi mieć strukturę: 00-000 Miasto, Ulica 00[/00]. Dopuszczalne są polskie znaki.")]
         public string Address { get; set; }
     }
 
