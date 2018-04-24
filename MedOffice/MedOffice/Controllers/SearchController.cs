@@ -36,7 +36,7 @@ namespace MedOffice.Controllers
                                               || x.Name.Contains(searching)
                                               || x.Surname.Contains(searching)
                                               || x.Specialization.Contains(searching)
-                                              || searching == null);
+                                              || searching == null).ToList().OrderBy(s => s.Surname);
             switch (sortOpt) // to gówno nie działa
             {
                 case 1: userList.ToList().OrderBy(s => s.Name); break;
@@ -55,11 +55,10 @@ namespace MedOffice.Controllers
         {
             PatientDBContext patientContext = new PatientDBContext();
             // kryteria wyszukiwania
-            List<Patient> patientList = patientContext.Patients.Where(x => x.Pesel.Contains(searching)
+            var patientList = patientContext.Patients.Where(x => x.Pesel.Contains(searching)
                                             || x.Name.Contains(searching)
                                             || x.Surname.Contains(searching)
-                                            || searching == null).ToList();
-            patientList.OrderBy(s => s.Surname);
+                                            || searching == null).ToList().OrderBy(s => s.Surname);
             return View(patientList);
         }
     }
