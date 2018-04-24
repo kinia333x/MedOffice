@@ -1,15 +1,20 @@
 ﻿@model IEnumerable<MedOffice.Models.Patient>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Spis pacjentów";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<div class="col-md-offset-0-5 col-md-4regt">
+    <h2>@ViewBag.Title.</h2>
+</div>
+<br style="clear: both;">
+<div class="col-md-offset-0-5 col-md-4regpt">
+    <p>
+        @Html.ActionLink("Zarejestruj nowego pacjenta", "Create")
+    </p>
+</div>
+<br style="clear: both;"><br />
 <table class="table">
     <tr>
         <th>
@@ -48,11 +53,10 @@
             @Html.DisplayFor(modelItem => item.Address)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            @Html.ActionLink("Edytuj", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Szczegóły", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Usuń", "Delete", new { id = item.Id })
         </td>
     </tr>
 }
-
 </table>
