@@ -42,7 +42,7 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                   <li>@Html.ActionLink("Wyszukaj", "WorkerSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
+                    <li>@Html.ActionLink("Wyszukaj", "WorkerSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
                 </ul>
             </li>
         </ul>
@@ -62,6 +62,40 @@
             </li>
         </ul>
     }
+    ////////////////////WIZYTY
+
+
+    if (User.IsInRole("Lekarz"))
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                    Wizyty
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Wyświetl wszystkie", "Show", "Appointments", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
+                </ul>
+            </li>
+        </ul>
+    }
+
+    if (User.IsInRole("Administrator") || User.IsInRole("Rejestrujący"))
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                    Wizyty
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Wyświetl wszystkie", "Index", "Appointments", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
+                    <li>@Html.ActionLink("Utwórz wizytę", "Create", "Appointments", routeValues: null, htmlAttributes: new { id = "appointmentCreateLink" })</li>
+                </ul>
+            </li>
+        </ul>
+    }
+    ////////////////////KONIEC WIZYT
 }
 else
 {
