@@ -47,7 +47,7 @@ namespace MedOffice.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Surname,Age,Pesel,Address")] Patient patient)
+        public ActionResult Create([Bind(Include = "Id,Name,Surname,Pesel,BirthDate,Address")] Patient patient)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +79,7 @@ namespace MedOffice.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Surname,Age,Pesel,Address")] Patient patient)
+        public ActionResult Edit([Bind(Include = "Id,Name,Surname,Pesel,BirthDate,Address")] Patient patient)
         {
             if (ModelState.IsValid)
             {
