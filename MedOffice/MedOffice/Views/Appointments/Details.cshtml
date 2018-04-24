@@ -1,0 +1,115 @@
+﻿@model MedOffice.Models.Appointment
+
+@{
+    ViewBag.Title = "Szczegóły wizyty";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Szczegóły wizyty</h2>
+
+<div>
+    <h4>Wizyta</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.patients_pesel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.patients_pesel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estim_disease)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estim_disease)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.real_disease)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.real_disease)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dis_descript)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dis_descript)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.appoint_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.appoint_date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.specialization)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.specialization)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.docs_pesel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.docs_pesel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.service_type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.service_type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.service_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.service_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.service_price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.service_price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.is_paid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_paid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.supplies_price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.supplies_price)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

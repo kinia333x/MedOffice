@@ -1,0 +1,98 @@
+﻿@model IEnumerable<MedOffice.Models.Appointment>
+
+@{
+    ViewBag.Title = "Show";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Wizyty</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.patients_pesel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.estim_disease)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.real_disease)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dis_descript)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.appoint_date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.specialization)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.docs_pesel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.service_type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.service_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.service_price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.is_paid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.supplies_price)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.patients_pesel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.estim_disease)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.real_disease)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dis_descript)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.appoint_date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.specialization)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.docs_pesel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.service_type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.service_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.service_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.is_paid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.supplies_price)
+            </td>
+            <td>
+                @Html.ActionLink("Uzupełnij", "Fill", new { id = item.ID })
+                @*Html.ActionLink("Details", "Details", new { id = item.ID }) |*@
+            </td>
+        </tr>
+    }
+
+</table>
