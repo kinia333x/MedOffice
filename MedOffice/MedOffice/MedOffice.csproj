@@ -218,6 +218,10 @@
     <Compile Include="Migrations\PatientDBContext\201804172031458_Pacjenci.Designer.cs">
       <DependentUpon>201804172031458_Pacjenci.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\PatientDBContext\201804241758347_DataUrodzenia.cs" />
+    <Compile Include="Migrations\PatientDBContext\201804241758347_DataUrodzenia.Designer.cs">
+      <DependentUpon>201804241758347_DataUrodzenia.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\PatientDBContext\PatientConf.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -327,6 +331,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\PatientDBContext\201804172031458_Pacjenci.resx">
       <DependentUpon>201804172031458_Pacjenci.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\PatientDBContext\201804241758347_DataUrodzenia.resx">
+      <DependentUpon>201804241758347_DataUrodzenia.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
