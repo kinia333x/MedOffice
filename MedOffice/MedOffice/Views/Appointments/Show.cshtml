@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<MedOffice.Models.Appointment>
 
 @{
-    ViewBag.Title = "Show";
+    ViewBag.Title = "Wizyty";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -26,26 +26,12 @@
             @Html.DisplayNameFor(model => model.appoint_date)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.specialization)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.docs_pesel)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.service_type)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.service_name)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.service_price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.is_paid)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.supplies_price)
-        </th>
+
         <th></th>
     </tr>
 
@@ -68,29 +54,16 @@
                 @Html.DisplayFor(modelItem => item.appoint_date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.specialization)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.docs_pesel)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.service_type)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.service_name)
             </td>
+
+
             <td>
-                @Html.DisplayFor(modelItem => item.service_price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.is_paid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.supplies_price)
-            </td>
-            <td>
-                @Html.ActionLink("Uzupełnij", "Fill", new { id = item.ID })
-                @*Html.ActionLink("Details", "Details", new { id = item.ID }) |*@
+                @Html.ActionLink("Uzupełnij", "Fill", new { id = item.ID }) |
+                @Html.ActionLink("Szczegóły", "Specifics", new { id = item.ID })
             </td>
         </tr>
     }

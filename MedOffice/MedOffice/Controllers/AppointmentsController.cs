@@ -30,7 +30,7 @@ namespace MedOffice.Controllers
         }
 
         // GET: Appointments/Details/5
-        [Authorize(Roles = "Administrator, Lekarz, Rejestrujący")]
+        [Authorize(Roles = "Administrator, Rejestrujący")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -44,6 +44,25 @@ namespace MedOffice.Controllers
             }
             return View(appointment);
         }
+
+        // GET: Appointments/Details/5
+        [Authorize(Roles = "Administrator, Lekarz")]
+        public ActionResult Specifics(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Appointment appointment = db.Appointments.Find(id);
+            if (appointment == null)
+            {
+                return HttpNotFound();
+            }
+            return View(appointment);
+        }
+
+
+
 
         // GET: Appointments/Create
         [Authorize(Roles = "Administrator, Rejestrujący")]

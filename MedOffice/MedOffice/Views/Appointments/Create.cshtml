@@ -39,7 +39,8 @@
     <div class="form-group">
         @Html.LabelFor(model => model.appoint_date, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.appoint_date, "{0:dd/MM/yyyy}", new { @class = "form-control" })
+            <input type="datetime" name="appoint_date" value="@DateTime.Now" />
+            @*Html.EditorFor(model => model.appoint_date, "{0:dd/MM/yyyy hh:mm tt}", new { @class = "form-control" })*@
             @Html.ValidationMessageFor(model => model.appoint_date, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -85,7 +86,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Powrót do listy", "Index")
 </div>
 
 @section Scripts {
