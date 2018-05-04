@@ -1,0 +1,67 @@
+﻿@model IEnumerable<MedOffice.Models.Appointment>
+
+@{
+    ViewBag.Title = "Wizyty";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Wizyty</h2>
+
+<p>
+    @Html.ActionLink("Utwórz nową wizytę", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.patients_pesel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.estim_disease)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.appoint_date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.specialization)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.docs_pesel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.service_type)
+        </th>
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.patients_pesel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.estim_disease)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.appoint_date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.specialization)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.docs_pesel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.service_type)
+        </td>
+
+
+        <td>
+            @Html.ActionLink("Edytuj", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Szczegóły", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Usuń", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>
