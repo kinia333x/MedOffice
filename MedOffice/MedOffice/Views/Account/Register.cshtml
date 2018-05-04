@@ -57,13 +57,13 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Experience, new { @class = "col-md-3 control-label" })
         <div class="col-md-9">
-            @Html.EditorFor(m => m.Experience, "{0:dd/MM/yyyy}", new { @class = "form-control" })
+            @Html.EditorFor(m => m.Experience, "{0:dd/MM/yyyy}", new { id = "Experience", @class = "form-control", min = "1899-01-01", max = "2000-13-13" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Seniority, new { @class = "col-md-3 control-label" })
         <div class="col-md-9">
-            @Html.EditorFor(m => m.Seniority, "{0:dd/MM/yyyy}", new { @class = "form-control" })
+            @Html.EditorFor(m => m.Seniority, "{0:dd/MM/yyyy}", new { id = "Seniority", @class = "form-control", min = "1899-01-01", max = "2000-13-13" })
         </div>
     </div>
     <div class="form-group">
@@ -111,6 +111,25 @@
                 $('#Specializations').hide();
                 $('#Specialization').hide();
             }
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function DateMaxToday() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+
+            today = yyyy + '-' + mm + '-' + dd;
+            document.getElementById("Seniority").setAttribute("max", today);
+            document.getElementById("Experience").setAttribute("max", today);
         });
     </script>
 }

@@ -148,15 +148,14 @@ namespace MedOffice.Controllers
                 ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
                                             .ToList(), "Name", "Name");
             }
-            else if (User.IsInRole("Manager"))
+            else if (User.IsInRole("Kierownik"))
             {
-                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Kierownik"))
                                .ToList(), "Name", "Name");
             }
 
             List<SelectListItem> Specializations = new List<SelectListItem>()
             {
-                new SelectListItem { Text = "- Wybierz jedno -" }, 
                 new SelectListItem { Text = "Alergologia" },
                 new SelectListItem { Text = "Anestezjologia i intensywna terapia" },
                 new SelectListItem { Text = "Angiologia" },
@@ -272,8 +271,9 @@ namespace MedOffice.Controllers
 
                     // Dodanie roli dla nowego użytkownika:
                     await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
+
                     // Dodanie specjalizacji: 
-                    if (model.Specialization != "- Wybierz jedno -")
+                    if (model.UserRoles == "Lekarz")
                     {
                         user.Specialization = model.Specialization;
                         await this.UserManager.UpdateAsync(user);
@@ -283,10 +283,8 @@ namespace MedOffice.Controllers
                     user.Surname = model.Surname;
                     user.Seniority = model.Seniority;
                     user.Experience = model.Experience;
-                    await this.UserManager.UpdateAsync(user);
 
-                    await this.UserManager.AddClaimAsync(user.Id, new Claim("FirstName", user.Name));
-                    await this.UserManager.AddClaimAsync(user.Id, new Claim("LastName", user.Surname));
+                    await this.UserManager.UpdateAsync(user);
 
                     return RedirectToAction("ConfirmRegistration", "Account");
                 }
@@ -296,15 +294,14 @@ namespace MedOffice.Controllers
                     ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
                                                 .ToList(), "Name", "Name");
                 }
-                else if (User.IsInRole("Manager"))
+                else if (User.IsInRole("Kierownik"))
                 {
-                    ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
+                    ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Kierownik"))
                                    .ToList(), "Name", "Name");
                 }
 
                 List<SelectListItem> Specializations = new List<SelectListItem>()
                 {
-                    new SelectListItem { Text = "- Wybierz jedno -" },
                     new SelectListItem { Text = "Alergologia" },
                     new SelectListItem { Text = "Alergologia" },
                     new SelectListItem { Text = "Anestezjologia i intensywna terapia" },

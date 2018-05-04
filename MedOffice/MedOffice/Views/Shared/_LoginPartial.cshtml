@@ -18,7 +18,7 @@
         </ul>
     }
 
-    if (User.IsInRole("Administrator"))
+    if (User.IsInRole("Administrator") || User.IsInRole("Kierownik"))
     {
         <ul class="nav navbar-nav navbar-right">
             <li>
@@ -33,7 +33,7 @@
             </li>
         </ul>
     }
-    if (User.IsInRole("Kierownik") || User.IsInRole("Rejestrujący"))
+    if (User.IsInRole("Rejestrujący"))
     {
         <ul class="nav navbar-nav navbar-right">
             <li>

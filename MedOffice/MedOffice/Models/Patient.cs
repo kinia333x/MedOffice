@@ -33,7 +33,7 @@ namespace MedOffice.Models
 
         [Required(ErrorMessage = "Data urodzenia jest wymagana.")]
         [Display(Name = "Data urodzenia:")]
-        [DataType(DataType.Date, ErrorMessage = "DATA")]
+        [DataType(DataType.Date)]
         [PastDate]
         public DateTime BirthDate { get; set; }
 
