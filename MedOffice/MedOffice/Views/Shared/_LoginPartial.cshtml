@@ -47,7 +47,7 @@
             </li>
         </ul>
     }
-    if (User.IsInRole("Administrator") || User.IsInRole("Kierownik") || User.IsInRole("Rejestrujący"))
+    if (User.IsInRole("Administrator") || User.IsInRole("Rejestrujący") || User.IsInRole("Kierownik"))
     {
         <ul class="nav navbar-nav navbar-right">
             <li>
@@ -56,6 +56,7 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Wyszukaj", "PatientSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
                     <li>@Html.ActionLink("Wyświetl", "Index", "Patients", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
                     <li>@Html.ActionLink("Zarejestruj", "Create", "Patients", routeValues: null, htmlAttributes: new { id = "patientCreateLink" })</li>
                 </ul>

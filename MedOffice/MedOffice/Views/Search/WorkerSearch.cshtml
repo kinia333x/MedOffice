@@ -40,7 +40,9 @@
                 <td>@item.Surname</td>
                 <td>@item.UserName</td>
                 <td>@item.Specialization</td>
-            </tr>
+                <td>@Html.ActionLink("Edit", "Edit", new { id = item.Id }) </td>
+
+</tr>
             }
         }
     </tbody>
