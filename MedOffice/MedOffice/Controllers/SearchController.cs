@@ -13,9 +13,9 @@ namespace MedOffice.Controllers
     {
         // GET: Search
 
-        
-        
 
+
+        [Authorize(Roles = "Administrator, Kierownik")]
         public ActionResult WorkerSearch(string searching, int sortOpt = 1)
         {
             ApplicationDbContext context = new ApplicationDbContext();
@@ -51,8 +51,8 @@ namespace MedOffice.Controllers
         }
 
 
-        
 
+        [Authorize(Roles = "Administrator, Kierownik, Rejestrujący, Lekarz")]
         public ActionResult PatientSearch(string searching)
         {
             PatientDBContext patientContext = new PatientDBContext();
