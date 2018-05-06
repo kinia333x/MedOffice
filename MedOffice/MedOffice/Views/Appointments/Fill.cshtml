@@ -39,10 +39,17 @@
     <div class="form-group">
         @Html.LabelFor(model => model.service_type, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.service_type, new { htmlAttributes = new { @class = "form-control" } })
+            <select class="form-control" name="service_type">
+                <option>konsultacja</option>
+                <option>wypisanie recept</option>
+                <option>zabieg</option>
+                <option>wizyta kontrolna</option>
+                <option>inne</option>
+            </select>
             @Html.ValidationMessageFor(model => model.service_type, "", new { @class = "text-danger" })
         </div>
     </div>
+
     <div class="form-group">
         @Html.LabelFor(model => model.service_name, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
