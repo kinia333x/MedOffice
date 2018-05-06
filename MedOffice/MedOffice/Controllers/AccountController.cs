@@ -257,8 +257,23 @@ namespace MedOffice.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                if (model.Specialization == "- Wybierz jedno -")
+                {
+                    model.Specialization = null;
+                }
+
+                var user = new ApplicationUser {
+                    Name = model.Name,
+                    Surname = model.Surname,
+                    Seniority = model.Seniority,
+                    Experience = model.Experience,
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    Specialization = model.Specialization
+                };
+                
                 var result = await UserManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
                     // Wyłączenie automatycznego logowania po rejestracji:
@@ -270,39 +285,47 @@ namespace MedOffice.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    // Dodanie roli dla nowego użytkownika:
+                    // Dodanie roli dla nowego użytkownika.
+                    // Rola dodawania jest później, stąd dwa wpisy w archiwum przy tworzeniu nowego konta.
                     await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
-                    // Dodanie specjalizacji: 
-                    if (model.Specialization != "- Wybierz jedno -")
-                    {
-                        user.Specialization = model.Specialization;
-                        await this.UserManager.UpdateAsync(user);
-                    }
 
-                    user.Name = model.Name;
-                    user.Surname = model.Surname;
-                    user.Seniority = model.Seniority;
-                    user.Experience = model.Experience;
-                    await this.UserManager.UpdateAsync(user);
+                    // Dodanie do archiwum ID osoby, która stworzyła nowe konto użytkownika:
+                    var CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
 
-                    await this.UserManager.AddClaimAsync(user.Id, new Claim("FirstName", user.Name));
-                    await this.UserManager.AddClaimAsync(user.Id, new Claim("LastName", user.Surname));
+                    string query = "UPDATE [dbo].[UsersArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'INSERTED' AND UserName = " + model.UserName;
+                    context.Database.ExecuteSqlCommand(query);
+
+                    // Drugi raz dodanie ID osoby, która stworzyła nowe konto użytkownika, a także dodanie roli dla stworzonego użytkownika.
+                    // Nie działa porównywanie ID z jakiegoś powodu (prawdopodobnie chodzi o znaki specjalne). Na tę chwilę do archiwum dodawana jest nazwa roli.
+                    //query = "UPDATE [dbo].[UsersArch] SET RId = (Select RoleId FROM [dbo].[AspNetUserRoles] WHERE dbo.RemoveNonAlphaCharacters(UserId) = dbo.RemoveNonAlphaCharacters(" + user.Id + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED' AND UserName = " + model.UserName;
+
+                    query = "UPDATE [dbo].[UsersArch] SET RId = '" + model.UserRoles + "', DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-INSERTED' AND UserName = " + model.UserName;
+                    context.Database.ExecuteSqlCommand(query);
+
+                    query = "UPDATE [dbo].[UsersArch] SET RId = '" + model.UserRoles + "', DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-DELETED' AND UserName = " + model.UserName;
+                    context.Database.ExecuteSqlCommand(query);
 
                     return RedirectToAction("ConfirmRegistration", "Account");
                 }
 
-                if (User.IsInRole("Administrator"))
-                {
-                    ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
-                                                .ToList(), "Name", "Name");
-                }
-                else if (User.IsInRole("Manager"))
-                {
-                    ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
-                                   .ToList(), "Name", "Name");
-                }
+                AddErrors(result);
+            }
 
-                List<SelectListItem> Specializations = new List<SelectListItem>()
+            if (User.IsInRole("Administrator"))
+            {
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
+                                            .ToList(), "Name", "Name");
+            }
+            else if (User.IsInRole("Manager"))
+            {
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
+                               .ToList(), "Name", "Name");
+            }
+
+            ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
+                                            .ToList(), "Name", "Name");
+
+            List<SelectListItem> Specializations = new List<SelectListItem>()
                 {
                     new SelectListItem { Text = "- Wybierz jedno -" },
                     new SelectListItem { Text = "Alergologia" },
@@ -392,10 +415,7 @@ namespace MedOffice.Controllers
                     new SelectListItem { Text = "Zdrowie publiczne " },
                 };
 
-                ViewBag.Spec = Specializations;
-
-                AddErrors(result);
-            }
+            ViewBag.Spec = Specializations;
 
             // If we got this far, something failed, redisplay form
             return View(model);
