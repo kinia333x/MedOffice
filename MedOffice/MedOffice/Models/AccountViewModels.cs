@@ -63,7 +63,7 @@ namespace MedOffice.Models
         public bool RememberMe { get; set; }
     }
     
-    public class RegisterViewModel
+    public class RegisterViewModel : IValidatableObject
     {
         [Required(ErrorMessage = "Wprowadź imię pracownika.")]
         [RegularExpression(@"^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+$", ErrorMessage = "Pole Imię może zawierać wyłącznie litery. Dopuszczalne są polskie znaki.")]
@@ -115,6 +115,36 @@ namespace MedOffice.Models
         [Required(ErrorMessage = "Wprowadź specjalizację pracownika.")]
         [Display(Name = "Specjalizacja:")]
         public string Specialization { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var results = new List<ValidationResult>();
+
+            if (Seniority > DateTime.Now)
+            {
+                results.Add(new ValidationResult("Data zatrudnienia nie może być większa niż " + DateTime.Now.Date));
+            }
+            else if (Seniority < new DateTime(1899, 1, 1))
+            {
+                results.Add(new ValidationResult("Data zatrudnienia " + Seniority.ToShortDateString() + " nie może przekraczać daty uzyskania kwalifikacji: " + Experience.ToShortDateString()));
+            }
+
+            if (Experience > DateTime.Now)
+            {
+                results.Add(new ValidationResult("Data uzyskania kwalifikacji nie może być większa niż " + DateTime.Now.ToShortDateString()));
+            }
+            else if (Experience < new DateTime(2017, 1, 18))
+            {
+                results.Add(new ValidationResult("Data zatrudnienia " + Seniority.ToShortDateString() + " nie może przekraczać daty uzyskania kwalifikacji: " + Experience.ToShortDateString()));
+            }
+
+            if (DateTime.Compare(Seniority, Experience) < 0)
+            {
+                results.Add(new ValidationResult("Data uzyskania kwalifikacji: " + Experience.ToShortDateString() + " nie może przekraczać daty zatrudnienia " + Seniority.ToShortDateString()));
+            }
+
+            return results;
+        }
     }
 
     public class ResetPasswordViewModel
