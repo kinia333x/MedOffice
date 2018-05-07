@@ -47,7 +47,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.BirthDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.BirthDate, new { htmlAttributes = new { id = "BirthDate", @class = "form-control", min = "1899-01-01", max = "2000-13-13" } })
+                @Html.EditorFor(model => model.BirthDate, new { htmlAttributes = new { id = "BirthDate", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.BirthDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -75,21 +75,4 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
-    <script type="text/javascript">
-        $(function DateMaxToday() {
-            var today = new Date();
-            var dd = today.getDate();
-            var mm = today.getMonth() + 1; //January is 0!
-            var yyyy = today.getFullYear();
-            if (dd < 10) {
-                dd = '0' + dd
-            }
-            if (mm < 10) {
-                mm = '0' + mm
-            }
-
-            today = yyyy + '-' + mm + '-' + dd;
-            document.getElementById("BirthDate").setAttribute("max", today);
-        });
-    </script>
 }
