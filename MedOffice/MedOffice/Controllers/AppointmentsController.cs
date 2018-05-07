@@ -25,10 +25,6 @@ namespace MedOffice.Controllers
         }
 
 
-
-
-
-
         // GET: Appointments
         [Authorize(Roles = "Administrator, Rejestrujący")]
         public ActionResult Index()
@@ -74,8 +70,6 @@ namespace MedOffice.Controllers
             }
             return View(appointment);
         }
-
-
 
 
         // GET: Appointments/Create
@@ -281,6 +275,25 @@ namespace MedOffice.Controllers
             ViewBag.A = "...";
             if (ModelState.IsValid)
             {
+
+                /*String s = appointment.service_time.ToString();
+                int x = 0;
+
+                if (Int32.TryParse(s, out x))
+                {
+                    if (x <=0)
+                    {
+                        ModelState.AddModelError("service_time", "Proszę podać czas w minutachhhhhhh1.");
+                        return View(appointment);
+                    }
+
+                }else
+                {
+                    ModelState.AddModelError("service_time", "Proszę podać czas w minutachhhhhhh2.");
+                    return View(appointment);
+                }*/
+
+
                 foreach(Patient p in dbP.Patients)
                 {
                     if (p.Pesel == appointment.patients_pesel)
@@ -542,12 +555,6 @@ namespace MedOffice.Controllers
 
             ViewBag.Spec = Specializations;
 
-            //if (ModelState.IsValid)
-            //{
-            //    db.Entry(appointment).State = EntityState.Modified;
-            //    db.SaveChanges();
-            //    return RedirectToAction("Index");
-            //}
 
             if (ModelState.IsValid)
             {

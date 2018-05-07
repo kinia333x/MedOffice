@@ -210,6 +210,15 @@
     <Compile Include="Migrations\201804171655392_NextMigration.Designer.cs">
       <DependentUpon>201804171655392_NextMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\AppointmentDBContext\201805070816545_InitialCreate.cs" />
+    <Compile Include="Migrations\AppointmentDBContext\201805070816545_InitialCreate.Designer.cs">
+      <DependentUpon>201805070816545_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\AppointmentDBContext\201805070833109_Service_time.cs" />
+    <Compile Include="Migrations\AppointmentDBContext\201805070833109_Service_time.Designer.cs">
+      <DependentUpon>201805070833109_Service_time.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\AppointmentDBContext\AppointmentConf.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\PatientDBContext\201804161815080_InitialCreate.cs" />
     <Compile Include="Migrations\PatientDBContext\201804161815080_InitialCreate.Designer.cs">
@@ -330,6 +339,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804171655392_NextMigration.resx">
       <DependentUpon>201804171655392_NextMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\AppointmentDBContext\201805070816545_InitialCreate.resx">
+      <DependentUpon>201805070816545_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\AppointmentDBContext\201805070833109_Service_time.resx">
+      <DependentUpon>201805070833109_Service_time.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\PatientDBContext\201804161815080_InitialCreate.resx">
       <DependentUpon>201804161815080_InitialCreate.cs</DependentUpon>
