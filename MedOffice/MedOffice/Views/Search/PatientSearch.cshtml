@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<MedOffice.Models.Patient>
 
 <br /><br />
-@using (Html.BeginForm("PatientSearch", "Search", FormMethod.Get))
+@using (Html.BeginForm())
 {
     @Html.TextBox("searching")<input type="submit" value="Szukaj" />
 }
@@ -9,9 +9,9 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Imię</th>
-            <th>Nazwisko</th>
-            <th>Pesel</th>
+            <th>@Html.ActionLink("Imię", "PatientSearch", new { sortOrder = ViewBag.NameSortParm })</th>
+            <th>@Html.ActionLink("Nazwisko", "PatientSearch", new { sortOrder = ViewBag.SurnameSortParm })</th>
+            <th>@Html.ActionLink("Pesel", "PatientSearch", new { sortOrder = ViewBag.PeselSortParm })</th>
         </tr>
     </thead>
     <tbody>
