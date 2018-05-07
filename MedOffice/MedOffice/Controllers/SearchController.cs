@@ -20,34 +20,30 @@ namespace MedOffice.Controllers
         {
             ApplicationDbContext context = new ApplicationDbContext();
 
-            //var list = from s in context.Users
-            //           join sa in context.Roles on s.Id equals sa.Id
-            //           select new
-            //           {
-            //               UserName = s.UserName,
-            //               Name = s.Name,
-            //               Role = sa.Name,
-            //               Specialization = s.Specialization,
-            //               Surname = s.Surname
-
-            //           };
-
+            var list = from s in context.Users
+                       join sa in context.Roles on s.Id equals sa.Id
+                       select new
+                       {
+                           UserName = s.UserName,
+                           Role = sa.Name
+                       };
 
             // kryteria wyszukiwania
-            var userList = context.Users.Where(x => x.UserName.Contains(searching)
+            var userList = context.Users.Where(x => (x.UserName.Contains(searching)
                                               || x.Name.Contains(searching)
                                               || x.Surname.Contains(searching)
                                               || x.Specialization.Contains(searching)
-                                              || searching == null).ToList().OrderBy(s => s.Surname);
+                                              || searching == null) && x.UserName != "admin").OrderBy(s => s.Surname);
             switch (sortOpt) // to gówno nie działa
             {
-                case 1: userList.ToList().OrderBy(s => s.Name); break;
-                case 2: userList.ToList().OrderBy(s => s.Surname); break;
-                case 3: userList.ToList().OrderBy(s => s.UserName); break;
-                case 4: userList.ToList().OrderBy(s => s.Specialization); break;
+                case 1: userList.OrderBy(s => s.Name); break;
+                case 2: userList.OrderBy(s => s.Surname); break;
+                case 3: userList.OrderBy(s => s.UserName); break;
+                default: userList.OrderBy(s => s.Specialization); break;
             }
-            
-            return View(userList);
+
+            return View(userList.ToList()); 
+         
         }
 
 
