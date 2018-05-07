@@ -88,6 +88,20 @@
         </ul>
     }
     ////////////////////KONIEC WIZYT
+    if (User.IsInRole("Administrator") || User.IsInRole("Księgowa") || User.IsInRole("Kierownik"))
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                    Księgowa
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Wyświetl", "Index", "Accountant", routeValues: null, htmlAttributes: new { id = "servicesShowLink" })</li>
+                </ul>
+            </li>
+        </ul>
+    }
 }
 else
 {

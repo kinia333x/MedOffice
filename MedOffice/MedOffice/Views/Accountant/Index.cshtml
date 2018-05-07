@@ -1,0 +1,51 @@
+﻿@model IEnumerable<MedOffice.Models.Appointment>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Spis usług.</h2>
+
+<p>
+    @Html.ActionLink("Wygeneruj raport", "Report");
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.service_type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.service_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.service_price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.is_paid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.supplies_price)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.service_type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.service_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.service_price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_paid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.supplies_price)
+        </td>
+    </tr>
+}
+
+</table>
