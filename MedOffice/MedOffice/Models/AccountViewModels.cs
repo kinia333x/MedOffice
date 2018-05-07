@@ -79,12 +79,14 @@ namespace MedOffice.Models
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         [Display(Name = "Data uzyskania kwalifikacji:")]
+        [EDateRange]
         public DateTime Experience { get; set; }
 
         [Required(ErrorMessage = "Wprowadź datę rozpoczęcia przez pracownika pracy w obecnym miejscu zatrudnienia.")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         [Display(Name = "Data zatrudnienia:")]
+        [SDateRange]
         public DateTime Seniority { get; set; }
 
         [Required(ErrorMessage = "Wprowadź adres email pracownika.")]
@@ -98,7 +100,6 @@ namespace MedOffice.Models
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Wprowadź hasło.")]
-        [StringLength(100, ErrorMessage = "Hasło musi zawierać przynajmniej {2} znaków.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Hasło:")]
         public string Password { get; set; }
@@ -145,4 +146,52 @@ namespace MedOffice.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
+
+    public class SDateRange : RangeAttribute
+    {
+        public SDateRange()
+          : base(typeof(DateTime), DateTime.Now.AddYears(-100).ToShortDateString(), DateTime.Now.ToShortDateString()) { }
+
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            DateTime Date = (DateTime)value;
+
+            if (Date > DateTime.Now)
+            {
+                return new ValidationResult("Data zatrudnienia nie może być większa niż " + DateTime.Now.ToShortDateString() + ".");
+            }
+            else if (Date < new DateTime(1899, 1, 1))
+            {
+                return new ValidationResult("Data zatrudnienia nie może być mniejsza niż niż " + new DateTime(1899, 1, 1).ToShortDateString() + ".");
+            }
+            else
+            {
+                return ValidationResult.Success;
+            }
+        }
+    }
+
+    public class EDateRange : RangeAttribute
+    {
+        public EDateRange()
+          : base(typeof(DateTime), new DateTime(1899, 1, 1).ToShortDateString(), DateTime.Now.ToShortDateString()) { }
+
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            DateTime Date = (DateTime)value;
+
+            if (Date > DateTime.Now)
+            {
+                return new ValidationResult("Data uzyskania kwalifikacji nie może być większa niż " + DateTime.Now.ToShortDateString() + ".");
+            }
+            else if (Date < new DateTime(1899, 1, 1))
+            {
+                return new ValidationResult("Data uzyskania kwalifikacji nie może być mniejsza niż niż " + new DateTime(1899, 1, 1).ToShortDateString() + ".");
+            }
+            else
+            {
+                return ValidationResult.Success;
+            }
+        }
+    }    
 }
