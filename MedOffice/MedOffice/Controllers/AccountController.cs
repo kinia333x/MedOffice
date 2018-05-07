@@ -148,15 +148,14 @@ namespace MedOffice.Controllers
                 ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
                                             .ToList(), "Name", "Name");
             }
-            else if (User.IsInRole("Manager"))
+            else if (User.IsInRole("Kierownik"))
             {
-                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Kierownik"))
                                .ToList(), "Name", "Name");
             }
 
             List<SelectListItem> Specializations = new List<SelectListItem>()
             {
-                new SelectListItem { Text = "- Wybierz jedno -" }, 
                 new SelectListItem { Text = "Alergologia" },
                 new SelectListItem { Text = "Anestezjologia i intensywna terapia" },
                 new SelectListItem { Text = "Angiologia" },
@@ -257,7 +256,7 @@ namespace MedOffice.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.Specialization == "- Wybierz jedno -")
+                if (model.Specialization != "Lekarz")
                 {
                     model.Specialization = null;
                 }
@@ -288,6 +287,7 @@ namespace MedOffice.Controllers
                     // Dodanie roli dla nowego użytkownika.
                     // Rola dodawania jest później, stąd dwa wpisy w archiwum przy tworzeniu nowego konta.
                     await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
+<<<<<<< HEAD
 
                     // Dodanie do archiwum ID osoby, która stworzyła nowe konto użytkownika:
                     var CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
@@ -304,10 +304,11 @@ namespace MedOffice.Controllers
 
                     query = "UPDATE [dbo].[UsersArch] SET RId = '" + model.UserRoles + "', DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-DELETED' AND UserName = " + model.UserName;
                     context.Database.ExecuteSqlCommand(query);
-
+=======
                     return RedirectToAction("ConfirmRegistration", "Account");
                 }
 
+<<<<<<< HEAD
                 AddErrors(result);
             }
 
@@ -324,10 +325,21 @@ namespace MedOffice.Controllers
 
             ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
                                             .ToList(), "Name", "Name");
+=======
+                if (User.IsInRole("Administrator"))
+                {
+                    ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
+                                                .ToList(), "Name", "Name");
+                }
+                else if (User.IsInRole("Kierownik"))
+                {
+                    ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Kierownik"))
+                                   .ToList(), "Name", "Name");
+                }
+>>>>>>> KornelPoprawki
 
             List<SelectListItem> Specializations = new List<SelectListItem>()
                 {
-                    new SelectListItem { Text = "- Wybierz jedno -" },
                     new SelectListItem { Text = "Alergologia" },
                     new SelectListItem { Text = "Alergologia" },
                     new SelectListItem { Text = "Anestezjologia i intensywna terapia" },
@@ -739,3 +751,4 @@ namespace MedOffice.Controllers
         #endregion
     }
 }
+

@@ -98,7 +98,6 @@ namespace MedOffice.Models
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Wprowadź hasło.")]
-        [StringLength(100, ErrorMessage = "Hasło musi zawierać przynajmniej {2} znaków.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Hasło:")]
         public string Password { get; set; }
