@@ -208,6 +208,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Identity Extensions\CustomPasswordValidator.cs" />
     <Compile Include="Migrations\201804061834571_InitialCreate.cs" />
     <Compile Include="Migrations\201804061834571_InitialCreate.Designer.cs">
       <DependentUpon>201804061834571_InitialCreate.cs</DependentUpon>
@@ -229,6 +230,10 @@
       <DependentUpon>201805070833109_Service_time.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\AppointmentDBContext\AppointmentConf.cs" />
+    <Compile Include="Migrations\201805061146160_UsersArch.cs" />
+    <Compile Include="Migrations\201805061146160_UsersArch.Designer.cs">
+      <DependentUpon>201805061146160_UsersArch.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\PatientDBContext\201804161815080_InitialCreate.cs" />
     <Compile Include="Migrations\PatientDBContext\201804161815080_InitialCreate.Designer.cs">
@@ -238,9 +243,15 @@
     <Compile Include="Migrations\PatientDBContext\201804172031458_Pacjenci.Designer.cs">
       <DependentUpon>201804172031458_Pacjenci.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\PatientDBContext\201805061050042_PatientsArch.cs" />
+    <Compile Include="Migrations\PatientDBContext\201805061050042_PatientsArch.Designer.cs">
+      <DependentUpon>201805061050042_PatientsArch.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\PatientDBContext\PatientConf.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Appointment.cs" />
+    <Compile Include="Models\PatientsArch.cs" />
+    <Compile Include="Models\UsersArch.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Patient.cs" />
@@ -360,11 +371,17 @@
     <EmbeddedResource Include="Migrations\AppointmentDBContext\201805070833109_Service_time.resx">
       <DependentUpon>201805070833109_Service_time.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805061146160_UsersArch.resx">
+      <DependentUpon>201805061146160_UsersArch.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\PatientDBContext\201804161815080_InitialCreate.resx">
       <DependentUpon>201804161815080_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\PatientDBContext\201804172031458_Pacjenci.resx">
       <DependentUpon>201804172031458_Pacjenci.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\PatientDBContext\201805061050042_PatientsArch.resx">
+      <DependentUpon>201805061050042_PatientsArch.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

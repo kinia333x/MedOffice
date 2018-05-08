@@ -146,5 +146,6 @@ namespace MedOffice.Models
     public class PatientDBContext : DbContext
     {
         public DbSet<Patient> Patients { get; set; }
+        public DbSet<PatientsArch> PatientsArch { get; set; }
     }
 }

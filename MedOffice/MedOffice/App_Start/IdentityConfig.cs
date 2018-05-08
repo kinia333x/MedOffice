@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using MedOffice.Models;
+using CPasswordValidator.IdentityExtensions;
 
 namespace MedOffice
 {
@@ -51,7 +52,7 @@ namespace MedOffice
             };
 
             // Configure validation logic for passwords
-            manager.PasswordValidator = new PasswordValidator
+            manager.PasswordValidator = new CustomPasswordValidator()
             {
                 RequiredLength = 6,
                 RequireNonLetterOrDigit = true,
