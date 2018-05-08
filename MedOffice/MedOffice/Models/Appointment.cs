@@ -49,7 +49,7 @@ namespace MedOffice.Models
         [Display(Name = "Typ usługi:")]
         public string service_type { get; set; }            //TYP USŁUGI
 
-        [Required(ErrorMessage = "Czas trwania wizyty jest wymagany.")]
+        //[Required(ErrorMessage = "Czas trwania wizyty jest wymagany.")]
         [Display(Name = "Szacowany czas trwania:")]
         public int service_time { get; set; }               //CZAS TRWANIA WIZYTY
 
