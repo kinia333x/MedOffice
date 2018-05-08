@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
+
 namespace MedOffice.Controllers
 {
     public class SearchController : Controller
@@ -33,13 +34,32 @@ namespace MedOffice.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             ApplicationUser user = context.Users.Find(Id);
+            var usr = new EditViewModel { UserName = user.UserName ,Name = user.Name, Surname = user.Surname, Specialization = user.Specialization, UserRoles = user.Roles.ToString()};
+            
             if (user == null)
             {
                 return HttpNotFound();
             }
+
+            if (User.IsInRole("Administrator"))
+            {
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
+                                            .ToList(), "Name", "Name");
+            }
+            else if (User.IsInRole("Manager"))
+            {
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
+                               .ToList(), "Name", "Name");
+            }
+            else
+            {
+                return HttpNotFound();
+            }
+          
+
             List<SelectListItem> Specializations = new List<SelectListItem>()
             {
-                new SelectListItem { Text = "- Wybierz jedno -" },
+                new SelectListItem { Text = "" },
                 new SelectListItem { Text = "Alergologia" },
                 new SelectListItem { Text = "Anestezjologia i intensywna terapia" },
                 new SelectListItem { Text = "Angiologia" },
@@ -128,7 +148,7 @@ namespace MedOffice.Controllers
 
             ViewBag.Spec = Specializations;
 
-            return View(user);
+            return View(usr);
         }
 
         // POST: Patients/Edit/5

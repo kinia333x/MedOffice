@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -17,7 +18,9 @@ namespace MedOffice.Models
         }
 
         public string Specialization { get; set; }
+        
         public string Name { get; set; }
+
         public string Surname { get; set; }
         public DateTime Experience { get; set; }
         public DateTime Seniority { get; set; }

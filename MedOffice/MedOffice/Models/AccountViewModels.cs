@@ -117,6 +117,29 @@ namespace MedOffice.Models
         public string Specialization { get; set; }
     }
 
+    public class EditViewModel
+    {
+        [Required(ErrorMessage = "Wprowadź imię pracownika.")]
+        [Display(Name = "Imię")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Wprowadź nazwisko pracownika.")]
+        [Display(Name = "Nazwisko")]
+        public string Surname { get; set; }
+        
+        [Required(ErrorMessage = "Wprowadź pesel pracownika.")]
+        [StringLength(11, ErrorMessage = "Pole Pesel musi zawierać dokładnie {2} cyfr.", MinimumLength = 11)] // Możliwe, że można zrobić to w bardziej elegancki sposób.
+        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Pole Pesel może zawierać wyłącznie cyfry.")]
+        [Display(Name = "Pesel")] // Login będący peselem lub ID (w zależności od języka, który wybierzemy).
+        public string UserName { get; set; }
+        
+        [Display(Name = "Zawód")]
+        public string UserRoles { get; set; }
+        
+        [Display(Name = "Specjalizacja")]
+        public string Specialization { get; set; }
+    }
+
     public class ResetPasswordViewModel
     {
         [Required]
