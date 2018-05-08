@@ -165,8 +165,7 @@ namespace MedOffice.Controllers
                 new SelectListItem { Text = "Zdrowie publiczne " }
             };
             ViewBag.Spec = Specializations;
-            ViewBag.D = new List<SelectListItem>();
-            ViewBag.A = "...";
+
             return View();
         }
 
@@ -178,7 +177,6 @@ namespace MedOffice.Controllers
         [Authorize(Roles = "Administrator, Rejestrujący")]
         public ActionResult Create([Bind(Include = "ID,patients_pesel,estim_disease,real_disease,dis_descript,appoint_date,specialization,docs_pesel,service_type,service_name,service_price,is_paid,supplies_price")] Appointment appointment)
         {
-            ViewBag.D = dbL.Users.Where(u => u.UserName == "").ToList();
 
             List<SelectListItem> Specializations = new List<SelectListItem>()
             {
@@ -270,9 +268,6 @@ namespace MedOffice.Controllers
             };
             ViewBag.Spec = Specializations;
 
-            List<SelectListItem> Docs = new List<SelectListItem>();
-            ViewBag.D = Docs;
-            ViewBag.A = "...";
             if (ModelState.IsValid)
             {
 
@@ -283,13 +278,13 @@ namespace MedOffice.Controllers
                 {
                     if (x <=0)
                     {
-                        ModelState.AddModelError("service_time", "Proszę podać czas w minutachhhhhhh1.");
+                        ModelState.AddModelError("service_time", "Proszę podać czas w minutach1.");
                         return View(appointment);
                     }
 
                 }else
                 {
-                    ModelState.AddModelError("service_time", "Proszę podać czas w minutachhhhhhh2.");
+                    ModelState.AddModelError("service_time", "Proszę podać czas w minutach2.");
                     return View(appointment);
                 }*/
 
