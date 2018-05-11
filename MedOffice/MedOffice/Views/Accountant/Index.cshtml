@@ -1,51 +1,87 @@
-﻿@model IEnumerable<MedOffice.Models.Appointment>
-
+﻿@model IEnumerable<MedOffice.Models.AppointmentViewModels.ServiceViewModel>
 @{
     ViewBag.Title = "Index";
 }
+<div class="col-md-offset-0-5 col-md-4regt">
+    <h2>Spis usług.</h2>
+</div>
+<br style="clear: both;">
 
-<h2>Spis usług.</h2>
+<div class="col-md-offset-0-5 col-md-4regpt">
+    <p>
+        @Html.ActionLink("Wygeneruj raport", "Report")
+    </p>
+</div>
+<br style="clear: both;"><br />
 
-<p>
-    @Html.ActionLink("Wygeneruj raport", "Report");
-</p>
+<div class="form-group form-inline">
+    @using (Html.BeginForm())
+    {
+        @Html.TextBox("searching", null, new { @class = "form-control", @placeholder = "Szukana usługa" })
+        <input type="submit" value="Szukaj" class="btn btn-default" />
+    }
+</div>
+
 <table class="table">
+
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.service_type)
+            @Html.DisplayNameFor(model => model.ServiceType)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.service_name)
+            @Html.ActionLink("Nazwa usługi", "Index", new { sortOrder = ViewBag.NameSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.service_price)
+            @Html.ActionLink("Data usługi", "Index", new { sortOrder = ViewBag.DataSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.is_paid)
+            @Html.ActionLink("Cena usługi", "Index", new { sortOrder = ViewBag.PriceSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.supplies_price)
+            @Html.ActionLink("Koszty dodatkowe", "Index", new { sortOrder = ViewBag.AddPriceSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Suma kosztów", "Index", new { sortOrder = ViewBag.TotalPriceSortParm })
+        </th>
+        <th>
         </th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.service_type)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.service_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.service_price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.is_paid)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.supplies_price)
-        </td>
-    </tr>
-}
-
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td colspan="13" style="color:red">
+                Brak wyników
+            </td>
+        </tr>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceName)
+            </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.ServiceDate)
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServicePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuppliesPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalPrice)
+            </td>
+            <td>
+                @Html.ActionLink("Edytuj", "Edit", new { id = item.Id }) 
+            </td>
+        </tr>
+        }
+    }
 </table>

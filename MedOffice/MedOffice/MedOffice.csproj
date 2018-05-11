@@ -250,6 +250,7 @@
     <Compile Include="Migrations\PatientDBContext\PatientConf.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Appointment.cs" />
+    <Compile Include="Models\AppointmentViewModels.cs" />
     <Compile Include="Models\PatientsArch.cs" />
     <Compile Include="Models\UsersArch.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -337,6 +338,8 @@
     <Content Include="Views\Search\AppointmentSearch.cshtml" />
     <Content Include="Views\Accountant\Index.cshtml" />
     <Content Include="Views\Accountant\Report.cshtml" />
+    <Content Include="Views\Shared\_PdfLayout.cshtml" />
+    <Content Include="Views\Accountant\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

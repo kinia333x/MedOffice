@@ -1,52 +1,54 @@
-﻿@model IEnumerable<MedOffice.Models.Appointment>
+﻿@model IEnumerable<MedOffice.Models.AppointmentViewModels.ServiceViewModel>
 
 @{
+    Layout = "~/Views/Shared/_PdfLayout.cshtml";
     ViewBag.Title = "Report";
-    Layout = null;
 }
 
-<h2>Raport</h2>
+ <h2>Raport</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.service_type)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.service_name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.service_price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.is_paid)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.supplies_price)
-        </th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.docs_pesel)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.service_type)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.service_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.service_price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.is_paid)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.supplies_price)
-        </td>
-    </tr>
-}
-
-</table>
+ <table class="table">
+     <tr>
+         <th>
+             @Html.DisplayNameFor(model => model.ServiceType)
+         </th>
+         <th>
+             @Html.DisplayNameFor(model => model.ServiceName)
+         </th>
+         <th>
+             @Html.DisplayNameFor(model => model.ServiceDate)
+         </th>
+         <th>
+             @Html.DisplayNameFor(model => model.ServicePrice)
+         </th>
+         <th>
+             @Html.DisplayNameFor(model => model.SuppliesPrice)
+         </th>
+         <th>
+             @Html.DisplayNameFor(model => model.TotalPrice)
+         </th>
+     </tr>
+     @foreach (var item in Model)
+     {
+     <tr>
+         <td>
+             @Html.DisplayFor(modelItem => item.ServiceType)
+         </td>
+         <td>
+             @Html.DisplayFor(modelItem => item.ServiceName)
+         </td>
+         <th>
+             @Html.DisplayFor(modelItem => item.ServiceDate)
+         </th>
+         <td>
+             @Html.DisplayFor(modelItem => item.ServicePrice)
+         </td>
+         <td>
+             @Html.DisplayFor(modelItem => item.SuppliesPrice)
+         </td>
+         <th>
+             @Html.DisplayFor(modelItem => item.TotalPrice)
+         </th>
+     </tr>
+     }
+ </table>
