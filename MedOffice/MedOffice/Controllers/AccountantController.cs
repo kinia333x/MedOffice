@@ -59,7 +59,52 @@ namespace MedOffice.Controllers
 
         public ActionResult Report()
         {
-            return new PdfActionResult("Report", db.Appointments.ToList());
+            var services = db.Appointments.ToList().Select(a => new AppointmentViewModels.ServiceViewModel()
+            {
+                Id = a.ID,
+                ServiceType = a.service_type,
+                ServiceName = a.service_name,
+                ServiceDate = a.appoint_date,
+                ServicePrice = a.service_price,
+                SuppliesPrice = a.supplies_price,
+                TotalPrice = a.service_price + a.supplies_price
+            }).ToList();
+
+            return new PdfActionResult("Report", services);
+        }
+
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Appointment appointment = db.Appointments.Find(id);
+            if (appointment == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(appointment);
+        }
+
+        // POST: Accountant/Edit/5
+        // Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
+        // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "ID, patients_pesel, estim_disease, real_disease, dis_descript, appoint_date, specialization, docs_pesel, service_type, service_name, service_price, is_paid, supplies_price")] Appointment appointment)
+        {
+            AppointmentDBContext context = new AppointmentDBContext();
+
+            if (ModelState.IsValid)
+            {
+                context.Entry(appointment).State = EntityState.Modified;
+                context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(appointment);
         }
     }
 }
