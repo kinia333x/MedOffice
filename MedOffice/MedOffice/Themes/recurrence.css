@@ -1,0 +1,14 @@
+/* active area */
+.area_recurring 
+{
+  height: 16px;
+  width: 16px;
+  background: url("repeat16.png");
+}
+
+.area_recurring_ex 
+{
+  height: 16px;
+  width: 16px;
+  background: url("repeat_exception16.png");
+}
