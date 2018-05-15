@@ -342,6 +342,8 @@
     <Content Include="Views\Accountant\Report.cshtml" />
     <Content Include="Views\Shared\_PdfLayout.cshtml" />
     <Content Include="Views\Accountant\Edit.cshtml" />
+    <Content Include="Views\Appointments\All.cshtml" />
+    <Content Include="Views\Appointments\Particulars.cshtml" />
     <None Include="Views\Error\PageNotFound.cshtml" />
     <Content Include="Views\Error\PermissionDenied.cshtml" />
   </ItemGroup>

@@ -87,6 +87,23 @@
             </li>
         </ul>
     }
+
+    if (User.IsInRole("Kierownik"))
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                    Wizyty
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Wyświetl wszystkie", "All", "Appointments", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
+                </ul>
+            </li>
+        </ul>
+    }
+
+
     ////////////////////KONIEC WIZYT
     if (User.IsInRole("Administrator") || User.IsInRole("Księgowa") || User.IsInRole("Kierownik"))
     {

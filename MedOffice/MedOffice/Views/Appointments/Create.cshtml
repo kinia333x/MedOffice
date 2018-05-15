@@ -24,6 +24,7 @@
             @Html.ValidationMessageFor(model => model.patients_pesel, "", new { @class = "text-danger" })
         </div>
     </div>
+
     <div class="form-group">
         @Html.LabelFor(model => model.estim_disease, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -31,10 +32,11 @@
             @Html.ValidationMessageFor(model => model.estim_disease, "", new { @class = "text-danger" })
         </div>
     </div>
+
     <div class="form-group">
         @Html.LabelFor(model => model.appoint_date, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <input class="form-control" name="appoint_date" id="appoint_date" type="datetime-local" value="@DateTime.Now" />
+            <input class="form-control" name="appoint_date" id="appoint_date" type="datetime-local" value="@DateTime.Now.AddMinutes(10)" />
             @Html.ValidationMessageFor(model => model.appoint_date, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -54,6 +56,7 @@
             @Html.DropDownListFor(model => model.specialization, (IEnumerable<SelectListItem>)ViewBag.Spec, new { @class = "form-control" })
         </div>
     </div>
+
     <div class="form-group">
         @Html.LabelFor(model => model.docs_pesel, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -63,6 +66,7 @@
             @Html.ValidationMessageFor(model => model.docs_pesel, "", new { @class = "text-danger" })
         </div>
     </div>
+
     <div class="form-group">
         @Html.LabelFor(model => model.service_type, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -92,9 +96,8 @@
     @Scripts.Render("~/bundles/jqueryval")
 
     <script type="text/javascript">
+
         $(document).ready(function () {
-            $("#specialization").on('change', function () {
-                var cos = $("#specialization option:selected").val();
 
                 $.get("/Appointments/GetDocList", { specialization: $("#specialization option:selected").val() }, (function (data) {
                     $("#docs_pesel").empty();
@@ -103,9 +106,14 @@
 
                     });
                 }));
+        });
+
+        $(document).ready(function () {
+            $("#specialization").on('change', function () {
+                location.reload();
             });
         });
-    </script>
 
+    </script>
 
 }
