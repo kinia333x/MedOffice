@@ -109,11 +109,26 @@
                 }));
         });
 
-        $(document).ready(function () {
-            $("#specialization").on('change', function () {
-                location.reload();
-            });
+        //$(document).ready(function () {
+        //    $("#specialization").on('change', function () {
+        //        location.reload();
+        //    });
+        //});
+
+    $(document).ready(function () {
+        $("#specialization").on('change', function () {
+
+            $.get("/Appointments/GetDocList", { specialization: $("#specialization option:selected").val() }, (function (data) {
+                $("#docs_pesel").empty();
+                $.each(data, function (index, row) {
+                    $("#docs_pesel").append("<option value='" + row.UserName + "'>" + row.Surname + "</option>");
+
+                });
+
+            }));
         });
+    });
+
 
         $(document).ready(function () {
             var type = '@ViewBag.opt';
