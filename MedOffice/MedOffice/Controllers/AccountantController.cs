@@ -43,9 +43,9 @@ namespace MedOffice.Controllers
             switch (sortOrder)
             {
                 case "name_desc": services = services.OrderByDescending(s => s.ServiceName); break;
-                case "price": services = services.OrderBy(s => s.ServiceName); break;
+                case "price": services = services.OrderBy(s => s.ServicePrice); break;
                 case "price_desc": services = services.OrderByDescending(s => s.ServicePrice); break;
-                case "addPrice": services = services.OrderBy(s => s.ServicePrice); break;
+                case "addPrice": services = services.OrderBy(s => s.SuppliesPrice); break;
                 case "addPrice_desc": services = services.OrderByDescending(s => s.SuppliesPrice); break;
                 case "totalPrice": services = services.OrderBy(s => s.TotalPrice); break;
                 case "totalPrice_desc": services = services.OrderByDescending(s => s.TotalPrice); break;
@@ -73,6 +73,7 @@ namespace MedOffice.Controllers
             return new PdfActionResult("Report", services);
         }
 
+        [Authorize(Roles = "Administrator, Księgowa")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -93,6 +94,7 @@ namespace MedOffice.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator, Księgowa")]
         public ActionResult Edit([Bind(Include = "ID, patients_pesel, estim_disease, real_disease, dis_descript, appoint_date, specialization, docs_pesel, service_type, service_name, service_price, is_paid, supplies_price")] Appointment appointment)
         {
             AppointmentDBContext context = new AppointmentDBContext();

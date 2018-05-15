@@ -78,9 +78,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.TotalPrice)
             </td>
+            @if (User.IsInRole("Administrator") || User.IsInRole("Księgowa")){
             <td>
                 @Html.ActionLink("Edytuj", "Edit", new { id = item.Id }) 
             </td>
+            }
         </tr>
         }
     }
