@@ -312,6 +312,8 @@
     <Content Include="Views\Appointments\Show.cshtml" />
     <Content Include="Views\Appointments\Specifics.cshtml" />
     <Content Include="Views\Appointments\Create.cshtml" />
+    <Content Include="Views\Appointments\All.cshtml" />
+    <Content Include="Views\Appointments\Particulars.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
