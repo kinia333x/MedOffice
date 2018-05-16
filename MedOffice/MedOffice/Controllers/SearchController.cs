@@ -1,9 +1,12 @@
 ﻿using MedOffice.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -13,51 +16,68 @@ namespace MedOffice.Controllers
     {
         // GET: Search
 
+        //public async Task<ActionResult> GetRolesForUser(string userId)  // moze sie przyda
+        //{
+        //    using (
+        //        var userManager =
+        //            new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
+        //    {
+        //        var rolesForUser = await userManager.GetRolesAsync(userId);
+
+        //        return this.View(rolesForUser);
+        //    }
+        //}
+
 
 
         [Authorize(Roles = "Administrator, Kierownik")]
         public ActionResult WorkerSearch(string searching, string sortOrder)
         {
-            ViewBag.SurnameSortParm = String.IsNullOrEmpty(sortOrder) ? "surname_desc" : "";
-            ViewBag.NameSortParm = sortOrder == "name" ? "name_desc" : "name";
-            ViewBag.UserNameSortParm = sortOrder == "userName" ? "userName_desc" : "userName";
-            ViewBag.SpecializationSortParm = sortOrder == "specialization" ? "specialization_desc" : "specialization";
-
-            ApplicationDbContext context = new ApplicationDbContext();
-
-            //           select new
-            //           {
-            //               UserName = s.UserName,
-            //               Name = s.Name,
-            //               Role = sa.Name,
-            //               Specialization = s.Specialization,
-            //               Surname = s.Surname
-
-            //           };
-
-            var userList = (from s in context.Users
-                           select s);
-
-
-            userList = userList.Where(x => x.UserName.Contains(searching)
-                                              || x.Name.Contains(searching)
-                                              || x.Surname.Contains(searching)
-                                              || x.Specialization.Contains(searching)
-                                              || searching == null);
-
-            switch (sortOrder)
+            using (var userManager =
+                    new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
             {
-                case "surname_desc": userList = userList.OrderByDescending(s => s.Surname); break;
-                case "name": userList = userList.OrderBy(s => s.Name); break;
-                case "name_desc": userList = userList.OrderByDescending(s => s.Name); break;
-                case "userName": userList = userList.OrderBy(s => s.UserName); break;
-                case "userName_desc": userList = userList.OrderByDescending(s => s.UserName); break;
-                case "specialization": userList = userList.OrderBy(s => s.Specialization); break;
-                case "specialization_desc": userList = userList.OrderByDescending(s => s.Specialization); break;
-                default: userList = userList.OrderBy(s => s.Surname); break;
+                ViewBag.SurnameSortParm = String.IsNullOrEmpty(sortOrder) ? "surname_desc" : "";
+                ViewBag.NameSortParm = sortOrder == "name" ? "name_desc" : "name";
+                ViewBag.UserNameSortParm = sortOrder == "userName" ? "userName_desc" : "userName";
+                ViewBag.SpecializationSortParm = sortOrder == "specialization" ? "specialization_desc" : "specialization";
+
+                ApplicationDbContext context = new ApplicationDbContext();
+
+                //           select new
+                //           {
+                //               UserName = s.UserName,
+                //               Name = s.Name,
+                //               Role = sa.Name,
+                //               Specialization = s.Specialization,
+                //               Surname = s.Surname
+
+                //           };
+
+                //var Roles = userManager.GetRolesAsync(userManager.Users.Id);
+                var userList = (from s in context.Users
+                                select s);
+
+                userList = userList.Where(x => (x.UserName.Contains(searching)
+                                                  || x.Name.Contains(searching)
+                                                  || x.Surname.Contains(searching)
+                                                  || x.Specialization.Contains(searching)
+                                                  || searching == null)
+                                                  && x.UserName != "admin");
+
+                switch (sortOrder)
+                {
+                    case "surname_desc": userList = userList.OrderByDescending(s => s.Surname); break;
+                    case "name": userList = userList.OrderBy(s => s.Name); break;
+                    case "name_desc": userList = userList.OrderByDescending(s => s.Name); break;
+                    case "userName": userList = userList.OrderBy(s => s.UserName); break;
+                    case "userName_desc": userList = userList.OrderByDescending(s => s.UserName); break;
+                    case "specialization": userList = userList.OrderBy(s => s.Specialization); break;
+                    case "specialization_desc": userList = userList.OrderByDescending(s => s.Specialization); break;
+                    default: userList = userList.OrderBy(s => s.Surname); break;
+                }
+
+                return View(userList.ToList());
             }
-            
-            return View(userList.ToList());
         }
 
 
@@ -113,8 +133,8 @@ namespace MedOffice.Controllers
                 case "price_desc": appointmentsList = appointmentsList.OrderByDescending(s => s.service_price); break;
                 case "addPrice": appointmentsList = appointmentsList.OrderBy(s => s.supplies_price); break;
                 case "addPrice_desc": appointmentsList = appointmentsList.OrderByDescending(s => s.supplies_price); break;
-                case "totalPrice": appointmentsList = appointmentsList.OrderBy(x => (x.supplies_price + x.service_price).ToString()); break;
-                case "totalPrice_desc": appointmentsList = appointmentsList.OrderByDescending(x => (x.supplies_price + x.service_price).ToString()); break;
+                case "totalPrice": appointmentsList = appointmentsList.OrderBy(x => (x.supplies_price + x.service_price)); break;
+                case "totalPrice_desc": appointmentsList = appointmentsList.OrderByDescending(x => (x.supplies_price + x.service_price)); break;
                 default: appointmentsList = appointmentsList.OrderBy(s => s.service_name); break;
             }
 

@@ -32,12 +32,22 @@ namespace MedOffice.Controllers
             return View(db.Appointments.ToList());
         }
 
+
         // GET: Appointments
         [Authorize(Roles = "Administrator, Lekarz")]
         public ActionResult Show()
         {
             return View(db.Appointments.ToList());
         }
+
+
+        // GET: Appointments/All
+        [Authorize(Roles = "Administrator, Kierownik")]
+        public ActionResult All()
+        {
+            return View(db.Appointments.ToList());
+        }
+
 
         // GET: Appointments/Details/5
         [Authorize(Roles = "Administrator, Rejestrujący")]
@@ -55,9 +65,27 @@ namespace MedOffice.Controllers
             return View(appointment);
         }
 
+
         // GET: Appointments/Details/5
         [Authorize(Roles = "Administrator, Lekarz")]
         public ActionResult Specifics(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Appointment appointment = db.Appointments.Find(id);
+            if (appointment == null)
+            {
+                return HttpNotFound();
+            }
+            return View(appointment);
+        }
+
+
+        // GET: Appointments/Particulars/5
+        [Authorize(Roles = "Administrator, Kierownik")]
+        public ActionResult Particulars(int? id)
         {
             if (id == null)
             {
@@ -170,8 +198,6 @@ namespace MedOffice.Controllers
         }
 
         // POST: Appointments/Create
-        // Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
-        // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator, Rejestrujący")]
@@ -271,43 +297,36 @@ namespace MedOffice.Controllers
             if (ModelState.IsValid)
             {
 
-                /*String s = appointment.service_time.ToString();
-                int x = 0;
-
-                if (Int32.TryParse(s, out x))
+                int x = 1;
+                if (DateTime.Compare(appointment.appoint_date, DateTime.Now) <= 0)
                 {
-                    if (x <=0)
-                    {
-                        ModelState.AddModelError("service_time", "Proszę podać czas w minutach1.");
-                        return View(appointment);
-                    }
-
-                }else
-                {
-                    ModelState.AddModelError("service_time", "Proszę podać czas w minutach2.");
-                    return View(appointment);
-                }*/
+                    ModelState.AddModelError("appoint_date", "Nie można ustawić daty przeszłej.");
+                    x = 0;
+                }
 
 
-                foreach(Patient p in dbP.Patients)
+                foreach (Patient p in dbP.Patients)
                 {
                     if (p.Pesel == appointment.patients_pesel)
                     {
+                        if(x == 1)
                         {
                             db.Appointments.Add(appointment);
                             db.SaveChanges();
                             return RedirectToAction("Index");
                         }
+                        else
+                            return View(appointment);
                     }
                 }
+                ModelState.AddModelError("patients_pesel", "Nie ma takiego pacjenta.");
             }
-            ModelState.AddModelError("patients_pesel", "Nie ma takiego pacjenta.");
             return View(appointment);
         }
 
         /////////////////////////////////////// fill dla lekarza
 
-
+        // GET: Appointments/Fill/5
         [Authorize(Roles = "Lekarz")]
         public ActionResult Fill(int? id)
         {
@@ -320,21 +339,42 @@ namespace MedOffice.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.opt = appointment.service_type;
 
             return View(appointment);
         }
 
 
+        // POST: Appointments/Fill/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Lekarz")]
         public ActionResult Fill([Bind(Include = "ID,patients_pesel,estim_disease,real_disease,dis_descript,appoint_date,specialization,docs_pesel,service_type,service_name,service_price,is_paid,supplies_price")] Appointment appointment)
         {
+            ViewBag.opt = appointment.service_type;
+
             if (ModelState.IsValid)
             {
-                db.Entry(appointment).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Show");
+                int x = 1;
+
+                if (appointment.service_price < 0)
+                {
+                    ModelState.AddModelError("service_price", "Koszt usługi nie może być ujemny");
+                    x = 0;
+                }
+
+                if (appointment.supplies_price < 0)
+                {
+                    ModelState.AddModelError("supplies_price", "Koszt materiałów nie może być ujemny");
+                    x = 0;
+                }
+
+                if (x == 1)
+                {
+                    db.Entry(appointment).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Show");
+                }
             }
             return View(appointment);
         }
@@ -348,7 +388,7 @@ namespace MedOffice.Controllers
         {
             List<SelectListItem> Specializations = new List<SelectListItem>()
             {
-                new SelectListItem { Text = "- Wybierz jedno -" },
+                new SelectListItem { Text = "" },
                 new SelectListItem { Text = "Alergologia" },
                 new SelectListItem { Text = "Anestezjologia i intensywna terapia" },
                 new SelectListItem { Text = "Angiologia" },
@@ -434,7 +474,6 @@ namespace MedOffice.Controllers
                 new SelectListItem { Text = "Urologia dziecięca" },
                 new SelectListItem { Text = "Zdrowie publiczne " }
             };
-
             ViewBag.Spec = Specializations;
 
             if (id == null)
@@ -447,12 +486,20 @@ namespace MedOffice.Controllers
                 return HttpNotFound();
             }
 
+            foreach (ApplicationUser doc in dbL.Users)
+            {
+                if (doc.UserName == appointment.docs_pesel)
+                {
+                    ViewBag.DocsSurname = doc.Surname;
+                    ViewBag.opt = appointment.service_type;
+                }
+            }
+
             return View(appointment);
         }
 
+
         // POST: Appointments/Edit/5
-        // Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
-        // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator, Rejestrujący")]
@@ -461,7 +508,7 @@ namespace MedOffice.Controllers
 
             List<SelectListItem> Specializations = new List<SelectListItem>()
             {
-                new SelectListItem { Text = "- Wybierz jedno -" },
+                new SelectListItem { Text = "" },
                 new SelectListItem { Text = "Alergologia" },
                 new SelectListItem { Text = "Anestezjologia i intensywna terapia" },
                 new SelectListItem { Text = "Angiologia" },
@@ -547,27 +594,46 @@ namespace MedOffice.Controllers
                 new SelectListItem { Text = "Urologia dziecięca" },
                 new SelectListItem { Text = "Zdrowie publiczne " }
             };
-
             ViewBag.Spec = Specializations;
 
+            foreach (ApplicationUser doc in dbL.Users)
+            {
+                if (doc.UserName == appointment.docs_pesel)
+                {
+                    ViewBag.DocsSurname = doc.Surname;
+                    ViewBag.opt = appointment.service_type;
+                }
+            }
 
             if (ModelState.IsValid)
             {
+
+                int x = 1;
+                if (DateTime.Compare(appointment.appoint_date, DateTime.Now) <= 0)
+                {
+                    ModelState.AddModelError("appoint_date", "Nie można ustawić daty przeszłej.");
+                    x = 0;
+                }
+
                 foreach (Patient p in dbP.Patients)
                 {
                     if (p.Pesel == appointment.patients_pesel)
                     {
+                        if (x == 1)
                         {
                             db.Entry(appointment).State = EntityState.Modified;
                             db.SaveChanges();
                             return RedirectToAction("Index");
                         }
+                        else
+                            return View(appointment);
                     }
                 }
             }
             ModelState.AddModelError("patients_pesel", "Nie ma takiego pacjenta.");
             return View(appointment);
         }
+
 
         // GET: Appointments/Delete/5
         [Authorize(Roles = "Administrator, Rejestrujący")]
@@ -585,6 +651,7 @@ namespace MedOffice.Controllers
             return View(appointment);
         }
 
+
         // POST: Appointments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -596,6 +663,8 @@ namespace MedOffice.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
 
         protected override void Dispose(bool disposing)
         {
