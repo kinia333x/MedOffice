@@ -46,4 +46,5 @@ namespace MedOffice.Models
 
         public DbSet<UsersArch> UsersArch { get; set; }
     }
+    
 }

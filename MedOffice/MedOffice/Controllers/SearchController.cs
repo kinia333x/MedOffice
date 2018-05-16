@@ -125,19 +125,38 @@ namespace MedOffice.Controllers
         public ActionResult Edit(string Id)
         {
             ApplicationDbContext context = new ApplicationDbContext();
-
             if (Id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             ApplicationUser user = context.Users.Find(Id);
+            var usr = new EditViewModel { UserName = user.UserName, Name = user.Name, Surname = user.Surname, Specialization = user.Specialization };
+
             if (user == null)
             {
                 return HttpNotFound();
             }
-            List<SelectListItem> Specializations = new List<SelectListItem>()
+
+            if (User.IsInRole("Administrator"))
             {
-                new SelectListItem { Text = "- Wybierz jedno -" },
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
+                                            .ToList(), "Name", "Name");
+            }
+            else if (User.IsInRole("Manager"))
+            {
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
+                               .ToList(), "Name", "Name");
+            }
+            else
+            {
+                return HttpNotFound();
+            }
+
+            //if (User.IsInRole("Lekarz"))
+            //{
+                List<SelectListItem> Specializations = new List<SelectListItem>()
+            {
+                new SelectListItem { Text = "" },
                 new SelectListItem { Text = "Alergologia" },
                 new SelectListItem { Text = "Anestezjologia i intensywna terapia" },
                 new SelectListItem { Text = "Angiologia" },
@@ -224,28 +243,34 @@ namespace MedOffice.Controllers
                 new SelectListItem { Text = "Zdrowie publiczne " }
             };
 
-            ViewBag.Spec = Specializations;
-
-            return View(user);
+                ViewBag.Spec = Specializations;
+            //}
+            return View(usr);
         }
+
 
         // POST: Patients/Edit/5
         // Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Surname,UserName,Specialization")] ApplicationUser user)
+        public ActionResult Edit([Bind(Include = "Id,Name,Surname,UserName,Specialization,Roles")] ApplicationUser user)
         {
             ApplicationDbContext context = new ApplicationDbContext();
-
             if (ModelState.IsValid)
             {
+                
+                //if (user.Roles.FirstOrDefault != "d843c219-de88-4571-83b6-0b5ed9bf90d7")
+                //{
+                //    user.Specialization = null;
+                //}
+
                 context.Entry(user).State = EntityState.Modified;
                 context.SaveChanges();
                 return RedirectToAction("WorkerSearch");
             }
             return View(user);
         }
-
+        
     }
 }

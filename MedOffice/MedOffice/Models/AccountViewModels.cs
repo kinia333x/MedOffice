@@ -118,6 +118,32 @@ namespace MedOffice.Models
         public string Specialization { get; set; }
     }
 
+    public class EditViewModel
+    {
+        [Required(ErrorMessage = "Wprowadź imię pracownika.")]
+        [RegularExpression(@"^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+$", ErrorMessage = "Pole Imię może zawierać wyłącznie litery. Dopuszczalne są polskie znaki.")]
+        [Display(Name = "Imię:")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Wprowadź nazwisko pracownika.")]
+        [RegularExpression(@"^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+(?:[\s\-][A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+)?$", ErrorMessage = "Pole Nazwisko może zawierać wyłącznie litery. Dopuszczalne są nazwiska dwuczłonowe i zawierające polskie znaki.")]
+        [Display(Name = "Nazwisko:")]
+        public string Surname { get; set; }
+        
+        [Required(ErrorMessage = "Wprowadź pesel pracownika.")]
+        [RegularExpression("([0-9]{11})", ErrorMessage = "Pole Pesel musi zawierać 11 cyfr.")]
+        [Display(Name = "Pesel:")] // Login
+        public string UserName { get; set; }
+
+        [Required(ErrorMessage = "Wprowadź zawód pracownika.")]
+        [Display(Name = "Zawód:")]
+        public string UserRoles { get; set; }
+
+        [Required(ErrorMessage = "Wprowadź specjalizację pracownika.")]
+        [Display(Name = "Specjalizacja:")]
+        public string Specialization { get; set; }
+    }
+
     public class ResetPasswordViewModel
     {
         [Required]
