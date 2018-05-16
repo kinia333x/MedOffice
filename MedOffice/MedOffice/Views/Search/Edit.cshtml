@@ -61,27 +61,4 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
-    <script type="text/javascript">
-        $(function ShowHideSpec() {
-            $('#UserRoles').on('change', function () {
-                if ($(this).val() == "Lekarz") {
-                    $('#Specialization').show();
-                    $('#Specializations').show();
-                }
-                else {
-                    $('#Specializations').hide();
-                    $('#Specialization').hide();
-                }
-            });
-            // Anty F5
-            if ($(UserRoles).val() == "Lekarz") {
-                $('#Specialization').show();
-                $('#Specializations').show();
-            }
-            else {
-                $('#Specializations').hide();
-                $('#Specialization').hide();
-            }
-        });
-    </script>
 }
