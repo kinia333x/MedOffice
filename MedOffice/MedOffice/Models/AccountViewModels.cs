@@ -134,14 +134,7 @@ namespace MedOffice.Models
         [RegularExpression("([0-9]{11})", ErrorMessage = "Pole Pesel musi zawierać 11 cyfr.")]
         [Display(Name = "Pesel:")] // Login
         public string UserName { get; set; }
-
-        [Required(ErrorMessage = "Wprowadź zawód pracownika.")]
-        [Display(Name = "Zawód:")]
-        public string UserRoles { get; set; }
-
-        [Required(ErrorMessage = "Wprowadź specjalizację pracownika.")]
-        [Display(Name = "Specjalizacja:")]
-        public string Specialization { get; set; }
+        
     }
 
     public class ResetPasswordViewModel
