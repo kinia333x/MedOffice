@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<MedOffice.Models.Appointment>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Wizyty";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Wizyty</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Utwórz nową wizytę", "Create")
 </p>
 <table class="table">
     <tr>
@@ -17,12 +17,6 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.estim_disease)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.real_disease)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.dis_descript)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.appoint_date)
@@ -36,18 +30,7 @@
         <th>
             @Html.DisplayNameFor(model => model.service_type)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.service_name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.service_price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.is_paid)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.supplies_price)
-        </th>
+
         <th></th>
     </tr>
 
@@ -58,12 +41,6 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.estim_disease)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.real_disease)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.dis_descript)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.appoint_date)
@@ -77,22 +54,12 @@
         <td>
             @Html.DisplayFor(modelItem => item.service_type)
         </td>
+
+
         <td>
-            @Html.DisplayFor(modelItem => item.service_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.service_price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.is_paid)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.supplies_price)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink("Edytuj", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Szczegóły", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Usuń", "Delete", new { id=item.ID })
         </td>
     </tr>
 }

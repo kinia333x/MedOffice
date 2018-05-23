@@ -18,6 +18,7 @@ namespace MedOffice.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
 
         ApplicationDbContext context;
     
@@ -148,15 +149,14 @@ namespace MedOffice.Controllers
                 ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
                                             .ToList(), "Name", "Name");
             }
-            else if (User.IsInRole("Manager"))
+            else if (User.IsInRole("Kierownik"))
             {
-                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Kierownik"))
                                .ToList(), "Name", "Name");
             }
 
             List<SelectListItem> Specializations = new List<SelectListItem>()
             {
-                new SelectListItem { Text = "- Wybierz jedno -" }, 
                 new SelectListItem { Text = "Alergologia" },
                 new SelectListItem { Text = "Anestezjologia i intensywna terapia" },
                 new SelectListItem { Text = "Angiologia" },
@@ -257,7 +257,7 @@ namespace MedOffice.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.Specialization == "- Wybierz jedno -")
+                if (model.Specialization != "Lekarz")
                 {
                     model.Specialization = null;
                 }
@@ -290,15 +290,12 @@ namespace MedOffice.Controllers
                     await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
 
                     // Dodanie do archiwum ID osoby, która stworzyła nowe konto użytkownika:
-                    var CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
-
                     string query = "UPDATE [dbo].[UsersArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'INSERTED' AND UserName = " + model.UserName;
                     context.Database.ExecuteSqlCommand(query);
 
                     // Drugi raz dodanie ID osoby, która stworzyła nowe konto użytkownika, a także dodanie roli dla stworzonego użytkownika.
                     // Nie działa porównywanie ID z jakiegoś powodu (prawdopodobnie chodzi o znaki specjalne). Na tę chwilę do archiwum dodawana jest nazwa roli.
-                    //query = "UPDATE [dbo].[UsersArch] SET RId = (Select RoleId FROM [dbo].[AspNetUserRoles] WHERE dbo.RemoveNonAlphaCharacters(UserId) = dbo.RemoveNonAlphaCharacters(" + user.Id + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED' AND UserName = " + model.UserName;
-
+                    // query = "UPDATE [dbo].[UsersArch] SET RId = (Select RoleId FROM [dbo].[AspNetUserRoles] WHERE dbo.RemoveNonAlphaCharacters(UserId) = dbo.RemoveNonAlphaCharacters(" + user.Id + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED' AND UserName = " + model.UserName;
                     query = "UPDATE [dbo].[UsersArch] SET RId = '" + model.UserRoles + "', DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-INSERTED' AND UserName = " + model.UserName;
                     context.Database.ExecuteSqlCommand(query);
 
@@ -322,12 +319,8 @@ namespace MedOffice.Controllers
                                .ToList(), "Name", "Name");
             }
 
-            ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
-                                            .ToList(), "Name", "Name");
-
             List<SelectListItem> Specializations = new List<SelectListItem>()
                 {
-                    new SelectListItem { Text = "- Wybierz jedno -" },
                     new SelectListItem { Text = "Alergologia" },
                     new SelectListItem { Text = "Alergologia" },
                     new SelectListItem { Text = "Anestezjologia i intensywna terapia" },
@@ -417,7 +410,6 @@ namespace MedOffice.Controllers
 
             ViewBag.Spec = Specializations;
 
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
@@ -739,3 +731,4 @@ namespace MedOffice.Controllers
         #endregion
     }
 }
+

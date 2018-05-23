@@ -63,7 +63,7 @@ namespace MedOffice.Models
         public bool RememberMe { get; set; }
     }
     
-    public class RegisterViewModel : IValidatableObject
+    public class RegisterViewModel
     {
         [Required(ErrorMessage = "Wprowadź imię pracownika.")]
         [RegularExpression(@"^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+$", ErrorMessage = "Pole Imię może zawierać wyłącznie litery. Dopuszczalne są polskie znaki.")]
@@ -79,12 +79,14 @@ namespace MedOffice.Models
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         [Display(Name = "Data uzyskania kwalifikacji:")]
+        [EDateRange]
         public DateTime Experience { get; set; }
 
         [Required(ErrorMessage = "Wprowadź datę rozpoczęcia przez pracownika pracy w obecnym miejscu zatrudnienia.")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         [Display(Name = "Data zatrudnienia:")]
+        [SDateRange]
         public DateTime Seniority { get; set; }
 
         [Required(ErrorMessage = "Wprowadź adres email pracownika.")]
@@ -98,7 +100,6 @@ namespace MedOffice.Models
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Wprowadź hasło.")]
-        [StringLength(100, ErrorMessage = "Hasło musi zawierać przynajmniej {2} znaków.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Hasło:")]
         public string Password { get; set; }
@@ -115,36 +116,25 @@ namespace MedOffice.Models
         [Required(ErrorMessage = "Wprowadź specjalizację pracownika.")]
         [Display(Name = "Specjalizacja:")]
         public string Specialization { get; set; }
+    }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var results = new List<ValidationResult>();
+    public class EditViewModel
+    {
+        [Required(ErrorMessage = "Wprowadź imię pracownika.")]
+        [RegularExpression(@"^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+$", ErrorMessage = "Pole Imię może zawierać wyłącznie litery. Dopuszczalne są polskie znaki.")]
+        [Display(Name = "Imię:")]
+        public string Name { get; set; }
 
-            if (Seniority > DateTime.Now)
-            {
-                results.Add(new ValidationResult("Data zatrudnienia nie może być większa niż " + DateTime.Now.Date));
-            }
-            else if (Seniority < new DateTime(1899, 1, 1))
-            {
-                results.Add(new ValidationResult("Data zatrudnienia " + Seniority.ToShortDateString() + " nie może przekraczać daty uzyskania kwalifikacji: " + Experience.ToShortDateString()));
-            }
-
-            if (Experience > DateTime.Now)
-            {
-                results.Add(new ValidationResult("Data uzyskania kwalifikacji nie może być większa niż " + DateTime.Now.ToShortDateString()));
-            }
-            else if (Experience < new DateTime(2017, 1, 18))
-            {
-                results.Add(new ValidationResult("Data zatrudnienia " + Seniority.ToShortDateString() + " nie może przekraczać daty uzyskania kwalifikacji: " + Experience.ToShortDateString()));
-            }
-
-            if (DateTime.Compare(Seniority, Experience) < 0)
-            {
-                results.Add(new ValidationResult("Data uzyskania kwalifikacji: " + Experience.ToShortDateString() + " nie może przekraczać daty zatrudnienia " + Seniority.ToShortDateString()));
-            }
-
-            return results;
-        }
+        [Required(ErrorMessage = "Wprowadź nazwisko pracownika.")]
+        [RegularExpression(@"^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+(?:[\s\-][A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+)?$", ErrorMessage = "Pole Nazwisko może zawierać wyłącznie litery. Dopuszczalne są nazwiska dwuczłonowe i zawierające polskie znaki.")]
+        [Display(Name = "Nazwisko:")]
+        public string Surname { get; set; }
+        
+        [Required(ErrorMessage = "Wprowadź pesel pracownika.")]
+        [RegularExpression("([0-9]{11})", ErrorMessage = "Pole Pesel musi zawierać 11 cyfr.")]
+        [Display(Name = "Pesel:")] // Login
+        public string UserName { get; set; }
+        
     }
 
     public class ResetPasswordViewModel
@@ -175,4 +165,52 @@ namespace MedOffice.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
+
+    public class SDateRange : RangeAttribute
+    {
+        public SDateRange()
+          : base(typeof(DateTime), DateTime.Now.AddYears(-100).ToShortDateString(), DateTime.Now.ToShortDateString()) { }
+
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            DateTime Date = (DateTime)value;
+
+            if (Date > DateTime.Now)
+            {
+                return new ValidationResult("Data zatrudnienia nie może być większa niż " + DateTime.Now.ToShortDateString() + ".");
+            }
+            else if (Date < new DateTime(1899, 1, 1))
+            {
+                return new ValidationResult("Data zatrudnienia nie może być mniejsza niż niż " + new DateTime(1899, 1, 1).ToShortDateString() + ".");
+            }
+            else
+            {
+                return ValidationResult.Success;
+            }
+        }
+    }
+
+    public class EDateRange : RangeAttribute
+    {
+        public EDateRange()
+          : base(typeof(DateTime), new DateTime(1899, 1, 1).ToShortDateString(), DateTime.Now.ToShortDateString()) { }
+
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            DateTime Date = (DateTime)value;
+
+            if (Date > DateTime.Now)
+            {
+                return new ValidationResult("Data uzyskania kwalifikacji nie może być większa niż " + DateTime.Now.ToShortDateString() + ".");
+            }
+            else if (Date < new DateTime(1899, 1, 1))
+            {
+                return new ValidationResult("Data uzyskania kwalifikacji nie może być mniejsza niż niż " + new DateTime(1899, 1, 1).ToShortDateString() + ".");
+            }
+            else
+            {
+                return ValidationResult.Success;
+            }
+        }
+    }    
 }

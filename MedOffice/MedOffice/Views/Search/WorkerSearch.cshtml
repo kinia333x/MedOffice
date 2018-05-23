@@ -8,7 +8,7 @@
 @model IEnumerable<MedOffice.Models.ApplicationUser>
 
 <br /><br />
-@using (Html.BeginForm("WorkerSearch", "Search", FormMethod.Get))
+@using (Html.BeginForm())
 {
     @Html.TextBox("searching")<input type="submit" value="Szukaj" />
 }
@@ -16,10 +16,10 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Imię</th>
-            <th>Nazwisko</th>
-            <th>Pesel</th>
-            <th>Specjalizacja</th>
+            <th>@Html.ActionLink("Imię", "WorkerSearch", new { sortOrder = ViewBag.NameSortParm })</th>
+            <th>@Html.ActionLink("Nazwisko", "WorkerSearch", new { sortOrder = ViewBag.SurnameSortParm })</th>
+            <th>@Html.ActionLink("Pesel", "WorkerSearch", new { sortOrder = ViewBag.UserNameSortParm })</th>
+            <th>@Html.ActionLink("Specjalizacja", "WorkerSearch", new { sortOrder = ViewBag.SpecializationSortParm })</th>
         </tr>
     </thead>
     <tbody>
@@ -42,7 +42,7 @@
                 <td>@item.Specialization</td>
                 <td>@Html.ActionLink("Edit", "Edit", new { id = item.Id }) </td>
 
-</tr>
+            </tr>
             }
         }
     </tbody>

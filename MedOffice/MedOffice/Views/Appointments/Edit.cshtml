@@ -12,73 +12,165 @@
 {
     @Html.AntiForgeryToken()
     
-    <div class="form-horizontal">
-        <h4>Wizyta</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ID)
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.patients_pesel, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.patients_pesel, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.patients_pesel, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.estim_disease, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.estim_disease, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.estim_disease, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.appoint_date, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.appoint_date, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.appoint_date, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.specialization, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.specialization, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.specialization, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.docs_pesel, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.docs_pesel, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.docs_pesel, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.service_type, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.service_type, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.service_type, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+<div class="form-horizontal">
+    <h4>Wizyta</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
+    <div class="form-group">
+        @Html.LabelFor(model => model.patients_pesel, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.patients_pesel, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.patients_pesel, "", new { @class = "text-danger" })
         </div>
     </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.estim_disease, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.estim_disease, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.estim_disease, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.appoint_date, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input class="form-control" name="appoint_date" id="appoint_date" type="datetime-local" value="@Model.appoint_date" />
+            @Html.ValidationMessageFor(model => model.appoint_date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <!--<div class="form-group">
+        @*Html.LabelFor(model => model.service_time, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        <div class="col-md-10">
+            @*Html.EditorFor(model => model.service_time, new { htmlAttributes = new { @class = "form-control" } })*@
+            @*Html.ValidationMessageFor(model => model.service_time, "", new { @class = "text-danger" })*@
+        </div>
+    </div>-->
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.specialization, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.specialization, (IEnumerable<SelectListItem>)ViewBag.Spec, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <!--<div class="form-group">
+        @*Html.LabelFor(model => model.docs_pesel, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        <div class="col-md-10">
+            @*Html.EditorFor(model => model.docs_pesel, new { htmlAttributes = new { @class = "form-control" } })*@
+            @*Html.ValidationMessageFor(model => model.docs_pesel, "", new { @class = "text-danger" })*@
+        </div>
+    </div>-->
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.docs_pesel, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <select class="form-control" id="docs_pesel" name="docs_pesel" value="@ViewBag.DocsSurname">
+                <option></option>
+            </select>
+            @Html.ValidationMessageFor(model => model.docs_pesel, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.service_type, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <select class="form-control" id="service_type" name="service_type" value="@ViewBag.opt">
+            </select>
+            @Html.ValidationMessageFor(model => model.service_type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Powrót do listy", "Index")
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+
+        $(document).ready(function () {
+
+                $.get("/Appointments/GetDocList", { specialization: $("#specialization option:selected").val() }, (function (data) {
+                    $("#docs_pesel").empty();
+                    $.each(data, function (index, row) {
+                       $("#docs_pesel").append("<option value='" + row.UserName + "'>" + row.Surname + "</option>");
+
+                    });
+                }));
+        });
+
+        //$(document).ready(function () {
+        //    $("#specialization").on('change', function () {
+        //        location.reload();
+        //    });
+        //});
+
+    $(document).ready(function () {
+        $("#specialization").on('change', function () {
+
+            $.get("/Appointments/GetDocList", { specialization: $("#specialization option:selected").val() }, (function (data) {
+                $("#docs_pesel").empty();
+                $.each(data, function (index, row) {
+                    $("#docs_pesel").append("<option value='" + row.UserName + "'>" + row.Surname + "</option>");
+
+                });
+
+            }));
+        });
+    });
+
+
+        $(document).ready(function () {
+            var type = '@ViewBag.opt';
+
+            if (type == 'konsultacja') {
+                $("#service_type").append("<option selected=\"selected\" value='konsultacja'>konsultacja</option>");
+            }
+            else
+                $("#service_type").append("<option value='konsultacja'>konsultacja</option>");
+
+
+            if (type == 'wypisanie recept') {
+                $("#service_type").append("<option selected=\"selected\" value='wypisanie recept'>wypisanie recept</option>");
+            }
+            else
+                $("#service_type").append("<option value='wypisanie recept'>wypisanie recept</option>");
+
+
+            if (type == 'zabieg') {
+                $("#service_type").append("<option selected=\"selected\" value='zabieg'>zabieg</option>");
+            }
+            else
+                $("#service_type").append("<option value='zabieg'>zabieg</option>");
+
+
+            if (type == 'wizyta kontrolna') {
+                $("#service_type").append("<option selected=\"selected\" value='wizyta kontrolna'>wizyta kontrolna</option>");
+            }
+            else
+                $("#service_type").append("<option value='wizyta kontrolna'>wizyta kontrolna</option>");
+
+
+            if (type == 'inne') {
+                $("#service_type").append("<option selected=\"selected\" value='inne'>inne</option>");
+            }
+            else
+                $("#service_type").append("<option value='inne'>inne</option>");
+
+        });
+
+
+
+</script>
+
 }
