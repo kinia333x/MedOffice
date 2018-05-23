@@ -9,6 +9,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace MedOffice.Controllers
 {
@@ -28,8 +29,8 @@ namespace MedOffice.Controllers
         //    }
         //}
 
-
-
+        private string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
+        
         [Authorize(Roles = "Administrator, Kierownik")]
         public ActionResult WorkerSearch(string searching, string sortOrder)
         {
@@ -185,16 +186,18 @@ namespace MedOffice.Controllers
         public ActionResult Edit([Bind(Include = "Id,Name,Surname,UserName,Specialization,Roles")] ApplicationUser user)
         {
             ApplicationDbContext context = new ApplicationDbContext();
+
             if (ModelState.IsValid)
             {
-                
-                //if (user.Roles.FirstOrDefault != "d843c219-de88-4571-83b6-0b5ed9bf90d7")
-                //{
-                //    user.Specialization = null;
-                //}
-
                 context.Entry(user).State = EntityState.Modified;
                 context.SaveChanges();
+
+                string query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = " + user.UserName + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-INSERTED' AND UserName = " + user.UserName;
+                context.Database.ExecuteSqlCommand(query);
+                
+                query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = " + user.UserName + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-DELETED' AND UserName = " + user.UserName;
+                context.Database.ExecuteSqlCommand(query);
+
                 return RedirectToAction("WorkerSearch");
             }
             return View(user);

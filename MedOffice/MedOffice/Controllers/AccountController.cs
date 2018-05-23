@@ -289,17 +289,14 @@ namespace MedOffice.Controllers
                     // Rola dodawania jest później, stąd dwa wpisy w archiwum przy tworzeniu nowego konta.
                     await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
 
-                    // Dodanie do archiwum ID osoby, która stworzyła nowe konto użytkownika:
-                    string query = "UPDATE [dbo].[UsersArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'INSERTED' AND UserName = " + model.UserName;
+                    // Dodanie do archiwum ID osoby, która stworzyła nowe konto użytkownika, a także dodanie roli dodanego użytkownika:
+                    string query = "UPDATE [dbo].[UsersArch] SET RId = '" + model.UserRoles + "', DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'INSERTED' AND UserName = " + model.UserName;
                     context.Database.ExecuteSqlCommand(query);
 
-                    // Drugi raz dodanie ID osoby, która stworzyła nowe konto użytkownika, a także dodanie roli dla stworzonego użytkownika.
-                    // Nie działa porównywanie ID z jakiegoś powodu (prawdopodobnie chodzi o znaki specjalne). Na tę chwilę do archiwum dodawana jest nazwa roli.
-                    // query = "UPDATE [dbo].[UsersArch] SET RId = (Select RoleId FROM [dbo].[AspNetUserRoles] WHERE dbo.RemoveNonAlphaCharacters(UserId) = dbo.RemoveNonAlphaCharacters(" + user.Id + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED' AND UserName = " + model.UserName;
-                    query = "UPDATE [dbo].[UsersArch] SET RId = '" + model.UserRoles + "', DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-INSERTED' AND UserName = " + model.UserName;
+                    // Dodanie roli rowna sie dwom wpisom z kategorii UPDATE, wiec je usuwamy:
+                    query = "DELETE FROM [dbo].[UsersArch] WHERE TypeOfChange = 'UPDATED-DELETED' AND UserName = " + model.UserName;
                     context.Database.ExecuteSqlCommand(query);
-
-                    query = "UPDATE [dbo].[UsersArch] SET RId = '" + model.UserRoles + "', DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-DELETED' AND UserName = " + model.UserName;
+                    query = "DELETE FROM [dbo].[UsersArch] WHERE TypeOfChange = 'UPDATED-INSERTED' AND UserName = " + model.UserName;
                     context.Database.ExecuteSqlCommand(query);
 
                     return RedirectToAction("ConfirmRegistration", "Account");

@@ -58,6 +58,12 @@ namespace MedOffice.Controllers
                 string query = "UPDATE [dbo].[PatientsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'INSERTED' AND Pesel = " + patient.Pesel;
                 db.Database.ExecuteSqlCommand(query);
 
+                query = "DELETE FROM [dbo].[PatientsArch] WHERE TypeOfChange = 'UPDATED-INSERTED' AND Pesel = " + patient.Pesel;
+                db.Database.ExecuteSqlCommand(query);
+
+                query = "DELETE FROM [dbo].[PatientsArch] WHERE TypeOfChange = 'UPDATED-DELETED' AND Pesel = " + patient.Pesel;
+                db.Database.ExecuteSqlCommand(query);
+
                 return RedirectToAction("Index");
             }
 
@@ -93,7 +99,7 @@ namespace MedOffice.Controllers
                 db.SaveChanges();
 
                 // Dodanie do archiwum użytkownika, który zmienił dane pacjenta:
-                string query = "UPDATE [dbo].[PatientsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-ISERTED' AND Pesel = " + patient.Pesel;
+                string query = "UPDATE [dbo].[PatientsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-INSERTED' AND Pesel = " + patient.Pesel;
                 db.Database.ExecuteSqlCommand(query);
 
                 query = "UPDATE [dbo].[PatientsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-DELETED' AND Pesel = " + patient.Pesel;
