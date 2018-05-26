@@ -155,14 +155,17 @@ namespace TutorialCS
                 cmd = new SqlCommand("select @@identity;", con);
                 int id = Convert.ToInt32(cmd.ExecuteScalar());
 
-                RecurrenceRule rule = RecurrenceRule.FromJson(id.ToString(), start, recurrenceJson);
-                string recurrenceString = rule.Encode();
-                if (!String.IsNullOrEmpty(recurrenceString))
+                if (recurrenceJson != null)
                 {
-                    cmd = new SqlCommand("update [WorkingTime] set [recurrence] = @recurrence where [id] = @id", con);
-                    cmd.Parameters.AddWithValue("recurrence", rule.Encode());
-                    cmd.Parameters.AddWithValue("id", id);
-                    cmd.ExecuteNonQuery();
+                    RecurrenceRule rule = RecurrenceRule.FromJson(id.ToString(), start, recurrenceJson);
+                    string recurrenceString = rule.Encode();
+                    if (!String.IsNullOrEmpty(recurrenceString))
+                    {
+                        cmd = new SqlCommand("update [WorkingTime] set [recurrence] = @recurrence where [id] = @id", con);
+                        cmd.Parameters.AddWithValue("recurrence", rule.Encode());
+                        cmd.Parameters.AddWithValue("id", id);
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
         }
