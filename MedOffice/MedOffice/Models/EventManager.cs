@@ -155,18 +155,31 @@ namespace TutorialCS
                 cmd = new SqlCommand("select @@identity;", con);
                 int id = Convert.ToInt32(cmd.ExecuteScalar());
 
-                if (recurrenceJson != null)
+                RecurrenceRule rule = RecurrenceRule.FromJson(id.ToString(), start, recurrenceJson);
+                string recurrenceString = rule.Encode();
+                if (!String.IsNullOrEmpty(recurrenceString))
                 {
-                    RecurrenceRule rule = RecurrenceRule.FromJson(id.ToString(), start, recurrenceJson);
-                    string recurrenceString = rule.Encode();
-                    if (!String.IsNullOrEmpty(recurrenceString))
-                    {
-                        cmd = new SqlCommand("update [WorkingTime] set [recurrence] = @recurrence where [id] = @id", con);
-                        cmd.Parameters.AddWithValue("recurrence", rule.Encode());
-                        cmd.Parameters.AddWithValue("id", id);
-                        cmd.ExecuteNonQuery();
-                    }
+                    cmd = new SqlCommand("update [WorkingTime] set [recurrence] = @recurrence where [id] = @id", con);
+                    cmd.Parameters.AddWithValue("recurrence", rule.Encode());
+                    cmd.Parameters.AddWithValue("id", id);
+                    cmd.ExecuteNonQuery();
                 }
+            }
+        }
+
+        internal void EventCreate(DateTime start, DateTime end, string text, string resource, int appointmentID)
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["AppointmentDBContext"].ConnectionString))
+            {
+                con.Open();
+
+                SqlCommand cmd = new SqlCommand("INSERT INTO [WorkingTime] (eventstart, eventend, name, resource, appointment_id) VALUES (@start, @end, @name, @resource, @appointmentID); ", con);  // SELECT SCOPE_IDENTITY();
+                cmd.Parameters.AddWithValue("start", start);
+                cmd.Parameters.AddWithValue("end", end);
+                cmd.Parameters.AddWithValue("name", text);
+                cmd.Parameters.AddWithValue("resource", resource);
+                cmd.Parameters.AddWithValue("appointmentID", appointmentID);
+                cmd.ExecuteScalar();
             }
         }
 

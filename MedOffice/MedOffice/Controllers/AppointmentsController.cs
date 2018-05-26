@@ -7,7 +7,6 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MedOffice.Models;
-using DayPilot.Web.Mvc.Recurrence;
 
 namespace MedOffice.Controllers
 {
@@ -314,11 +313,8 @@ namespace MedOffice.Controllers
                         {
                             db.Appointments.Add(appointment);
                             db.SaveChanges();
-                            string id = "123";  // id of the master event
-                            DateTime start = new DateTime(2014, 12, 10, 10, 0, 0);
-                            RecurrenceRule rule = RecurrenceRule.FromDateTime(id, start).Weekly().Indefinitely();
-                            string encoded = rule.Encode();
-                            new TutorialCS.EventManager().EventCreate(appointment.appoint_date, appointment.appoint_date.AddMinutes(20), appointment.service_type.ToString(), "1", null);
+                            //dodanie do kalendarza
+                            new TutorialCS.EventManager().EventCreate(appointment.appoint_date, appointment.appoint_date.AddMinutes(20), appointment.service_type + " " + appointment.patients_pesel, "1", appointment.ID);
                             return RedirectToAction("Index");
                         }
                         else
