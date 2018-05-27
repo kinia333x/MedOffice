@@ -244,6 +244,10 @@
     <Compile Include="Migrations\AppointmentDBContext\201805232147177_AppointArch.Designer.cs">
       <DependentUpon>201805232147177_AppointArch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\AppointmentDBContext\201805261526374_EmployeesChanges.cs" />
+    <Compile Include="Migrations\AppointmentDBContext\201805261526374_EmployeesChanges.Designer.cs">
+      <DependentUpon>201805261526374_EmployeesChanges.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AppointmentDBContext\AppointmentConf.cs" />
     <Compile Include="Migrations\201805061146160_UsersArch.cs" />
     <Compile Include="Migrations\201805061146160_UsersArch.Designer.cs">
@@ -367,6 +371,7 @@
     <Content Include="Views\Accountant\Edit.cshtml" />
     <Content Include="Views\Appointments\All.cshtml" />
     <Content Include="Views\Appointments\Particulars.cshtml" />
+    <Content Include="Views\Account\Delete.cshtml" />
     <None Include="Views\Error\PageNotFound.cshtml" />
     <Content Include="Views\Error\PermissionDenied.cshtml" />
     <Content Include="Views\Scheduler\Index.cshtml" />
@@ -417,6 +422,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\AppointmentDBContext\201805232147177_AppointArch.resx">
       <DependentUpon>201805232147177_AppointArch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\AppointmentDBContext\201805261526374_EmployeesChanges.resx">
+      <DependentUpon>201805261526374_EmployeesChanges.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\PatientDBContext\201804161815080_InitialCreate.resx">
       <DependentUpon>201804161815080_InitialCreate.cs</DependentUpon>

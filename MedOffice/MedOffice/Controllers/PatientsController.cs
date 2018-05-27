@@ -88,7 +88,7 @@ namespace MedOffice.Controllers
         {
             if (ModelState.IsValid)
             {
-                double time = -1; 
+                double time = -1;
 
                 db.Entry(patient).State = EntityState.Modified;
                 db.SaveChanges();
@@ -102,6 +102,7 @@ namespace MedOffice.Controllers
 
                 return RedirectToAction("Index");
             }
+
             return View(patient);
         }
 

@@ -15,11 +15,6 @@ namespace TutorialCS
     /// </summary>
     public class EventManager
     {
-        public void PopulateResources()
-        {
-
-        }
-
         public DataTable FilteredData(DateTime start, DateTime end)
         {
             SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM [WorkingTime] WHERE NOT (([eventend] <= @start) OR ([eventstart] >= @end))", ConfigurationManager.ConnectionStrings["AppointmentDBContext"].ConnectionString);
@@ -82,6 +77,17 @@ namespace TutorialCS
 
             return dt.DefaultView.ToTable();
 
+        }
+
+        public DataTable GetResourcesOneUser(string ID)
+        {
+            string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
+
+            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM [Resources] WHERE name = '" + ID + "'", ConfigurationManager.ConnectionStrings["AppointmentDBContext"].ConnectionString);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            return dt.DefaultView.ToTable();
         }
 
         public void EventMove(string id, DateTime start, DateTime end, string resource)

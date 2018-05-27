@@ -171,6 +171,12 @@ namespace MedOffice.Models
         public string Email { get; set; }
     }
 
+    public class RoleName
+    {
+        public string Username { get; set; }
+        public string Rolename { get; set; }
+    }
+
     public class SDateRange : RangeAttribute
     {
         public SDateRange()

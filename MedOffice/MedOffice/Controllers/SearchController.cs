@@ -30,7 +30,7 @@ namespace MedOffice.Controllers
         //}
 
         private string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
-        
+
         [Authorize(Roles = "Administrator, Kierownik")]
         public ActionResult WorkerSearch(string searching, string sortOrder)
         {
@@ -154,7 +154,6 @@ namespace MedOffice.Controllers
 
             ApplicationUser user = context.Users.Find(Id);
 
-
             // VV EMAIL i SENIORITY nie dzialaja
             var usr = new EditViewModel { Email = user.Email, UserName = user.UserName, Name = user.Name, Surname = user.Surname, Seniority = user.Seniority };
 
@@ -162,7 +161,7 @@ namespace MedOffice.Controllers
             {
                 return HttpNotFound();
             }
-            
+
             //}
             return View(usr);
         }
@@ -176,6 +175,7 @@ namespace MedOffice.Controllers
         public ActionResult Edit([Bind(Include = "Id,Email,Name,Surname,UserName,Specialization,Roles")] ApplicationUser user)
         {
             ApplicationDbContext context = new ApplicationDbContext();
+            AppointmentDBContext Appdb = new AppointmentDBContext();
 
             if (ModelState.IsValid)
             {
@@ -184,57 +184,18 @@ namespace MedOffice.Controllers
                 context.Entry(user).State = EntityState.Modified;
                 context.SaveChanges();
 
-                string query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = " + user.UserName + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-INSERTED' AND UserName = " + user.UserName + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'";;
+                string query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = " + user.UserName + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-INSERTED' AND UserName = " + user.UserName + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'"; ;
                 context.Database.ExecuteSqlCommand(query);
-                
+
                 query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = " + user.UserName + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-DELETED' AND UserName = " + user.UserName + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'";
                 context.Database.ExecuteSqlCommand(query);
+
+                query = "UPDATE [dbo].[Resources] SET fsname = '" + user.Name + " " + user.Surname + "' WHERE name = " + user.UserName + "";
+                Appdb.Database.ExecuteSqlCommand(query);
 
                 return RedirectToAction("WorkerSearch");
             }
             return View(user);
         }
-
-        /* USUWANIA NIE MA, Nie wiem, czy zadziała to, co jest na dole, ale dodana jest już komenda do archiwum, gdyby ktoś chciał zaimplementować usuwanie pracowników.
-        // GET: Search/Delete
-        [Authorize(Roles = "Administrator, Rejestrujący")]
-        public ActionResult Delete(int? id)
-        {
-            ApplicationDbContext context = new ApplicationDbContext();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            ApplicationUser user = context.Users.Find(id);
-
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(user);
-        }
-
-        // POST: Search/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator, Rejestrujący")]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            ApplicationDbContext context = new ApplicationDbContext();
-            ApplicationUser user = context.Users.Find(id);
-
-            context.Users.Remove(user);
-            context.SaveChanges();
-
-            string query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = " + user.UserName + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'DELETED' AND UserName = " + user.UserName;
-            context.Database.ExecuteSqlCommand(query);
-
-            return RedirectToAction("Index");
-        }
-        */
-
     }
 }

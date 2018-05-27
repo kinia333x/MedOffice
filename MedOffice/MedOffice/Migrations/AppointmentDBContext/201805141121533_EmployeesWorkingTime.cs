@@ -11,10 +11,10 @@ namespace MedOffice.Migrations.AppointmentDBContext
                 "dbo.Resources",
                 c => new
                 {
-                    id = c.Int(nullable: false, identity: true),
-                    name = c.String(),
+                    name = c.String(maxLength: 11),
                     fsname = c.String(),
-                });
+                })
+                .PrimaryKey(t => t.name);
             
             CreateTable(
                 "dbo.WorkingTime",
