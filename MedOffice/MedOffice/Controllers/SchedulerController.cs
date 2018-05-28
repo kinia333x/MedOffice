@@ -56,6 +56,13 @@ namespace TutorialCS.Controllers
             return View(usr);
         }
 
+        [Authorize(Roles = "Administrator, Kierownik, Rejestrujący, Lekarz")]
+        public ActionResult Appointments()
+        {
+            Session["ID"] = "wizyty";
+            return View();
+        }
+
         public ActionResult Backend()
         {
             string ID = Session["ID"].ToString();
@@ -221,7 +228,7 @@ namespace TutorialCS.Controllers
 
                 if (e.Level == 0)
                 {
-                    e.InnerHtml = String.Format("<span style=\"font - weight: bold\">Tydzień (trzeba dodac obliczanie ktory jest tydzien) </span>");
+                    e.InnerHtml = String.Format("<span style=\"font - weight: bold\">Tydzień</span>");
                 }
                 if (e.Level == 1)
                 {

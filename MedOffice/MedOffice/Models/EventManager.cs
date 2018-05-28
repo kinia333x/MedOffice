@@ -173,6 +173,26 @@ namespace TutorialCS
             }
         }
 
+        //przeladowane EventCreate dla dodawania wizyt
+        internal void EventCreate(DateTime start, DateTime end, string text, string resource, int appointmentID)
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["AppointmentDBContext"].ConnectionString))
+            {
+                con.Open();
+
+                SqlCommand cmd = new SqlCommand("INSERT INTO [WorkingTime] (eventstart, eventend, name, resource, appointment_id) VALUES (@start, @end, @name, @resource, @appointmentID); ", con);
+                cmd.Parameters.AddWithValue("start", start);
+                cmd.Parameters.AddWithValue("end", end);
+                cmd.Parameters.AddWithValue("name", text);
+                cmd.Parameters.AddWithValue("resource", resource);
+                cmd.Parameters.AddWithValue("appointmentID", appointmentID);
+                cmd.ExecuteScalar();
+
+                cmd = new SqlCommand("select @@identity;", con);
+                int id = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+        }
+
         public class Event
         {
             public string Id { get; set; }

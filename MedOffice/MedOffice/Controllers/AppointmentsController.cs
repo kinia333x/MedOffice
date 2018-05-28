@@ -317,6 +317,10 @@ namespace MedOffice.Controllers
                             string query = "UPDATE [dbo].[AppointmentsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'INSERTED' AND Idd = " + appointment.ID;
                             db.Database.ExecuteSqlCommand(query);
 
+                            //dodanie do kalendarza
+                            //"10" to id wizyt, narazie na sztywno
+                            new TutorialCS.EventManager().EventCreate(appointment.appoint_date, appointment.appoint_date.AddMinutes(20), appointment.service_type + " " + appointment.patients_pesel, "10", appointment.ID);
+
                             return RedirectToAction("Index");
                         }
                         else
