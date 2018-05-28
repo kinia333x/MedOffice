@@ -9,6 +9,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace MedOffice.Controllers
 {
@@ -28,7 +29,7 @@ namespace MedOffice.Controllers
         //    }
         //}
 
-
+        private string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
 
         [Authorize(Roles = "Administrator, Kierownik")]
         public ActionResult WorkerSearch(string searching, string sortOrder)
@@ -141,64 +142,60 @@ namespace MedOffice.Controllers
             return View(appointmentsList.ToList());
         }
 
-        // GET: Patients/Edit/5
+        // GET: Search/Edit/5
         public ActionResult Edit(string Id)
         {
             ApplicationDbContext context = new ApplicationDbContext();
+
             if (Id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             ApplicationUser user = context.Users.Find(Id);
-            var usr = new EditViewModel { UserName = user.UserName, Name = user.Name, Surname = user.Surname};
+
+            // VV EMAIL i SENIORITY nie dzialaja
+            var usr = new EditViewModel { Email = user.Email, UserName = user.UserName, Name = user.Name, Surname = user.Surname, Seniority = user.Seniority };
 
             if (user == null)
             {
                 return HttpNotFound();
             }
 
-            if (User.IsInRole("Administrator"))
-            {
-                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
-                                            .ToList(), "Name", "Name");
-            }
-            else if (User.IsInRole("Manager"))
-            {
-                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
-                               .ToList(), "Name", "Name");
-            }
-            else
-            {
-                return HttpNotFound();
-            }
-            
             //}
             return View(usr);
         }
 
 
-        // POST: Patients/Edit/5
+        // POST: Search/Edit/5 
         // Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Surname,UserName,Specialization,Roles")] ApplicationUser user)
+        public ActionResult Edit([Bind(Include = "Id,Email,Name,Surname,UserName,Specialization,Roles")] ApplicationUser user)
         {
             ApplicationDbContext context = new ApplicationDbContext();
+            AppointmentDBContext Appdb = new AppointmentDBContext();
+
             if (ModelState.IsValid)
             {
-                
-                //if (user.Roles.FirstOrDefault != "d843c219-de88-4571-83b6-0b5ed9bf90d7")
-                //{
-                //    user.Specialization = null;
-                //}
+                double time = -1;
 
                 context.Entry(user).State = EntityState.Modified;
                 context.SaveChanges();
+
+                string query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = " + user.UserName + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-INSERTED' AND UserName = " + user.UserName + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'"; ;
+                context.Database.ExecuteSqlCommand(query);
+
+                query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = " + user.UserName + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-DELETED' AND UserName = " + user.UserName + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'";
+                context.Database.ExecuteSqlCommand(query);
+
+                query = "UPDATE [dbo].[Resources] SET fsname = '" + user.Name + " " + user.Surname + "' WHERE name = " + user.UserName + "";
+                Appdb.Database.ExecuteSqlCommand(query);
+
                 return RedirectToAction("WorkerSearch");
             }
             return View(user);
         }
-        
     }
 }

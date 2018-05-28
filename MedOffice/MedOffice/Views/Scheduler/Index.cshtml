@@ -2,67 +2,122 @@
 @using DayPilot.Web.Mvc.Enums
 @using DayPilot.Web.Mvc.Events.Scheduler;
 @using DayPilot.Web.Mvc.Enums.Scheduler;
+@model MedOffice.Models.ApplicationUser
 
 @{
-    ViewBag.Title = "Scheduler with Sortable Columns for ASP.NET MVC 5";
+    ViewBag.Title = "Karta pracownika";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <style>
     .row1 {
         text-align: center
     }
+    .row2 {
+        text-align: center;
+        height: 42px;
+    }
+    .row3 {
+        text-align: center;
+        height: 20px;
+    }
+    .row4 {
+        text-align: center;
+        height: 10px;
+    }
 </style>
 
-@Html.DayPilotMenu("menu", new DayPilotMenuConfig
-{
-    CssClassPrefix = "menu_default",
-    Items = new DayPilot.Web.Mvc.MenuItemCollection
+<div>
+    <div class="col-md-offset-0-5 col-md-4regt">
+        <h2>@ViewBag.Title.</h2>
+    </div>
+    <br style="clear: both;">
+    <div class="col-md-offset-0-5 col-md-4regst">
+        <h4>Szczegółowe informacje o pracowniku.</h4>
+    </div>
+    <br style="clear: both;">
+    <hr />
+
+    @if (ViewBag.RoleName == null)
     {
-        new DayPilot.Web.Mvc.MenuItem { Text = "Usuń", Action = MenuItemAction.CallBack, Command = "Delete"}
+        ViewBag.RoleName = "administrator";
     }
-})
 
-@Html.DayPilotScheduler("dps", new DayPilotSchedulerConfig
+    <div class="row2"><h2><b>@Html.DisplayFor(model => model.Name) @Html.DisplayFor(model => model.Surname)</b>, @ViewBag.RoleName</h2></div>
+
+    @Html.DayPilotMenu("menu", new DayPilotMenuConfig
+    {
+        CssClassPrefix = "menu_default",
+        Items = new DayPilot.Web.Mvc.MenuItemCollection
 {
-    BackendUrl = Url.Content("~/Scheduler/Backend"),
-    EventResizeHandling = EventResizeHandlingType.CallBack,
-    EventMoveHandling = EventMoveHandlingType.CallBack,
-    CellGroupBy = GroupBy.Day,
-    CellDuration = 1440,
-    Days = 31,
-    Scale = TimeScale.Hour,
-    StartDate = new DateTime(DateTime.Today.Year, 1, 1),
-    BeforeRowHeaderRenderJavaScript = "row(args);", // LOL
-    CellWidth = 40,
-    EventHeight = 25,
+new DayPilot.Web.Mvc.MenuItem { Text = "Usuń", Action = MenuItemAction.CallBack, Command = "Delete"}
+}
+    })
 
-    HeaderColumns = new RowHeaderColumnCollection {
-new RowHeaderColumn("<center><a href='javascript:dps.commandCallBack(\"sort\", { field: \"name\" }); '>Pesel</a></center>", 100),
-new RowHeaderColumn("<center><a href='javascript:dps.commandCallBack(\"sort\", { field: \"fsname\" });'>Personalia</a></center>", 100)
+    @Html.DayPilotScheduler("dps", new DayPilotSchedulerConfig
+    {
+
+        BackendUrl = Url.Content("~/Scheduler/Backend"),
+        EventResizeHandling = EventResizeHandlingType.CallBack,
+        EventMoveHandling = EventMoveHandlingType.CallBack,
+        CellGroupBy = GroupBy.Day,
+        CellDuration = 1440,
+        Days = 31,
+        Scale = TimeScale.Hour,
+        StartDate = new DateTime(DateTime.Today.Year, 1, 1),
+        BeforeRowHeaderRenderJavaScript = "row(args);", // LOL
+        CellWidth = 40,
+        EventHeight = 25,
+
+        HeaderColumns = new RowHeaderColumnCollection {
+new RowHeaderColumn("<center>Pesel</center>", 100),
+new RowHeaderColumn("<center>Personalia</center>", 100),
+//new RowHeaderColumn("<center><a href='javascript:dps.commandCallBack(\"sort\", { field: \"fsname\" });'>Personalia</a></center>", 100)
 },
-
-    TimeHeaders = new TimeHeaderCollection {
+        TimeHeaders = new TimeHeaderCollection {
 //new TimeHeader(GroupBy.Month, "MMMM yyyy"),
 new TimeHeader(GroupBy.Week),
 new TimeHeader(GroupBy.Day),
 new TimeHeader(GroupBy.Hour)
 },
 
-    ShowNonBusiness = false,
-    BusinessBeginsHour = 6,
-    BusinessEndsHour = 20,
+        ShowNonBusiness = false,
+        BusinessBeginsHour = 6,
+        BusinessEndsHour = 20,
 
-    EventClickHandling = EventClickHandlingType.JavaScript,
-    EventClickJavaScript = "ask(e);",
-    TimeRangeSelectedHandling = TimeRangeSelectedHandlingType.JavaScript,
-    TimeRangeSelectedJavaScript = "create(start, end, resource)",
-    ContextMenu = "menu",
-})
+        EventClickHandling = EventClickHandlingType.JavaScript,
+        EventClickJavaScript = "ask(e);",
+        TimeRangeSelectedHandling = TimeRangeSelectedHandlingType.JavaScript,
+        TimeRangeSelectedJavaScript = "create(start, end, resource)",
+        ContextMenu = "menu",
+    })
+
+    <div class="row4"></div>
+
+    @if (Model.Specialization != null)
+    {
+        <div class="row3">
+            <b>Specjalizacja:</b> @Html.DisplayFor(model => model.Specialization)
+        </div>
+    }
+
+    <div class="row3">
+        <b>Email:</b> @Html.DisplayFor(model => model.Email)
+    </div>
+
+    <div class="row3">
+        <b>Uzyskanie kwalifikacji:</b> @Html.DisplayFor(model => model.Experience, "{0:dd/MM/yyyy}")
+    </div>
+
+    <div class="row3">
+        <b>Uzyskanie zatrudnienia:</b> @Html.DisplayFor(model => model.Seniority)
+    </div>
+</div>
 
 
 <script type="text/javascript">
     function row(args) {
-      args.row.cssClass = "row1";
+        args.row.cssClass = "row1";
     };
 </script>
 

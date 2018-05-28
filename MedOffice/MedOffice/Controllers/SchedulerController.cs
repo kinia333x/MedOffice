@@ -10,29 +10,79 @@ using DayPilot.Web.Mvc.Events.Scheduler;
 using DayPilot.Web.Mvc.Json;
 using DayPilot.Web.Mvc.Recurrence;
 using DayPilot.Web.Mvc.Data;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
+using MedOffice.Models;
+using System.Net;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace TutorialCS.Controllers
 {
     public class SchedulerController : Controller
     {
-        //
-        // GET: /Scheduler/
-        public ActionResult Index()
+        // GET: /Scheduler/id
+        public ActionResult Index(string Id)
         {
-            return View();
+            string name = Id;
+
+            if (name == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            AppointmentDBContext db = new AppointmentDBContext();
+            Resources Resource = db.Resources.Find(name);
+           
+            ApplicationDbContext db2 = new ApplicationDbContext();
+            ApplicationUser usr = db2.Users
+                .Where(y => y.UserName.Equals(name))
+                .ToList()
+                .FirstOrDefault();
+
+            var Roles = db2.Roles.ToList();
+            var RoleName = Roles.Where(r => r.Id.Equals(usr.Roles)).Select(r => r.Name).FirstOrDefault();
+
+            usr = db2.Users.Find(usr.Id);
+            ViewBag.RoleName = RoleName;
+
+            if (Resource == null || usr == null)
+            {
+                return HttpNotFound();
+            }
+
+            Session["ID"] = name;
+            return View(usr);
         }
 
         public ActionResult Backend()
         {
-            return new Dps().CallBack(this);
+            string ID = Session["ID"].ToString();
+
+            if (ID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            return new Dps(ID).CallBack(this);
         }
 
         class Dps : DayPilotScheduler
         {
+            private string ID;
+
+            public Dps(string ID)
+            {
+                this.ID = ID;
+            }
+
+            private string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
+            private bool RoleChecker = System.Web.HttpContext.Current.User.IsInRole("Administrator") || System.Web.HttpContext.Current.User.IsInRole("Kierownik");
+
             protected override void OnInit(InitArgs e)
             {
-                LoadResources();
-
+                LoadResourcesOneUser(ID);
                 UpdateWithMessage("Welcome!", CallBackUpdateType.Full);
             }
 
@@ -47,13 +97,24 @@ namespace TutorialCS.Controllers
                 }
             }
 
+            private void LoadResourcesOneUser(string ID)
+            {
+                Resources.Clear();
+                foreach (DataRow r in new EventManager().GetResourcesOneUser(ID).Rows)
+                {
+                    Resource res = new Resource((string)r["name"], Convert.ToString(r["id"]));
+                    res.DataItem = r;
+                    Resources.Add(res);
+                }
+            }
+
             private void LoadResources()
             {
                 LoadResources("name");
             }
 
             protected override void OnBeforeResHeaderRender(BeforeResHeaderRenderArgs e)
-            { 
+            {
                 e.Columns[0].Html = "" + e.DataItem["fsname"];
             }
 
@@ -157,7 +218,7 @@ namespace TutorialCS.Controllers
 
             protected override void OnBeforeTimeHeaderRender(BeforeTimeHeaderRenderArgs e)
             {
-                
+
                 if (e.Level == 0)
                 {
                     e.InnerHtml = String.Format("<span style=\"font - weight: bold\">Tydzień (trzeba dodac obliczanie ktory jest tydzien) </span>");
@@ -166,7 +227,7 @@ namespace TutorialCS.Controllers
                 {
                     e.InnerHtml = String.Format("<span style=\"font - weight: bold\">{0} </span>", e.Start.ToShortDateString());
                 }
-                
+
             }
         }
     }

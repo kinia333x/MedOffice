@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" />
@@ -206,7 +206,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AppointmentsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-	<Compile Include="Controllers\EventController.cs" />
+    <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\SchedulerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -236,9 +236,17 @@
     <Compile Include="Migrations\AppointmentDBContext\201805070833109_Service_time.Designer.cs">
       <DependentUpon>201805070833109_Service_time.cs</DependentUpon>
     </Compile>
-	<Compile Include="Migrations\AppointmentDBContext\201805141121533_EmployeesWorkingTime.cs" />
+    <Compile Include="Migrations\AppointmentDBContext\201805141121533_EmployeesWorkingTime.cs" />
     <Compile Include="Migrations\AppointmentDBContext\201805141121533_EmployeesWorkingTime.Designer.cs">
       <DependentUpon>201805141121533_EmployeesWorkingTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\AppointmentDBContext\201805232147177_AppointArch.cs" />
+    <Compile Include="Migrations\AppointmentDBContext\201805232147177_AppointArch.Designer.cs">
+      <DependentUpon>201805232147177_AppointArch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\AppointmentDBContext\201805261526374_EmployeesChanges.cs" />
+    <Compile Include="Migrations\AppointmentDBContext\201805261526374_EmployeesChanges.Designer.cs">
+      <DependentUpon>201805261526374_EmployeesChanges.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\AppointmentDBContext\AppointmentConf.cs" />
     <Compile Include="Migrations\201805061146160_UsersArch.cs" />
@@ -261,8 +269,9 @@
     <Compile Include="Migrations\PatientDBContext\PatientConf.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Appointment.cs" />
+    <Compile Include="Models\AppointmentsArch.cs" />
     <Compile Include="Models\AppointmentViewModels.cs" />
-	<Compile Include="Models\EmployeesWorkingTime.cs" />
+    <Compile Include="Models\EmployeesWorkingTime.cs" />
     <Compile Include="Models\EventManager.cs" />
     <Compile Include="Models\PatientsArch.cs" />
     <Compile Include="Models\UsersArch.cs" />
@@ -297,7 +306,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-	<Content Include="Themes\areas.css" />
+    <Content Include="Themes\areas.css" />
     <Content Include="Themes\areas\icons.png" />
     <Content Include="Themes\recurrence.css" />
     <Content Include="Themes\repeat16.png" />
@@ -362,9 +371,10 @@
     <Content Include="Views\Accountant\Edit.cshtml" />
     <Content Include="Views\Appointments\All.cshtml" />
     <Content Include="Views\Appointments\Particulars.cshtml" />
+    <Content Include="Views\Account\Delete.cshtml" />
     <None Include="Views\Error\PageNotFound.cshtml" />
     <Content Include="Views\Error\PermissionDenied.cshtml" />
-	<Content Include="Views\Scheduler\Index.cshtml" />
+    <Content Include="Views\Scheduler\Index.cshtml" />
     <Content Include="Views\Event\Edit.cshtml" />
     <Content Include="Views\Event\Create.cshtml" />
     <Content Include="Views\Event\RecurrentDeleteMode.cshtml" />
@@ -372,7 +382,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-	<Folder Include="Themes\scheduler_white\" />
+    <Folder Include="Themes\scheduler_white\" />
     <Folder Include="Views\ClaimsPrincipalExtension\" />
   </ItemGroup>
   <ItemGroup>
@@ -407,8 +417,14 @@
     <EmbeddedResource Include="Migrations\201805061146160_UsersArch.resx">
       <DependentUpon>201805061146160_UsersArch.cs</DependentUpon>
     </EmbeddedResource>
-	<EmbeddedResource Include="Migrations\AppointmentDBContext\201805141121533_EmployeesWorkingTime.resx">
+    <EmbeddedResource Include="Migrations\AppointmentDBContext\201805141121533_EmployeesWorkingTime.resx">
       <DependentUpon>201805141121533_EmployeesWorkingTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\AppointmentDBContext\201805232147177_AppointArch.resx">
+      <DependentUpon>201805232147177_AppointArch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\AppointmentDBContext\201805261526374_EmployeesChanges.resx">
+      <DependentUpon>201805261526374_EmployeesChanges.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\PatientDBContext\201804161815080_InitialCreate.resx">
       <DependentUpon>201804161815080_InitialCreate.cs</DependentUpon>

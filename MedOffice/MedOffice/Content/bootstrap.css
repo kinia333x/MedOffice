@@ -639,6 +639,44 @@ dd {
   }
 }
 
+@media (min-width: 768px) {
+    .dl-horizontal2 dt {
+        float: left;
+        width: 20%;
+        overflow: hidden;
+        clear: left;
+        text-align: right;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-left: 35%;
+        text-align: center;
+    }
+
+    .dl-horizontal2 dd {
+        margin-left: 308px;
+    }
+
+        .dl-horizontal2 dd:before,
+        .dl-horizontal2 dd:after {
+            display: table;
+            content: " ";
+        }
+
+        .dl-horizontal2 dd:after {
+            clear: both;
+        }
+
+        .dl-horizontal2 dd:before,
+        .dl-horizontal2 dd:after {
+            display: table;
+            content: " ";
+        }
+
+        .dl-horizontal2 dd:after {
+            clear: both;
+        }
+}
+
 abbr[title],
 abbr[data-original-title] {
   cursor: help;

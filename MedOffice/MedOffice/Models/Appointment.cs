@@ -76,5 +76,6 @@ namespace MedOffice.Models
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<WorkingTime> WorkingTime { get; set; }
         public DbSet<Resources> Resources { get; set; }
+        public DbSet<AppointmentsArch> AppointmentsArch { get; set; }
     }
 }
