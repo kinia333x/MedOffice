@@ -46,7 +46,10 @@ namespace MedOffice.Controllers
         [Authorize(Roles = "Administrator, Kierownik")]
         public ActionResult All()
         {
+
+
             return View(db.Appointments.ToList());
+
         }
 
 
