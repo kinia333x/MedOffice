@@ -26,13 +26,13 @@ namespace MedOffice.Models
 
         [Required(ErrorMessage = "Pesel jest wymagany.")]
         [Display(Name = "Pesel:")]
-        [PeselUnique]
-        [PeselAndDateOfBirth("BirthDate")]
+        [PeselUnique("Id")]
         [RegularExpression("([0-9]{11})", ErrorMessage = "Pole pesel musi zawierać 11 cyfr.")]
         public string Pesel { get; set; }
 
         [Required(ErrorMessage = "Data urodzenia jest wymagana.")]
         [Display(Name = "Data urodzenia:")]
+        [PeselAndDateOfBirth("Pesel")]
         [DataType(DataType.Date, ErrorMessage = "DATA")]
         [PastDate]
         public DateTime BirthDate { get; set; }
@@ -59,64 +59,83 @@ namespace MedOffice.Models
     }
     public class PeselUniqueAttribute : ValidationAttribute
     {
+        private string _IdName { get; set; }
+        public PeselUniqueAttribute(string IdName)
+        {
+            _IdName = IdName;
+        }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             PatientDBContext db = new PatientDBContext();
-            var patients = db.Patients.FirstOrDefault(p => p.Pesel == (string)value);
+            var patient = db.Patients.FirstOrDefault(p => p.Pesel == (string)value);
 
-            if (patients == null)
+            if (patient == null)
             {
                 return ValidationResult.Success;
             }
             else
             {
-                return new ValidationResult("Pacjent o padanym peselu już istnieje.");
+                var _IdProperty = validationContext.ObjectType.GetProperty(_IdName);
+                if (_IdProperty == null)
+                {
+                    return new ValidationResult("Error!");
+                }
+
+                int _Id = (int)_IdProperty.GetValue(validationContext.ObjectInstance, null);
+
+                if (_Id == patient.Id)
+                {
+                    return ValidationResult.Success;
+                }
+                else
+                {
+                    return new ValidationResult("Pacjent o padanym peselu już istnieje.");
+                }
             }
         }
     }
     public class PeselAndDateOfBirthAttribute : ValidationAttribute
     {
-        private string _birthDateName { get; set; }
-        public PeselAndDateOfBirthAttribute(string birthDateName)
+        private string _PeselName { get; set; }
+        public PeselAndDateOfBirthAttribute(string PeselName)
         {
-            _birthDateName = birthDateName;
+            _PeselName = PeselName;
         }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            string _value = value.ToString();
-            var _birthDateProperty = validationContext.ObjectType.GetProperty(_birthDateName);
-            if (_birthDateProperty == null)
+            DateTime _value = (DateTime)value;
+            var dt = _value.ToString("yyyyMMdd");
+
+            var _PeselProperty = validationContext.ObjectType.GetProperty(_PeselName);
+            if (_PeselProperty == null)
             {
                 return new ValidationResult("Error!");
             }
+            string _Pesel = _PeselProperty.GetValue(validationContext.ObjectInstance, null).ToString();
 
-            DateTime _birthDate = (DateTime)_birthDateProperty.GetValue(validationContext.ObjectInstance, null);
-
-            var dt = _birthDate.ToString("yyyyMMdd");
-
-            if (dt.ToString()[2] != _value[0])
+            if (dt.ToString()[2] != _Pesel[0])
             {
                 return new ValidationResult("Data urodzenia oraz pesel nie zgadzają się. Rok jest niepoprawny.");
             }
-            if (dt.ToString()[3] != _value[1])
+            if (dt.ToString()[3] != _Pesel[1])
             {
                 return new ValidationResult("Data urodzenia oraz pesel nie zgadzają się. Rok jest niepoprawny.");
             }
 
-            if (dt.ToString()[4] != _value[2])
+            if (dt.ToString()[4] != _Pesel[2])
             {
                 return new ValidationResult("Data urodzenia oraz pesel nie zgadzają się. Miesiąc jest niepoprawny.");
             }
-            if (dt.ToString()[5] != _value[3])
+            if (dt.ToString()[5] != _Pesel[3])
             {
                 return new ValidationResult("Data urodzenia oraz pesel nie zgadzają się. Miesiąc jest niepoprawny.");
             }
 
-            if (dt.ToString()[6] != _value[4])
+            if (dt.ToString()[6] != _Pesel[4])
             {
                 return new ValidationResult("Data urodzenia oraz pesel nie zgadzają się. Dzień jest niepoprawny.");
             }
-            if (dt.ToString()[7] != _value[5])
+            if (dt.ToString()[7] != _Pesel[5])
             {
                 return new ValidationResult("Data urodzenia oraz pesel nie zgadzają się. Dzień jest niepoprawny.");
             }
@@ -127,5 +146,6 @@ namespace MedOffice.Models
     public class PatientDBContext : DbContext
     {
         public DbSet<Patient> Patients { get; set; }
+        public DbSet<PatientsArch> PatientsArch { get; set; }
     }
 }

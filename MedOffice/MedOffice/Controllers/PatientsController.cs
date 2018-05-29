@@ -14,6 +14,7 @@ namespace MedOffice.Controllers
     public class PatientsController : Controller
     {
         private PatientDBContext db = new PatientDBContext();
+        private string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
 
         // GET: Patients
         public ActionResult Index()
@@ -53,6 +54,10 @@ namespace MedOffice.Controllers
             {
                 db.Patients.Add(patient);
                 db.SaveChanges();
+
+                string query = "UPDATE [dbo].[PatientsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'INSERTED' AND Pesel = " + patient.Pesel;
+                db.Database.ExecuteSqlCommand(query);
+
                 return RedirectToAction("Index");
             }
 
@@ -83,10 +88,21 @@ namespace MedOffice.Controllers
         {
             if (ModelState.IsValid)
             {
+                double time = -1;
+
                 db.Entry(patient).State = EntityState.Modified;
                 db.SaveChanges();
+
+                // Dodanie do archiwum użytkownika, który zmienił dane pacjenta:
+                string query = "UPDATE [dbo].[PatientsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-INSERTED' AND Pesel = " + patient.Pesel + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'";
+                db.Database.ExecuteSqlCommand(query);
+
+                query = "UPDATE [dbo].[PatientsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-DELETED' AND Pesel = " + patient.Pesel + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'"; ;
+                db.Database.ExecuteSqlCommand(query);
+
                 return RedirectToAction("Index");
             }
+
             return View(patient);
         }
 
@@ -113,6 +129,11 @@ namespace MedOffice.Controllers
             Patient patient = db.Patients.Find(id);
             db.Patients.Remove(patient);
             db.SaveChanges();
+
+            // Dodanie do archiwum użytkownika, który usunął dane pacjenta:
+            string query = "UPDATE [dbo].[PatientsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'DELETED' AND Pesel = " + patient.Pesel;
+            db.Database.ExecuteSqlCommand(query);
+
             return RedirectToAction("Index");
         }
 

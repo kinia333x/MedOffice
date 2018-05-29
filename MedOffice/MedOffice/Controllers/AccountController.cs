@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using MedOffice.Models;
 using System.Collections.Generic;
+using System.Net;
 
 namespace MedOffice.Controllers
 {
@@ -18,15 +19,16 @@ namespace MedOffice.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
 
         ApplicationDbContext context;
-    
+
         public AccountController()
         {
             context = new ApplicationDbContext();
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -38,9 +40,9 @@ namespace MedOffice.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -124,7 +126,7 @@ namespace MedOffice.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -148,15 +150,14 @@ namespace MedOffice.Controllers
                 ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
                                             .ToList(), "Name", "Name");
             }
-            else if (User.IsInRole("Manager"))
+            else if (User.IsInRole("Kierownik"))
             {
-                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Kierownik"))
                                .ToList(), "Name", "Name");
             }
 
             List<SelectListItem> Specializations = new List<SelectListItem>()
             {
-                new SelectListItem { Text = "- Wybierz jedno -" }, 
                 new SelectListItem { Text = "Alergologia" },
                 new SelectListItem { Text = "Anestezjologia i intensywna terapia" },
                 new SelectListItem { Text = "Angiologia" },
@@ -257,8 +258,24 @@ namespace MedOffice.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                if (model.Specialization != "Lekarz")
+                {
+                    model.Specialization = null;
+                }
+
+                var user = new ApplicationUser
+                {
+                    Name = model.Name,
+                    Surname = model.Surname,
+                    Seniority = model.Seniority,
+                    Experience = model.Experience,
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    Specialization = model.Specialization
+                };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
                     // Wyłączenie automatycznego logowania po rejestracji:
@@ -270,41 +287,45 @@ namespace MedOffice.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    // Dodanie roli dla nowego użytkownika:
+                    // Dodanie roli dla nowego użytkownika.
+                    // Rola dodawania jest później, stąd dwa wpisy w archiwum przy tworzeniu nowego konta.
                     await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
-                    // Dodanie specjalizacji: 
-                    if (model.Specialization != "- Wybierz jedno -")
-                    {
-                        user.Specialization = model.Specialization;
-                        await this.UserManager.UpdateAsync(user);
-                    }
 
-                    user.Name = model.Name;
-                    user.Surname = model.Surname;
-                    user.Seniority = model.Seniority;
-                    user.Experience = model.Experience;
-                    await this.UserManager.UpdateAsync(user);
+                    // Dodanie do archiwum ID osoby, która stworzyła nowe konto użytkownika, a także dodanie roli dodanego użytkownika:
+                    string query = "UPDATE [dbo].[UsersArch] SET RId = '" + model.UserRoles + "', DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'INSERTED' AND UserName = " + model.UserName;
+                    context.Database.ExecuteSqlCommand(query);
 
-                    await this.UserManager.AddClaimAsync(user.Id, new Claim("FirstName", user.Name));
-                    await this.UserManager.AddClaimAsync(user.Id, new Claim("LastName", user.Surname));
+                    // Dodanie roli rowna sie dwom wpisom z kategorii UPDATE, wiec je usuwamy:
+                    query = "DELETE FROM [dbo].[UsersArch] WHERE TypeOfChange = 'UPDATED-DELETED' AND UserName = " + model.UserName;
+                    context.Database.ExecuteSqlCommand(query);
+                    query = "DELETE FROM [dbo].[UsersArch] WHERE TypeOfChange = 'UPDATED-INSERTED' AND UserName = " + model.UserName;
+                    context.Database.ExecuteSqlCommand(query);
+
+                    // Dodanie do tabeli Resources danych nowo zarejestrowanego pracownika:
+                    AppointmentDBContext Appdb = new AppointmentDBContext();
+
+                    query = "INSERT INTO [dbo].[Resources] (name, fsname) VALUES ('" + model.UserName + "', '" + model.Name + " " + model.Surname + "')";
+                    Appdb.Database.ExecuteSqlCommand(query);
 
                     return RedirectToAction("ConfirmRegistration", "Account");
                 }
 
-                if (User.IsInRole("Administrator"))
-                {
-                    ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
-                                                .ToList(), "Name", "Name");
-                }
-                else if (User.IsInRole("Manager"))
-                {
-                    ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
-                                   .ToList(), "Name", "Name");
-                }
+                AddErrors(result);
+            }
 
-                List<SelectListItem> Specializations = new List<SelectListItem>()
+            if (User.IsInRole("Administrator"))
+            {
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator"))
+                                            .ToList(), "Name", "Name");
+            }
+            else if (User.IsInRole("Manager"))
+            {
+                ViewBag.UserRoles = new SelectList(context.Roles.Where(u => !u.Name.Contains("Administrator") && !u.Name.Contains("Manager"))
+                               .ToList(), "Name", "Name");
+            }
+
+            List<SelectListItem> Specializations = new List<SelectListItem>()
                 {
-                    new SelectListItem { Text = "- Wybierz jedno -" },
                     new SelectListItem { Text = "Alergologia" },
                     new SelectListItem { Text = "Alergologia" },
                     new SelectListItem { Text = "Anestezjologia i intensywna terapia" },
@@ -392,12 +413,8 @@ namespace MedOffice.Controllers
                     new SelectListItem { Text = "Zdrowie publiczne " },
                 };
 
-                ViewBag.Spec = Specializations;
+            ViewBag.Spec = Specializations;
 
-                AddErrors(result);
-            }
-
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
@@ -621,6 +638,52 @@ namespace MedOffice.Controllers
             return View(model);
         }
 
+        // GET: Search/Delete
+        [Authorize(Roles = "Administrator, Rejestrujący")]
+        public ActionResult Delete(string id)
+        {
+            ApplicationDbContext context = new ApplicationDbContext();
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ApplicationUser user = context.Users.Find(id);
+
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(user);
+        }
+
+        // POST: 
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator, Rejestrujący")]
+        public ActionResult DeleteConfirmed(string id)
+        {
+            ApplicationDbContext context = new ApplicationDbContext();
+            AppointmentDBContext Appdb = new AppointmentDBContext();
+            ApplicationUser user = context.Users.Find(id);
+
+            context.Users.Remove(user);
+            context.SaveChanges();
+
+            string query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = '" + user.UserName + "'), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'DELETED' AND UserName = " + user.UserName;
+            context.Database.ExecuteSqlCommand(query);
+
+            query = "DELETE FROM [dbo].[WorkingTime] WHERE resource = (SELECT id FROM [dbo].[Resources] WHERE name = '" + user.UserName + "')";
+            Appdb.Database.ExecuteSqlCommand(query);
+
+            query = "DELETE FROM [dbo].[Resources] WHERE name = '" + user.UserName + "'";
+            Appdb.Database.ExecuteSqlCommand(query);
+
+            return RedirectToAction("WorkerSearch", "Search");
+        }
+
         //
         // POST: /Account/LogOff
         [HttpPost]
@@ -719,3 +782,4 @@ namespace MedOffice.Controllers
         #endregion
     }
 }
+

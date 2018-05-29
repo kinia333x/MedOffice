@@ -1,0 +1,47 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Event Move</title>
+    <style type="text/css">
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            font-size: 10pt;
+        }
+    </style>
+</head>
+<body>
+    <div>
+
+        Do you want to edit this occurrence or the series?
+
+        <div><label for="this"><input type="radio" name="result" value="this" id="this" checked="checked" /> This occurrence only</label></div>
+        <div><label for="series"><input type="radio" name="result" value="series" id="series" /> Whole series</label></div>
+
+        <div style="margin-top:10px">
+            <button onclick="javascript:clicked(selected());">OK</button>
+            <button onclick="javascript:clicked('cancel');">Cancel</button>
+        </div>
+
+    </div>
+    <script type="text/javascript">
+
+    function selected() {
+        if (document.getElementById("this").checked) {
+            return "this";
+        }
+        return "series";
+    }
+
+    function clicked(result) {
+        if (parent && parent.DayPilot && parent.DayPilot.ModalStatic) {
+            parent.DayPilot.ModalStatic.close(result);
+        }
+    }
+
+    </script>
+
+</body>
+</html>

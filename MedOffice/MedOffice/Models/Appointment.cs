@@ -34,7 +34,7 @@ namespace MedOffice.Models
         [Required(ErrorMessage = "Data wizyty jest wymagana.")]
         [Display(Name = "Data wizyty:")]
         [DataType(DataType.Date, ErrorMessage = "DATA")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime appoint_date { get; set; }          //DATA WIZYTY
 
         [Required(ErrorMessage = "Specjalizacja jest wymagana.")]
@@ -42,13 +42,16 @@ namespace MedOffice.Models
         public string specialization { get; set; }          //SPECJALIZACJA
 
         [Required(ErrorMessage = "Lekarz jest wymagany.")]
-        [Display(Name = "Pesel lekarza:")]
+        [Display(Name = "Lekarz:")]
         public string docs_pesel { get; set; }              //PESEL LEKARZA
 
         [Required(ErrorMessage = "Typ usługi jest wymagany.")]
         [Display(Name = "Typ usługi:")]
         public string service_type { get; set; }            //TYP USŁUGI
 
+        //[Required(ErrorMessage = "Czas trwania wizyty jest wymagany.")]
+        [Display(Name = "Szacowany czas trwania:")]
+        public int service_time { get; set; }               //CZAS TRWANIA WIZYTY
 
         [Display(Name = "Nazwa usługi:")]
         public string service_name { get; set; }            //nazwa usługi
@@ -71,5 +74,8 @@ namespace MedOffice.Models
     public class AppointmentDBContext : DbContext
     {
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<WorkingTime> WorkingTime { get; set; }
+        public DbSet<Resources> Resources { get; set; }
+        public DbSet<AppointmentsArch> AppointmentsArch { get; set; }
     }
 }

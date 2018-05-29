@@ -19,7 +19,7 @@
     <input type="hidden" name="specialization" value="@Model.specialization" />
     <input type="hidden" name="docs_pesel" value="@Model.docs_pesel" />
     <input type="hidden" name="appoint_date" value="@Model.appoint_date" />
-
+    <input type="hidden" name="service_time" value="@Model.service_time" />
 
     <div class="form-group">
         @Html.LabelFor(model => model.real_disease, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -36,13 +36,28 @@
         </div>
     </div>
 
+    <!--<div class="form-group">
+        @*Html.LabelFor(model => model.service_type, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        <div class="col-md-10">
+            <select class="form-control" name="service_type">
+                <option>konsultacja</option>
+                <option>wypisanie recept</option>
+                <option>zabieg</option>
+                <option>wizyta kontrolna</option>
+                <option>inne</option>
+            </select>
+            @*Html.ValidationMessageFor(model => model.service_type, "", new { @class = "text-danger" })*@
+        </div>
+    </div>-->
+
     <div class="form-group">
         @Html.LabelFor(model => model.service_type, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.service_type, new { htmlAttributes = new { @class = "form-control" } })
+            <select class="form-control" id="service_type" name="service_type" value="@ViewBag.opt"></select>
             @Html.ValidationMessageFor(model => model.service_type, "", new { @class = "text-danger" })
         </div>
     </div>
+
     <div class="form-group">
         @Html.LabelFor(model => model.service_name, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -84,4 +99,47 @@
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var type = '@ViewBag.opt';
+
+            if (type == 'konsultacja') {
+                $("#service_type").append("<option selected=\"selected\" value='konsultacja'>konsultacja</option>");
+            }
+            else
+                $("#service_type").append("<option value='konsultacja'>konsultacja</option>");
+
+
+            if (type == 'wypisanie recept') {
+                $("#service_type").append("<option selected=\"selected\" value='wypisanie recept'>wypisanie recept</option>");
+            }
+            else
+                $("#service_type").append("<option value='wypisanie recept'>wypisanie recept</option>");
+
+
+            if (type == 'zabieg') {
+                $("#service_type").append("<option selected=\"selected\" value='zabieg'>zabieg</option>");
+            }
+            else
+                $("#service_type").append("<option value='zabieg'>zabieg</option>");
+
+
+            if (type == 'wizyta kontrolna') {
+                $("#service_type").append("<option selected=\"selected\" value='wizyta kontrolna'>wizyta kontrolna</option>");
+            }
+            else
+                $("#service_type").append("<option value='wizyta kontrolna'>wizyta kontrolna</option>");
+
+
+            if (type == 'inne') {
+                $("#service_type").append("<option selected=\"selected\" value='inne'>inne</option>");
+            }
+            else
+                $("#service_type").append("<option value='inne'>inne</option>");
+
+        });
+
+    </script>
 }
