@@ -17,6 +17,13 @@ namespace MedOffice.Controllers
         private PatientDBContext db = new PatientDBContext();
         private string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
 
+        // GET: Appointments/Changes
+        [Authorize(Roles = "Administrator, Kierownik")]
+        public ActionResult Changes()
+        {
+            return View(db.PatientsArch.ToList());
+        }
+
         // GET: Patients
         public ActionResult Index()
         {
