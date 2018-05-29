@@ -35,7 +35,7 @@ namespace MedOffice.Controllers
                                           where ur.UserId.Equals(u.Id)
                                           join r in context.Roles on ur.RoleId equals r.Id
                                           select r.Name)
-                             select new UserSearchModel() { User = u, Role = query.ToList<string>() });
+                             select new UserSearchModel() { User = u, Role = query.ToList<string>().FirstOrDefault() });
 
                 userList = userList.Where(x => (x.User.UserName.Contains(searching)
                                                   || x.User.Name.Contains(searching)
@@ -104,6 +104,7 @@ namespace MedOffice.Controllers
 
             AppointmentDBContext context = new AppointmentDBContext();
             // kryteria wyszukiwania
+            //var containsKeyword = string.Format(@"\b{0}\b", searching);
             var appointmentsList = context.Appointments.Where(x => x.service_name.Contains(searching)
                                             || x.service_price.ToString().Contains(searching)
                                             || x.supplies_price.ToString().Contains(searching)

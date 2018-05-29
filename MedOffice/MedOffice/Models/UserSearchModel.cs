@@ -10,7 +10,7 @@ namespace MedOffice.Models
     public class UserSearchModel
     {
         public ApplicationUser User { set; get; }
-        public List<string> Role { set; get; }
+        public string Role { set; get; }
     }
 
 }
