@@ -681,7 +681,7 @@ namespace MedOffice.Controllers
             query = "DELETE FROM [dbo].[Resources] WHERE name = '" + user.UserName + "'";
             Appdb.Database.ExecuteSqlCommand(query);
 
-            return RedirectToAction("Workers", "WorkerSearch");
+            return RedirectToAction("WorkerSearch", "Search");
         }
 
         //
