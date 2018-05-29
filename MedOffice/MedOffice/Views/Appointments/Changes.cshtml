@@ -1,0 +1,89 @@
+﻿@model IEnumerable<MedOffice.Models.AppointmentsArch>
+@{
+    ViewBag.Title = "Zmiany w wizytach";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Zmiany w wizytach:</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            Data zmiany
+        </th>
+        <th>
+            Autor zmiany
+        </th>
+        <th>
+            Typ zmiany
+        </th>
+        <th>
+            Pesel pacjenta
+        </th>
+        <th>
+            Specjalizacja
+        </th>
+        <th>
+            Pesel lekarza
+        </th>
+        <th>
+            Typ usługi
+        </th>
+
+
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfChange)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DBUser)
+            </td>
+            <td>
+                @{
+                    if (item.TypeOfChange == "DELETED")
+                    {
+                        @:usuniecie
+                    }
+                    else
+                    {
+                        if (item.TypeOfChange == "INSERTED")
+                        {
+                            @:dodanie
+                        }
+                        else
+                        {
+                            if (item.TypeOfChange == "UPDATED-INSERTED")
+                            {
+                                @:edycja: dodanie
+                            }
+                            else
+                            {
+                                @:edycja: usuniecie
+                            }
+                        }
+                    }
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.patients_pesel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.specialization)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.docs_pesel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.service_type)
+            </td>
+            <td>
+                @Html.ActionLink("Szczegóły", "ChangeDetails", new { id = item.ID })
+            </td>
+        </tr>
+    }
+</table>
+

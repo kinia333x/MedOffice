@@ -1,0 +1,145 @@
+﻿@model MedOffice.Models.AppointmentsArch
+@{
+    ViewBag.Title = "Szczegóły wizyty";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Szczegóły wizyty</h2>
+<div>
+    <h4>Wizyta</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            Data zmiany
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateOfChange)
+        </dd>
+        <br>
+        <dt>
+            Autor zmiany
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DBUser)
+        </dd>
+        <br>
+        <dt>
+            Typ zmiany
+        </dt>
+        <dd>
+        @{
+
+                if (Model.TypeOfChange == "DELETED")
+                {
+                    @:usuniecie
+                }
+                else
+                {
+                    if (Model.TypeOfChange == "INSERTED")
+                    {
+                        @:dodanie
+                    }
+                    else
+                    {
+                        if (Model.TypeOfChange == "UPDATED-INSERTED")
+                        {
+                            @:edycja: dodanie
+                        }
+                        else
+                        {
+                            @:edycja: usuniecie
+                        }
+                    }
+                }
+            }        
+        </dd>
+        <br>
+        <dt>
+            Pesel pacjenta
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.patients_pesel)
+        </dd>
+        <br>
+        <dt>
+            Szacowany problem
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.estim_disease)
+        </dd>
+        <br>
+        <dt>
+            Zdiagnozowana choroba
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.real_disease)
+        </dd>
+        <br>
+        <dt>
+            Opis choroby
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.dis_descript)
+        </dd>
+        <br>
+        <dt>
+            Data wizyty
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.appoint_date)
+        </dd>
+        <br>
+        <dt>
+            Specjalizacja
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.specialization)
+        </dd>
+        <br>
+        <dt>
+            Pesel lekarza
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.docs_pesel)
+        </dd>
+        <br>
+        <dt>
+            Typ usługi
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.service_type)
+        </dd>
+        <br>
+        <dt>
+            Nazwa usługi
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.service_name)
+        </dd>
+        <br>
+        <dt>
+            Cena usługi
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.service_price)
+        </dd>
+        <br>
+        <dt>
+            Czy usługa jest opłacona?
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.is_paid)
+        </dd>
+        <br>
+        <dt>
+            Koszty materiałów
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.supplies_price)
+        </dd>
+        <br>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Powrót do listy", "Changes")
+</p>
