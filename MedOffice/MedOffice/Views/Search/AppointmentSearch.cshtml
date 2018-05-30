@@ -6,14 +6,14 @@
     @Html.TextBox("searching")<input type="submit" value="Szukaj" />
 }
 
-<table class="table table-striped">
+<table class="table">
     <thead>
         <tr>
             <th>Pesel pacjenta</th>
             <th>Szacowany problem</th>
             <th>Zdiagnozowana choroba</th>
             <th>Opis dolegliwości</th>
-            <th>Data wizyty</th>
+            <th>@Html.ActionLink("Data wizyty", "AppointmentSearch", new { sortOrder = ViewBag.DateSortParm })</th>
             <th>Specjalizacja</th>
             <th>Pesel lekarza</th>
             <th>Typ usługi</th>

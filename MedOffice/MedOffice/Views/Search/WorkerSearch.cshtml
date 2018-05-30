@@ -4,7 +4,7 @@
 
 <h2>WorkerSearch</h2>
 
-@model IEnumerable<MedOffice.Models.ApplicationUser>
+@model IEnumerable<MedOffice.Models.UserSearchModel>
 
 <br /><br />
 @using (Html.BeginForm())
@@ -12,12 +12,13 @@
     @Html.TextBox("searching")<input type="submit" value="Szukaj" />
 }
 
-<table class="table table-striped">
+<table class="table">
     <thead>
         <tr>
             <th>@Html.ActionLink("Imię", "WorkerSearch", new { sortOrder = ViewBag.NameSortParm })</th>
             <th>@Html.ActionLink("Nazwisko", "WorkerSearch", new { sortOrder = ViewBag.SurnameSortParm })</th>
             <th>@Html.ActionLink("Pesel", "WorkerSearch", new { sortOrder = ViewBag.UserNameSortParm })</th>
+            <th>@Html.ActionLink("Rola", "WorkerSearch", new { sortOrder = ViewBag.RoleSortParm })</th>
             <th>@Html.ActionLink("Specjalizacja", "WorkerSearch", new { sortOrder = ViewBag.SpecializationSortParm })</th>
         </tr>
     </thead>
