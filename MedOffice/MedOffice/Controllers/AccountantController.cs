@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using MvcRazorToPdf;
 using System.Net;
 using System.Data.Entity;
+using static MedOffice.Models.AppointmentViewModels;
 
 namespace MedOffice.Controllers
 {
@@ -16,7 +17,6 @@ namespace MedOffice.Controllers
     {
         private AppointmentDBContext db = new AppointmentDBContext();
         private string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
-
         public ActionResult Index(string searching, string sortOrder)
         {
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -55,11 +55,43 @@ namespace MedOffice.Controllers
                 default: services = services.OrderBy(s => s.ServiceName); break;
             }
 
-            return View(services.ToList());
+            var model = new  ServicesViewModel
+            {
+                AvailableServices = services.ToList()
+            };
+
+            return View(model);
         }
 
-        public ActionResult Report()
+        [HttpPost]
+        public ActionResult Index(ServicesViewModel model)
         {
+            if (ModelState.IsValid)
+            {
+                List<ServiceViewModel> Services = new List<ServiceViewModel>();
+                
+                foreach (var item in model.SelectedServices)
+                {
+
+                    var s = db.Appointments.ToList().Where(a => a.ID == item).Select(a => new AppointmentViewModels.ServiceViewModel()
+                    {
+                        Id = a.ID,
+                        ServiceType = a.service_type,
+                        ServiceName = a.service_name,
+                        ServiceDate = a.appoint_date,
+                        ServicePrice = a.service_price,
+                        SuppliesPrice = a.supplies_price,
+                        TotalPrice = a.service_price + a.supplies_price
+                    }).FirstOrDefault();
+
+                    Services.Add(s);
+                }
+                
+                Session["Services"] = Services.ToList();
+
+                return RedirectToAction("Report");
+            }
+
             var services = db.Appointments.ToList().Select(a => new AppointmentViewModels.ServiceViewModel()
             {
                 Id = a.ID,
@@ -71,7 +103,32 @@ namespace MedOffice.Controllers
                 TotalPrice = a.service_price + a.supplies_price
             }).ToList();
 
-            return new PdfActionResult("Report", services);
+            model.AvailableServices = services;
+
+            return View(model);
+        }
+        public ActionResult Report()
+        {
+            List<ServiceViewModel> Services;
+            if (Session["Services"] == null)
+            {
+                Services = db.Appointments.ToList().Select(a => new AppointmentViewModels.ServiceViewModel()
+                {
+                    Id = a.ID,
+                    ServiceType = a.service_type,
+                    ServiceName = a.service_name,
+                    ServiceDate = a.appoint_date,
+                    ServicePrice = a.service_price,
+                    SuppliesPrice = a.supplies_price,
+                    TotalPrice = a.service_price + a.supplies_price
+                }).ToList();
+            }
+            else
+            {
+                Services = (List<ServiceViewModel>)Session["Services"];
+                Session.Clear();
+            }
+            return new PdfActionResult("Report", Services);
         }
 
         [Authorize(Roles = "Administrator, Księgowa")]
