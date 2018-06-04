@@ -343,7 +343,8 @@ namespace MedOffice.Controllers
 
                             //dodanie do kalendarza
                             //"10" to id wizyt, narazie na sztywno
-                            new TutorialCS.EventManager().EventCreate(appointment.appoint_date, appointment.appoint_date.AddMinutes(20), appointment.service_type + " " + appointment.patients_pesel, "10", appointment.ID);
+                            //new TutorialCS.EventManager().EventCreate(appointment.appoint_date, appointment.appoint_date.AddMinutes(20), appointment.service_type + " " + appointment.patients_pesel, "10", appointment.ID);
+                            new TutorialCS.EventManager().EventCreate(appointment.appoint_date, appointment.appoint_date.AddMinutes(20), appointment.ID.ToString(), "10", appointment.ID);
 
                             return RedirectToAction("Index");
                         }
@@ -664,6 +665,9 @@ namespace MedOffice.Controllers
 
                             query = "UPDATE [dbo].[AppointmentsArch] SET DBUSer = '" + CurrentUser + "' WHERE Idd = '" + appointment.ID + "' AND TypeOfChange = 'UPDATED-DELETED' AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'";
                             db.Database.ExecuteSqlCommand(query);
+
+                            //edycja w kalendarzu
+                            new TutorialCS.EventManager().EventEdit(appointment.ID.ToString(), appointment.appoint_date, appointment.appoint_date.AddMinutes(20));
 
                             return RedirectToAction("Index");
                         }

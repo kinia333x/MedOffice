@@ -36,13 +36,14 @@
     <hr />
 
     @Html.DayPilotMenu("menu", new DayPilotMenuConfig
-    {
-        CssClassPrefix = "menu_default",
-        Items = new DayPilot.Web.Mvc.MenuItemCollection
+{
+    CssClassPrefix = "menu_default",
+    Items = new DayPilot.Web.Mvc.MenuItemCollection
         {
-            new DayPilot.Web.Mvc.MenuItem { Text = "Usuń", Action = MenuItemAction.CallBack, Command = "Delete"}
+            new DayPilot.Web.Mvc.MenuItem { Text = "Usuń", Action = MenuItemAction.CallBack, Command = "Delete"},
+            new DayPilot.Web.Mvc.MenuItem { Text = "Edytuj", Action = MenuItemAction.CallBack, Command = "Edit"}
         }
-    })
+})
 
     @Html.DayPilotScheduler("dps", new DayPilotSchedulerConfig
     {
@@ -75,7 +76,7 @@
         BusinessEndsHour = 20,
 
         EventClickHandling = EventClickHandlingType.JavaScript,
-        EventClickJavaScript = "ask(e);",
+        EventClickJavaScript = "show(e);",
         TimeRangeSelectedHandling = TimeRangeSelectedHandlingType.JavaScript,
         TimeRangeSelectedJavaScript = "create(start, end, resource)",
         ContextMenu = "menu",
@@ -89,6 +90,12 @@
     function row(args) {
         args.row.cssClass = "row1";
     };
+
+    function show(e) {
+        var modal = new DayPilot.Modal();
+        var id = e.text();
+        modal.showUrl('/Appointments/Details/' + id);
+    }
 </script>
 
 <script type="text/javascript">
