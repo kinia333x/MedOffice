@@ -380,6 +380,7 @@
     <Content Include="Views\Event\RecurrentDeleteMode.cshtml" />
     <Content Include="Views\Event\RecurrentEditMode.cshtml" />
     <Content Include="Views\Scheduler\Appointments.cshtml" />
+    <Content Include="Views\Search\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
