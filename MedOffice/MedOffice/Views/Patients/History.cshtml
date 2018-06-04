@@ -1,0 +1,76 @@
+﻿@model IEnumerable<MedOffice.Models.Appointment>
+
+@{
+    ViewBag.Title = "Historia chorób pacjenta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-offset-0-5 col-md-4regt">
+    <h2>@ViewBag.Title.</h2>
+</div>
+
+<div>
+    <br style="clear: both;">
+    <div class="col-md-offset-0-5 col-md-6">
+        <h4>Szczegółowe informacje o chorobach pacjenta o peselu: </h4> @ViewBag.PatientPesel
+</div>
+    <br style="clear: both;">
+    <hr />
+
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.estim_disease)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.real_disease)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.dis_descript)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.appoint_date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.service_type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.service_name)
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.estim_disease)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.real_disease)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dis_descript)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.appoint_date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.service_type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.service_name)
+            </td>
+
+        </tr>
+}
+    </table>
+
+
+</div>
+<div class="col-md-offset-0-5">
+    <p>
+        @Html.ActionLink("Powrót do szczegółów pacjenta", "Details", new { id = ViewBag.PatientId }) |
+        @Html.ActionLink("Powrót do listy", "Index")
+    </p>
+</div>

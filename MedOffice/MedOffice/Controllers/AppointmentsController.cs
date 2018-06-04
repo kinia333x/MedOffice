@@ -25,6 +25,27 @@ namespace MedOffice.Controllers
             return Json(dbL.Users.Where(u=>u.Specialization == specialization), JsonRequestBehavior.AllowGet);
         }
 
+        // GET: Appointments/Changes
+        [Authorize(Roles = "Administrator, Kierownik")]
+        public ActionResult Changes()
+        {
+            return View(db.AppointmentsArch.ToList());
+        }
+
+        [Authorize(Roles = "Administrator, Kierownik")]
+        public ActionResult ChangeDetails(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            AppointmentsArch appointment = db.AppointmentsArch.Find(id);
+            if (appointment == null)
+            {
+                return HttpNotFound();
+            }
+            return View(appointment);
+        }
 
         // GET: Appointments
         [Authorize(Roles = "Administrator, Rejestrujący")]
@@ -34,7 +55,7 @@ namespace MedOffice.Controllers
         }
 
 
-        // GET: Appointments
+        // GET: Appointments/Show
         [Authorize(Roles = "Administrator, Lekarz")]
         public ActionResult Show()
         {
@@ -46,7 +67,10 @@ namespace MedOffice.Controllers
         [Authorize(Roles = "Administrator, Kierownik")]
         public ActionResult All()
         {
+
+
             return View(db.Appointments.ToList());
+
         }
 
 
