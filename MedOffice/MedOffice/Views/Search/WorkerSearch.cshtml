@@ -43,7 +43,11 @@ else
             <td>@appUser.UserName</td>
             <td>@roles</td>
             <td>@appUser.Specialization</td>
-            <td>@Html.ActionLink("Edit", "Edit", new { id = appUser.Id }) </td>
+            <td>
+                @Html.ActionLink("Edytuj", "Edit", new { id = appUser.Id })
+                @Html.ActionLink("Szczegóły", "Index", "Scheduler", new { id = appUser.UserName }, null)
+                @Html.ActionLink("Usuń", "Delete", "Account", new { id = appUser.Id }, null)
+                    </td>
 
         </tr>
     }

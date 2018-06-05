@@ -27,6 +27,8 @@ namespace TutorialCS
             return dt;
         }
 
+
+
         public void EventEdit(string id, string name, DateTime start, DateTime end, string resource)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["AppointmentDBContext"].ConnectionString))
