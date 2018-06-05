@@ -172,6 +172,12 @@ namespace TutorialCS.Controllers
                         }
                         Update();
                         break;
+
+                    case "Edit":
+                        Redirect("/Appointments/Edit/"+e.Text);
+                        Update();
+                        break;
+
                 }
             }
 

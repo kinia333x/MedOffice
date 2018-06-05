@@ -62,6 +62,23 @@ namespace TutorialCS
             }
         }
 
+        //dla wizyt w kalendarzu
+        public void EventEdit(string name, DateTime start, DateTime end)
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["AppointmentDBContext"].ConnectionString))
+            {
+                con.Open();
+
+                SqlCommand cmd = new SqlCommand("UPDATE [WorkingTime] SET [name] = @name, [eventstart] = @start, [eventend] = @end, [resource] = @resource WHERE [name] = @name", con);
+                cmd.Parameters.AddWithValue("name", name);
+                cmd.Parameters.AddWithValue("start", start);
+                cmd.Parameters.AddWithValue("end", end);
+                cmd.Parameters.AddWithValue("resource", "10");
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+
         public DataTable GetResources()
         {
             return GetResources("name");

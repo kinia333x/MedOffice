@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MedOffice.Models.AppointmentViewModels.ServiceViewModel>
+﻿@model MedOffice.Models.AppointmentViewModels.ServicesViewModel
 @{
     ViewBag.Title = "Index";
 }
@@ -9,7 +9,7 @@
 
 <div class="col-md-offset-0-5 col-md-4regpt">
     <p>
-        @Html.ActionLink("Wygeneruj raport", "Report")
+        @Html.ActionLink("Wygeneruj pełny raport", "Report")
     </p>
 </div>
 <br style="clear: both;"><br />
@@ -26,7 +26,10 @@
 
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.ServiceType)
+            @Html.Label("Wybierz")
+        </th>
+        <th>
+            @Html.Label("Typ usługi")
         </th>
         <th>
             @Html.ActionLink("Nazwa usługi", "Index", new { sortOrder = ViewBag.NameSortParm })
@@ -47,7 +50,7 @@
         </th>
     </tr>
 
-    @if (Model.Count() == 0)
+    @if (Model.AvailableServices.Count() == 0)
     {
         <tr>
             <td colspan="13" style="color:red">
@@ -57,33 +60,43 @@
     }
     else
     {
-        foreach (var item in Model)
+        using (Html.BeginForm("Index", "Accountant"))
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ServiceType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ServiceName)
-            </td>
-            <th>
-                @Html.DisplayFor(modelItem => item.ServiceDate)
-            </th>
-            <td>
-                @Html.DisplayFor(modelItem => item.ServicePrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SuppliesPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
-            </td>
-            @if (User.IsInRole("Administrator") || User.IsInRole("Księgowa")){
-            <td>
-                @Html.ActionLink("Edytuj", "Edit", new { id = item.Id }) 
-            </td>
+            foreach (var item in Model.AvailableServices)
+            {
+                <tr>
+                    <td>
+                      <input type="checkbox" name="SelectedServices" value="@item.Id" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ServiceType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ServiceName)
+                    </td>
+                    <th>
+                        @Html.DisplayFor(modelItem => item.ServiceDate)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ServicePrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SuppliesPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalPrice)
+                    </td>
+                    @if (User.IsInRole("Administrator") || User.IsInRole("Księgowa"))
+                    {
+                        <td>
+                            @Html.ActionLink("Edytuj", "Edit", new { id = item.Id })
+                        </td>
+                    }
+                </tr>
             }
-        </tr>
+            <div class="form-group text-left">
+                <input type="submit" class="btn btn-primary" value="Wygeneruj raport" />
+            </div>
         }
     }
 </table>

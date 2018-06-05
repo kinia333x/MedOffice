@@ -240,7 +240,10 @@
     <Compile Include="Migrations\AppointmentDBContext\201805141121533_EmployeesWorkingTime.Designer.cs">
       <DependentUpon>201805141121533_EmployeesWorkingTime.cs</DependentUpon>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> master
     </Compile>
     <Compile Include="Migrations\AppointmentDBContext\201805232147177_AppointArch.cs" />
     <Compile Include="Migrations\AppointmentDBContext\201805232147177_AppointArch.Designer.cs">
@@ -249,6 +252,9 @@
     <Compile Include="Migrations\AppointmentDBContext\201805261526374_EmployeesChanges.cs" />
     <Compile Include="Migrations\AppointmentDBContext\201805261526374_EmployeesChanges.Designer.cs">
       <DependentUpon>201805261526374_EmployeesChanges.cs</DependentUpon>
+<<<<<<< HEAD
+>>>>>>> master
+=======
 >>>>>>> master
     </Compile>
     <Compile Include="Migrations\AppointmentDBContext\AppointmentConf.cs" />
@@ -273,6 +279,10 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Appointment.cs" />
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    <Compile Include="Models\AppointmentsArch.cs" />
+>>>>>>> master
 =======
     <Compile Include="Models\AppointmentsArch.cs" />
 >>>>>>> master
@@ -386,9 +396,15 @@
     <Content Include="Views\Event\RecurrentDeleteMode.cshtml" />
     <Content Include="Views\Event\RecurrentEditMode.cshtml" />
 <<<<<<< HEAD
+<<<<<<< HEAD
     <Content Include="Views\Search\Edit.cshtml" />
 =======
     <Content Include="Views\Scheduler\Appointments.cshtml" />
+>>>>>>> master
+=======
+    <Content Include="Views\Scheduler\Appointments.cshtml" />
+    <Content Include="Views\Search\Edit.cshtml" />
+    <Content Include="Views\Patients\History.cshtml" /> 
 >>>>>>> master
   </ItemGroup>
   <ItemGroup>
@@ -431,13 +447,19 @@
     <EmbeddedResource Include="Migrations\AppointmentDBContext\201805141121533_EmployeesWorkingTime.resx">
       <DependentUpon>201805141121533_EmployeesWorkingTime.cs</DependentUpon>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> master
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\AppointmentDBContext\201805232147177_AppointArch.resx">
       <DependentUpon>201805232147177_AppointArch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\AppointmentDBContext\201805261526374_EmployeesChanges.resx">
       <DependentUpon>201805261526374_EmployeesChanges.cs</DependentUpon>
+<<<<<<< HEAD
+>>>>>>> master
+=======
 >>>>>>> master
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\PatientDBContext\201804161815080_InitialCreate.resx">

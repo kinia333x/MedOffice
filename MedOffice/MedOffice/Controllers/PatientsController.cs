@@ -13,8 +13,16 @@ namespace MedOffice.Controllers
     [Authorize(Roles = "Administrator, Kierownik, Rejestrujący")]
     public class PatientsController : Controller
     {
+        private AppointmentDBContext dbA = new AppointmentDBContext();
         private PatientDBContext db = new PatientDBContext();
         private string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
+
+        // GET: Appointments/Changes
+        [Authorize(Roles = "Administrator, Kierownik")]
+        public ActionResult Changes()
+        {
+            return View(db.PatientsArch.ToList());
+        }
 
         // GET: Patients
         public ActionResult Index()
@@ -35,6 +43,28 @@ namespace MedOffice.Controllers
                 return HttpNotFound();
             }
             return View(patient);
+        }
+
+        // GET: Patients/History/5
+        public ActionResult History(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+
+            Patient patient = db.Patients.Find(id);
+            var patientList = (from s in dbA.Appointments select s);
+            patientList = patientList.Where(x => x.patients_pesel.Contains(patient.Pesel));
+            ViewBag.PatientId = patient.Id;
+            ViewBag.PatientPesel = patient.Pesel;
+            if (patient == null)
+            {
+                return HttpNotFound();
+            }
+            //return View(patient);
+            return View(patientList.ToList());
         }
 
         // GET: Patients/Create

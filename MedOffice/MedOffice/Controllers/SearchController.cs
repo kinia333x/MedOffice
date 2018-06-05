@@ -17,6 +17,7 @@ namespace MedOffice.Controllers
     public class SearchController : Controller
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         // GET: Search
 
@@ -32,6 +33,9 @@ namespace MedOffice.Controllers
         //    }
         //}
 
+        private string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
+>>>>>>> master
+=======
         private string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
 >>>>>>> master
 
