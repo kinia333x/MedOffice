@@ -100,34 +100,18 @@ namespace MedOffice.Controllers
         [Authorize(Roles = "Administrator, Kierownik, Rejestrujący, Lekarz")]
         public ActionResult AppointmentSearch(string searching, string sortOrder)
         {
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.NameSortParm = sortOrder == "name" ? "name_desc" : "name";
             ViewBag.PriceSortParm = sortOrder == "price" ? "price_desc" : "price";
             ViewBag.AddPriceSortParm = sortOrder == "addPrice" ? "addPrice_desc" : "addPrice";
-            ViewBag.DateSortParm = sortOrder == "date" ? "date_desc" : "date";
             ViewBag.TotalPriceSortParm = sortOrder == "totalPrice" ? "totalPrice_desc" : "totalPrice";
 
             AppointmentDBContext context = new AppointmentDBContext();
-            // kryteria wyszukiwania
-            //char[] year = new char[5];
-            //char[] month = new char[3];
-            //char[] day = new char[3];
-
-            //if (searching != null && searching.Length == 10)
-            //{
-            //    year[0] = searching[0];
-            //    year[1] = searching[1];
-            //    year[2] = searching[2];
-            //    year[3] = searching[3];
-
-            //    month[0] = searching[5];
-            //    month[1] = searching[6];
-
-            //    day[0] = searching[8];
-            //    day[1] = searching[9];
-            //}
-
-            var appointmentsList = context.Appointments.Where(x => x.service_name.Contains(searching) //.AsEnumerable()
-                                            //|| (String.Format("{0}-{1}-{2}", x.appoint_date.Year, x.appoint_date.Month, x.appoint_date.Day) == searching)
+            DateTime dateTime;
+            DateTime.TryParse(searching, out dateTime);
+            var appointmentsList = context.Appointments.Where(x => x.service_name.Contains(searching)
+                                            || (x.appoint_date.Year == dateTime.Year && x.appoint_date.Month == dateTime.Month
+                                                && x.appoint_date.Day == dateTime.Day)
                                             || (x.service_price.ToString() == searching)
                                             || (x.supplies_price.ToString() == searching)
                                             || ((x.supplies_price + x.service_price).ToString() == searching)
@@ -135,16 +119,16 @@ namespace MedOffice.Controllers
 
             switch (sortOrder)
             {
+                case "name": appointmentsList = appointmentsList.OrderBy(s => s.service_name); break;
                 case "name_desc": appointmentsList = appointmentsList.OrderByDescending(s => s.service_name); break;
                 case "price": appointmentsList = appointmentsList.OrderBy(s => s.service_price); break;
                 case "price_desc": appointmentsList = appointmentsList.OrderByDescending(s => s.service_price); break;
                 case "addPrice": appointmentsList = appointmentsList.OrderBy(s => s.supplies_price); break;
                 case "addPrice_desc": appointmentsList = appointmentsList.OrderByDescending(s => s.supplies_price); break;
-                case "date": appointmentsList = appointmentsList.OrderBy(s => s.appoint_date); break;
                 case "date_desc": appointmentsList = appointmentsList.OrderByDescending(s => s.appoint_date); break;
                 case "totalPrice": appointmentsList = appointmentsList.OrderBy(x => (x.supplies_price + x.service_price)); break;
                 case "totalPrice_desc": appointmentsList = appointmentsList.OrderByDescending(x => (x.supplies_price + x.service_price)); break;
-                default: appointmentsList = appointmentsList.OrderBy(s => s.service_name); break;
+                default: appointmentsList = appointmentsList.OrderBy(s => s.appoint_date); break;
             }
 
             return View(appointmentsList.ToList());
