@@ -27,9 +27,79 @@ namespace MedOffice.Controllers
 
         // GET: Appointments/Changes
         [Authorize(Roles = "Administrator, Kierownik")]
-        public ActionResult Changes()
+        public ActionResult Changes(string searching, string sortOrder)
         {
-            return View(db.AppointmentsArch.ToList());
+            ViewBag.DateSortParm = sortOrder == "date" ? "date_desc" : "date";
+            ViewBag.ServTypeParm = sortOrder == "serv" ? "serv_desc" : "serv";
+            ViewBag.ChangeTypeParm = sortOrder == "chan" ? "chan_desc" : "chan";
+
+            string typ = "";
+            if (searching == "usuniecie")
+            {
+                typ = "DELETED";
+            }
+            else
+            {
+                if (searching == "dodanie")
+                {
+                    typ = "INSERTED";
+                }
+                else
+                {
+                    if (searching == "edycja: dodanie")
+                    {
+                        typ = "UPDATED-INSERTED";
+                    
+                    }
+                    else
+                    {
+                        if (searching == "edycja: usuniecie")
+                        {
+                            typ = "UPDATED-DELETED";
+
+                        }
+                        else
+                        if (searching == "edycja")
+                        {
+                            typ = "UPDATED";
+
+                        }                   
+                    }
+                }
+            }
+
+
+            DateTime data;
+            DateTime.TryParse(searching, out data);
+
+            var appointmentsList = db.AppointmentsArch.Where(x => x.specialization.Contains(searching)
+                                            || (x.patients_pesel == searching)
+                                            || (x.DateOfChange.Year == data.Year && x.DateOfChange.Month == data.Month && x.DateOfChange.Day == data.Day)
+                                            || (x.TypeOfChange.ToString() == typ)
+                                            || (x.DBUser.ToString() == searching)
+                                            || searching == null);
+
+
+            ViewBag.DateSortParm = sortOrder == "date" ? "date_desc" : "date";
+            ViewBag.ServTypeParm = sortOrder == "serv" ? "serv_desc" : "serv";
+            ViewBag.ChangeTypeParm = sortOrder == "chan" ? "chan_desc" : "chan";
+
+            switch (sortOrder)
+            {
+                case "date": appointmentsList = appointmentsList.OrderBy(s => s.DateOfChange); break;
+                case "date_desc": appointmentsList = appointmentsList.OrderByDescending(s => s.DateOfChange); break;
+
+                case "serv": appointmentsList = appointmentsList.OrderBy(x => (x.service_type)); break;
+                case "serv_desc": appointmentsList = appointmentsList.OrderByDescending(x => (x.service_type)); break;
+
+                case "chan": appointmentsList = appointmentsList.OrderBy(x => (x.TypeOfChange)); break;
+                case "chan_desc": appointmentsList = appointmentsList.OrderByDescending(x => (x.TypeOfChange)); break;
+
+                default: appointmentsList = appointmentsList.OrderBy(s => s.DateOfChange); break;
+            }
+
+            return View(appointmentsList.ToList());
+
         }
 
         [Authorize(Roles = "Administrator, Kierownik")]
