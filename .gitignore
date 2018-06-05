@@ -9,7 +9,7 @@
 *.dll.config
 *.cache
 *.suo
-# Include dlls if they’re in the NuGet packages directory
+# Include dlls if theyï¿½re in the NuGet packages directory
 !/packages/*/lib/*.dll
 !/packages/*/lib/*/*.dll
 # Include dlls if they're in the CommonReferences directory
@@ -37,7 +37,7 @@ TestResults/
 ############
 # Packages #
 ############
-# it’s better to unpack these files and commit the raw source
+# itï¿½s better to unpack these files and commit the raw source
 # git has its own built in compression methods
 *.7z
 *.dmg
@@ -75,3 +75,8 @@ _[Ss]cripts
 *.dot[Cc]over
 *.orig
 .vs/
+MedOffice/MedOffice/Views/Search/WorkerSearch.cshtml
+MedOffice/MedOffice/App_Data/Appointments.mdf
+MedOffice/MedOffice/App_Data/aspnet-MedOffice-20180406074007.mdf
+MedOffice/MedOffice/App_Data/Appointments_log.ldf
+MedOffice/MedOffice/App_Data/aspnet-MedOffice-20180406074007_log.ldf

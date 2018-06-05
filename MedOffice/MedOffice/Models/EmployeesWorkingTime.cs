@@ -24,8 +24,9 @@ namespace MedOffice.Models
     [Table("Resources")]
     public class Resources
     {
-        public int id { get; set; } // Id wpisu
+        [Key]
         public string name { get; set; } // Pesel pracownika
         public string fsname { get; set; }
+        public int id { get; set; }
     }
 }

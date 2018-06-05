@@ -15,11 +15,6 @@ namespace TutorialCS
     /// </summary>
     public class EventManager
     {
-        public void PopulateResources()
-        {
-
-        }
-
         public DataTable FilteredData(DateTime start, DateTime end)
         {
             SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM [WorkingTime] WHERE NOT (([eventend] <= @start) OR ([eventstart] >= @end))", ConfigurationManager.ConnectionStrings["AppointmentDBContext"].ConnectionString);
@@ -82,6 +77,17 @@ namespace TutorialCS
 
             return dt.DefaultView.ToTable();
 
+        }
+
+        public DataTable GetResourcesOneUser(string ID)
+        {
+            string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
+
+            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM [Resources] WHERE name = '" + ID + "'", ConfigurationManager.ConnectionStrings["AppointmentDBContext"].ConnectionString);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            return dt.DefaultView.ToTable();
         }
 
         public void EventMove(string id, DateTime start, DateTime end, string resource)
@@ -164,6 +170,26 @@ namespace TutorialCS
                     cmd.Parameters.AddWithValue("id", id);
                     cmd.ExecuteNonQuery();
                 }
+            }
+        }
+
+        //przeladowane EventCreate dla dodawania wizyt
+        internal void EventCreate(DateTime start, DateTime end, string text, string resource, int appointmentID)
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["AppointmentDBContext"].ConnectionString))
+            {
+                con.Open();
+
+                SqlCommand cmd = new SqlCommand("INSERT INTO [WorkingTime] (eventstart, eventend, name, resource, appointment_id) VALUES (@start, @end, @name, @resource, @appointmentID); ", con);
+                cmd.Parameters.AddWithValue("start", start);
+                cmd.Parameters.AddWithValue("end", end);
+                cmd.Parameters.AddWithValue("name", text);
+                cmd.Parameters.AddWithValue("resource", resource);
+                cmd.Parameters.AddWithValue("appointmentID", appointmentID);
+                cmd.ExecuteScalar();
+
+                cmd = new SqlCommand("select @@identity;", con);
+                int id = Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
 

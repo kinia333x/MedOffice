@@ -15,7 +15,8 @@ namespace MedOffice.Controllers
     {
         private AppointmentDBContext db = new AppointmentDBContext();
         private PatientDBContext dbP = new PatientDBContext();
-        private ApplicationDbContext dbL = new ApplicationDbContext(); 
+        private ApplicationDbContext dbL = new ApplicationDbContext();
+        private string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
 
 
         public JsonResult GetDocList (string specialization)
@@ -304,7 +305,6 @@ namespace MedOffice.Controllers
                     x = 0;
                 }
 
-
                 foreach (Patient p in dbP.Patients)
                 {
                     if (p.Pesel == appointment.patients_pesel)
@@ -313,12 +313,21 @@ namespace MedOffice.Controllers
                         {
                             db.Appointments.Add(appointment);
                             db.SaveChanges();
+
+                            string query = "UPDATE [dbo].[AppointmentsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'INSERTED' AND Idd = " + appointment.ID;
+                            db.Database.ExecuteSqlCommand(query);
+
+                            //dodanie do kalendarza
+                            //"10" to id wizyt, narazie na sztywno
+                            new TutorialCS.EventManager().EventCreate(appointment.appoint_date, appointment.appoint_date.AddMinutes(20), appointment.service_type + " " + appointment.patients_pesel, "10", appointment.ID);
+
                             return RedirectToAction("Index");
                         }
                         else
                             return View(appointment);
                     }
                 }
+
                 ModelState.AddModelError("patients_pesel", "Nie ma takiego pacjenta.");
             }
             return View(appointment);
@@ -623,6 +632,15 @@ namespace MedOffice.Controllers
                         {
                             db.Entry(appointment).State = EntityState.Modified;
                             db.SaveChanges();
+
+                            double time = -1;
+
+                            string query = "UPDATE [dbo].[AppointmentsArch] SET DBUSer = '" + CurrentUser + "' WHERE Idd = '" + appointment.ID + "' AND TypeOfChange = 'UPDATED-INSERTED' AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'";
+                            db.Database.ExecuteSqlCommand(query);
+
+                            query = "UPDATE [dbo].[AppointmentsArch] SET DBUSer = '" + CurrentUser + "' WHERE Idd = '" + appointment.ID + "' AND TypeOfChange = 'UPDATED-DELETED' AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'";
+                            db.Database.ExecuteSqlCommand(query);
+
                             return RedirectToAction("Index");
                         }
                         else
@@ -631,6 +649,7 @@ namespace MedOffice.Controllers
                 }
             }
             ModelState.AddModelError("patients_pesel", "Nie ma takiego pacjenta.");
+
             return View(appointment);
         }
 
@@ -661,6 +680,10 @@ namespace MedOffice.Controllers
             Appointment appointment = db.Appointments.Find(id);
             db.Appointments.Remove(appointment);
             db.SaveChanges();
+
+            string query = "UPDATE [dbo].[AppointmentsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'DELETED' AND Idd = " + appointment.ID;
+            db.Database.ExecuteSqlCommand(query);
+
             return RedirectToAction("Index");
         }
 

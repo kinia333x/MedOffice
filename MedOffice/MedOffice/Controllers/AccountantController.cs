@@ -15,6 +15,7 @@ namespace MedOffice.Controllers
     public class AccountantController : Controller
     {
         private AppointmentDBContext db = new AppointmentDBContext();
+        private string CurrentUser = System.Web.HttpContext.Current.User.Identity.Name;
 
         public ActionResult Index(string searching, string sortOrder)
         {
@@ -101,8 +102,17 @@ namespace MedOffice.Controllers
 
             if (ModelState.IsValid)
             {
+                double time = -1;
+
                 context.Entry(appointment).State = EntityState.Modified;
                 context.SaveChanges();
+
+                string query = "UPDATE [dbo].[AppointmentsArch] SET DBUSer = '" + CurrentUser + "' WHERE Idd = '" + appointment.ID + "' AND TypeOfChange = 'UPDATED-INSERTED' AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'";
+                db.Database.ExecuteSqlCommand(query);
+
+                query = "UPDATE [dbo].[AppointmentsArch] SET DBUSer = '" + CurrentUser + "' WHERE Idd = '" + appointment.ID + "' AND TypeOfChange = 'UPDATED-DELETED' AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'";
+                db.Database.ExecuteSqlCommand(query);
+
                 return RedirectToAction("Index");
             }
 

@@ -66,6 +66,7 @@
                 <ul class="dropdown-menu">
                     <li>@Html.ActionLink("Wyszukaj", "AppointmentSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
                     <li>@Html.ActionLink("Wyświetl wszystkie", "Show", "Appointments", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
+                    <li>@Html.ActionLink("Kalendarz wizyt", "Appointments", "Scheduler", routeValues: null, htmlAttributes: new { id = "SchedulerShowLink" })</li>
                 </ul>
             </li>
         </ul>
@@ -83,6 +84,7 @@
                     <li>@Html.ActionLink("Wyszukaj", "AppointmentSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
                     <li>@Html.ActionLink("Wyświetl wszystkie", "Index", "Appointments", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
                     <li>@Html.ActionLink("Utwórz wizytę", "Create", "Appointments", routeValues: null, htmlAttributes: new { id = "appointmentCreateLink" })</li>
+                    <li>@Html.ActionLink("Kalendarz wizyt", "Appointments", "Scheduler", routeValues: null, htmlAttributes: new { id = "SchedulerShowLink" })</li>
                 </ul>
             </li>
         </ul>
@@ -98,6 +100,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li>@Html.ActionLink("Wyświetl wszystkie", "All", "Appointments", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
+                    <li>@Html.ActionLink("Kalendarz wizyt", "Appointments", "Scheduler", routeValues: null, htmlAttributes: new { id = "SchedulerShowLink" })</li>
                 </ul>
             </li>
         </ul>

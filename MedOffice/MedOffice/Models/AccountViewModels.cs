@@ -130,11 +130,16 @@ namespace MedOffice.Models
         [Display(Name = "Nazwisko:")]
         public string Surname { get; set; }
         
-        [Required(ErrorMessage = "Wprowadź pesel pracownika.")]
-        [RegularExpression("([0-9]{11})", ErrorMessage = "Pole Pesel musi zawierać 11 cyfr.")]
-        [Display(Name = "Pesel:")] // Login
         public string UserName { get; set; }
-        
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime Seniority { get; set; }
+
     }
 
     public class ResetPasswordViewModel
@@ -164,6 +169,12 @@ namespace MedOffice.Models
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+    }
+
+    public class RoleName
+    {
+        public string Username { get; set; }
+        public string Rolename { get; set; }
     }
 
     public class SDateRange : RangeAttribute

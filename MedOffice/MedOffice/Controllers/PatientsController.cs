@@ -88,19 +88,21 @@ namespace MedOffice.Controllers
         {
             if (ModelState.IsValid)
             {
-                
+                double time = -1;
+
                 db.Entry(patient).State = EntityState.Modified;
                 db.SaveChanges();
 
                 // Dodanie do archiwum użytkownika, który zmienił dane pacjenta:
-                string query = "UPDATE [dbo].[PatientsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-ISERTED' AND Pesel = " + patient.Pesel;
+                string query = "UPDATE [dbo].[PatientsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-INSERTED' AND Pesel = " + patient.Pesel + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'";
                 db.Database.ExecuteSqlCommand(query);
 
-                query = "UPDATE [dbo].[PatientsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-DELETED' AND Pesel = " + patient.Pesel;
+                query = "UPDATE [dbo].[PatientsArch] SET DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-DELETED' AND Pesel = " + patient.Pesel + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'"; ;
                 db.Database.ExecuteSqlCommand(query);
 
                 return RedirectToAction("Index");
             }
+
             return View(patient);
         }
 
