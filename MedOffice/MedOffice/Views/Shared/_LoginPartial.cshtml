@@ -28,6 +28,23 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Harmonogram pracy", "DailyScheduler", "Scheduler", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
+                    <li>@Html.ActionLink("Wyszukaj", "WorkerSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
+                    <li>@Html.ActionLink("Zarejestruj", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+                </ul>
+            </li>
+        </ul>
+    }
+    else
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                    Pracownicy
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Harmonogram pracy", "DailyScheduler", "Scheduler", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
                     <li>@Html.ActionLink("Wyszukaj", "WorkerSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
                     <li>@Html.ActionLink("Zarejestruj", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
                 </ul>
@@ -38,37 +55,37 @@
     //////////////PACJENCI
     if (User.IsInRole("Administrator") || User.IsInRole("Kierownik"))
     {
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                    Pacjenci
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li>@Html.ActionLink("Wyszukaj", "PatientSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
-                    <li>@Html.ActionLink("Wyświetl", "Index", "Patients", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
-                    <li>@Html.ActionLink("Zarejestruj", "Create", "Patients", routeValues: null, htmlAttributes: new { id = "patientCreateLink" })</li>
-                    <li>@Html.ActionLink("Zmiany w danych pacjentów", "Changes", "Patients", routeValues: null, htmlAttributes: new { id = "patientChangesLink" })</li>
-                </ul>
-            </li>
+<ul class="nav navbar-nav navbar-right">
+    <li>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+            Pacjenci
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li>@Html.ActionLink("Wyszukaj", "PatientSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
+            <li>@Html.ActionLink("Wyświetl", "Index", "Patients", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
+            <li>@Html.ActionLink("Zarejestruj", "Create", "Patients", routeValues: null, htmlAttributes: new { id = "patientCreateLink" })</li>
+            <li>@Html.ActionLink("Zmiany w danych pacjentów", "Changes", "Patients", routeValues: null, htmlAttributes: new { id = "patientChangesLink" })</li>
         </ul>
+    </li>
+</ul>
     }
 
     if (User.IsInRole("Rejestrujący"))
     {
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                    Pacjenci
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li>@Html.ActionLink("Wyszukaj", "PatientSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
-                    <li>@Html.ActionLink("Wyświetl", "Index", "Patients", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
-                    <li>@Html.ActionLink("Zarejestruj", "Create", "Patients", routeValues: null, htmlAttributes: new { id = "patientCreateLink" })</li>
-                </ul>
-            </li>
+<ul class="nav navbar-nav navbar-right">
+    <li>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+            Pacjenci
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li>@Html.ActionLink("Wyszukaj", "PatientSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
+            <li>@Html.ActionLink("Wyświetl", "Index", "Patients", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
+            <li>@Html.ActionLink("Zarejestruj", "Create", "Patients", routeValues: null, htmlAttributes: new { id = "patientCreateLink" })</li>
         </ul>
+    </li>
+</ul>
     }
 
     ////////////////////WIZYTY
@@ -85,7 +102,7 @@
                 <ul class="dropdown-menu">
                     <li>@Html.ActionLink("Wyszukaj", "AppointmentSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
                     <li>@Html.ActionLink("Wyświetl wszystkie", "Show", "Appointments", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
-                    <li>@Html.ActionLink("Kalendarz wizyt", "Appointments", "Scheduler", routeValues: null, htmlAttributes: new { id = "SchedulerShowLink" })</li>
+                    <li>@Html.ActionLink("Kalendarz wizyt", "Appointments", "Scheduler", routeValues: new { viewType = "week" }, htmlAttributes: new { id = "SchedulerShowLink" })</li>
                 </ul>
             </li>
         </ul>
@@ -103,7 +120,7 @@
                     <li>@Html.ActionLink("Wyszukaj", "AppointmentSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
                     <li>@Html.ActionLink("Wyświetl wszystkie", "Index", "Appointments", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
                     <li>@Html.ActionLink("Utwórz wizytę", "Create", "Appointments", routeValues: null, htmlAttributes: new { id = "appointmentCreateLink" })</li>
-                    <li>@Html.ActionLink("Kalendarz wizyt", "Appointments", "Scheduler", routeValues: null, htmlAttributes: new { id = "SchedulerShowLink" })</li>
+                    <li>@Html.ActionLink("Kalendarz wizyt", "Appointments", "Scheduler", routeValues: new { viewType = "week" }, htmlAttributes: new { id = "SchedulerShowLink" })</li>
                 </ul>
             </li>
         </ul>
@@ -121,7 +138,7 @@
                     <li>@Html.ActionLink("Wyszukaj", "AppointmentSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
                     <li>@Html.ActionLink("Wyświetl wszystkie", "Index", "Appointments", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
                     <li>@Html.ActionLink("Utwórz wizytę", "Create", "Appointments", routeValues: null, htmlAttributes: new { id = "appointmentCreateLink" })</li>
-                    <li>@Html.ActionLink("Kalendarz wizyt", "Appointments", "Scheduler", routeValues: null, htmlAttributes: new { id = "SchedulerShowLink" })</li>
+                    <li>@Html.ActionLink("Kalendarz wizyt", "Appointments", "Scheduler", routeValues: new { viewType = "week" }, htmlAttributes: new { id = "SchedulerShowLink" })</li>
                     <li>@Html.ActionLink("Zmiany w wizytach", "Changes", "Appointments", routeValues: null, htmlAttributes: new { id = "AppointmentsShowLink" })</li>
                 </ul>
             </li>
@@ -138,7 +155,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li>@Html.ActionLink("Wyświetl wszystkie", "All", "Appointments", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
-                    <li>@Html.ActionLink("Kalendarz wizyt", "Appointments", "Scheduler", routeValues: null, htmlAttributes: new { id = "SchedulerShowLink" })</li>
+                    <li>@Html.ActionLink("Kalendarz wizyt", "Appointments", "Scheduler", routeValues: new { viewType = "week" }, htmlAttributes: new { id = "SchedulerShowLink" })</li>
                     <li>@Html.ActionLink("Zmiany w wizytach", "Changes", "Appointments", routeValues: null, htmlAttributes: new { id = "AppointmentsShowLink" })</li>
                 </ul>
             </li>
@@ -149,22 +166,22 @@
     ////////////////////KONIEC WIZYT
     if (User.IsInRole("Administrator") || User.IsInRole("Księgowa") || User.IsInRole("Kierownik"))
     {
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                    Księgowa
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li>@Html.ActionLink("Wyświetl", "Index", "Accountant", routeValues: null, htmlAttributes: new { id = "servicesShowLink" })</li>
-                </ul>
-            </li>
+<ul class="nav navbar-nav navbar-right">
+    <li>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+            Księgowa
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li>@Html.ActionLink("Wyświetl", "Index", "Accountant", routeValues: null, htmlAttributes: new { id = "servicesShowLink" })</li>
         </ul>
+    </li>
+</ul>
     }
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Zaloguj się", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-    </ul>
+<ul class="nav navbar-nav navbar-right">
+    <li>@Html.ActionLink("Zaloguj się", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+</ul>
 }

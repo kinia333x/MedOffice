@@ -41,11 +41,13 @@ namespace TutorialCS.Controllers
                 .ToList()
                 .FirstOrDefault();
 
-            var Roles = db2.Roles.ToList();
-            var RoleName = Roles.Where(r => r.Id.Equals(usr.Roles)).Select(r => r.Name).FirstOrDefault();
+            var RoleName = db2.UsersArch
+                .Where(y => y.UserName.Equals(name) && y.TypeOfChange.Equals("INSERTED"))
+                .Select(y => y.RId)
+                .FirstOrDefault();
 
             usr = db2.Users.Find(usr.Id);
-            ViewBag.RoleName = RoleName;
+            ViewBag.RoleName = RoleName.ToLower();
 
             if (Resource == null || usr == null)
             {
@@ -57,9 +59,10 @@ namespace TutorialCS.Controllers
         }
 
         [Authorize(Roles = "Administrator, Kierownik, Rejestrujący, Lekarz")]
-        public ActionResult Appointments()
+        public ActionResult Appointments(string viewType)
         {
             Session["ID"] = "wizyty";
+            ViewBag.Type = viewType;
             return View();
         }
 
@@ -75,7 +78,7 @@ namespace TutorialCS.Controllers
             return new Dps(ID).CallBack(this);
         }
 
-        class Dps : DayPilotScheduler
+    class Dps : DayPilotScheduler
         {
             private string ID;
 
@@ -90,7 +93,7 @@ namespace TutorialCS.Controllers
             protected override void OnInit(InitArgs e)
             {
                 LoadResourcesOneUser(ID);
-                UpdateWithMessage("Welcome!", CallBackUpdateType.Full);
+                UpdateWithMessage("Wita!", CallBackUpdateType.Full);
             }
 
             private void LoadResources(string orderBy)
@@ -130,12 +133,12 @@ namespace TutorialCS.Controllers
                 if (e.Recurrent && !e.RecurrentException)
                 {
                     new EventManager().EventCreateException(e.NewStart, e.NewEnd, e.Text, e.Resource, RecurrenceRule.EncodeExceptionModified(e.RecurrentMasterId, e.OldStart));
-                    UpdateWithMessage("Recurrence exception was created.");
+                    UpdateWithMessage("Wyjątek od powtarzalnego wydarzenia został utworzony.");
                 }
                 else
                 {
                     new EventManager().EventMove(e.Id, e.NewStart, e.NewEnd, e.Resource);
-                    UpdateWithMessage("The event was resized.");
+                    UpdateWithMessage("Czas trwania wydarzenia został zmieniony.");
                 }
             }
 
@@ -144,12 +147,12 @@ namespace TutorialCS.Controllers
                 if (e.Recurrent && !e.RecurrentException)
                 {
                     new EventManager().EventCreateException(e.NewStart, e.NewEnd, e.Text, e.NewResource, RecurrenceRule.EncodeExceptionModified(e.RecurrentMasterId, e.OldStart));
-                    UpdateWithMessage("Recurrence exception was created.");
+                    UpdateWithMessage("Wyjątek od powtarzalnego wydarzenia został utworzony.");
                 }
                 else
                 {
                     new EventManager().EventMove(e.Id, e.NewStart, e.NewEnd, e.NewResource);
-                    UpdateWithMessage("The event was moved.");
+                    UpdateWithMessage("Wydarzenie zostało przeniesione.");
                 }
             }
 
@@ -161,17 +164,23 @@ namespace TutorialCS.Controllers
                         if (e.Recurrent == false)
                         {
                             new EventManager().EventDelete(e.Id);
-                            UpdateWithMessage("Event deleted.");
+                            UpdateWithMessage("Wydarzenie usunięte.");
                         }
                         else
                         {
                             string prefix = RecurrenceRule.Prefix(e.RecurrentMasterId);
 
                             new EventManager().EventDeleteWholeRecurrence(prefix);
-                            UpdateWithMessage("Series of events deleted.");
+                            UpdateWithMessage("Seria wydarzeń usunięta.");
                         }
                         Update();
                         break;
+
+                    case "Edit":
+                        Redirect("/Appointments/Edit/"+e.Text);
+                        Update();
+                        break;
+
                 }
             }
 
@@ -180,7 +189,7 @@ namespace TutorialCS.Controllers
                 switch (e.Command)
                 {
                     case "refresh":
-                        UpdateWithMessage("Refreshed");
+                        UpdateWithMessage("Harmonogram odświeżony.");
                         break;
                     case "sort":
                         LoadResources((string)e.Data["field"]);
@@ -208,8 +217,6 @@ namespace TutorialCS.Controllers
 
             protected override void OnBeforeEventRender(BeforeEventRenderArgs e)
             {
-
-                // Nie działa, powinny się wyświetlać znaczki na każdym evencie. Może jest coś z Themes, nie wiem.
                 if (e.Recurrent)
                 {
                     if (e.RecurrentException)
@@ -225,16 +232,182 @@ namespace TutorialCS.Controllers
 
             protected override void OnBeforeTimeHeaderRender(BeforeTimeHeaderRenderArgs e)
             {
-
                 if (e.Level == 0)
                 {
-                    e.InnerHtml = String.Format("<span style=\"font - weight: bold\">Tydzień</span>");
+                    e.InnerHtml = String.Format("<span style=\"font - weight: bold\">{0} - {1}</span>", e.Start.Day, e.Start.AddDays(6).ToShortDateString());
                 }
-                if (e.Level == 1)
+
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public ActionResult DailyScheduler()
+        {
+            return View();
+        }
+
+        public ActionResult DailyBackend()
+        {
+            return new DpsDaily().CallBack(this);
+        }
+
+        class DpsDaily : DayPilotScheduler
+        {
+            protected override void OnInit(InitArgs e)
+            {
+                LoadResources();
+                UpdateWithMessage("Witaj!", CallBackUpdateType.Full);
+            }
+
+            private void LoadResources(string orderBy)
+            {
+                Resources.Clear();
+
+                foreach (DataRow r in new EventManager().GetResources(orderBy).Rows)
+                {
+                    Resource res = new Resource((string)r["name"], Convert.ToString(r["id"]));
+
+                    res.DataItem = r;
+                    res.Columns.Add(new ResourceColumn(r["fsname"].ToString()));
+                    Resources.Add(res);
+                }
+            }
+
+            private void LoadResources()
+            {
+                LoadResources("name");
+            }
+
+            protected override void OnEventResize(EventResizeArgs e)
+            {
+                if (e.Recurrent && !e.RecurrentException)
+                {
+                    new EventManager().EventCreateException(e.NewStart, e.NewEnd, e.Text, e.Resource, RecurrenceRule.EncodeExceptionModified(e.RecurrentMasterId, e.OldStart));
+                    UpdateWithMessage("Wyjątek od powtarzalnego wydarzenia został utworzony.");
+                }
+                else
+                {
+                    new EventManager().EventMove(e.Id, e.NewStart, e.NewEnd, e.Resource);
+                    UpdateWithMessage("Czas trwania wydarzenia został zmieniony.");
+                }
+            }
+
+            protected override void OnEventMove(EventMoveArgs e)
+            {
+                if (e.Recurrent && !e.RecurrentException)
+                {
+                    new EventManager().EventCreateException(e.NewStart, e.NewEnd, e.Text, e.NewResource, RecurrenceRule.EncodeExceptionModified(e.RecurrentMasterId, e.OldStart));
+                    UpdateWithMessage("Wyjątek od powtarzalnego wydarzenia został utworzony.");
+                }
+                else
+                {
+                    new EventManager().EventMove(e.Id, e.NewStart, e.NewEnd, e.NewResource);
+                    UpdateWithMessage("Wydarzenie zostało przeniesione.");
+                }
+            }
+
+            protected override void OnEventMenuClick(EventMenuClickArgs e)
+            {
+                switch (e.Command)
+                {
+                    case "Delete":
+                        if (e.Recurrent == false)
+                        {
+                            new EventManager().EventDelete(e.Id);
+                            UpdateWithMessage("Wydarzenie usunięte.");
+                        }
+                        else
+                        {
+                            string prefix = RecurrenceRule.Prefix(e.RecurrentMasterId);
+
+                            new EventManager().EventDeleteWholeRecurrence(prefix);
+                            UpdateWithMessage("Seria wydarzeń usunięta.");
+                        }
+                        Update();
+                        break;
+
+                    case "Edit":
+                        Redirect("/Appointments/Edit/" + e.Text);
+                        Update();
+                        break;
+                }
+            }
+
+            protected override void OnCommand(CommandArgs e)
+            {
+                switch (e.Command)
+                {
+                    case "refresh":
+                        UpdateWithMessage("Harmonogram odświeżony.");
+                        break;
+                    case "sort":
+                        LoadResources((string)e.Data["field"]);
+                        Update(CallBackUpdateType.Full);
+                        break;
+                    case "navigate":
+                        StartDate = (DateTime)e.Data["start"];
+                        Update(CallBackUpdateType.Full);
+                        break;
+                }
+            }
+
+            protected override void OnFinish()
+            {
+                if (UpdateType == CallBackUpdateType.None)
+                {
+                    return;
+                }
+
+                Events = new EventManager().FilteredData(StartDate, StartDate.AddDays(Days)).AsEnumerable();
+
+                DataIdField = "id";
+                DataTextField = "name";
+                DataStartField = "eventstart";
+                DataEndField = "eventend";
+                DataResourceField = "resource";
+                DataRecurrenceField = "recurrence";
+            }
+
+            protected override void OnBeforeEventRender(BeforeEventRenderArgs e)
+            {
+                if (e.Recurrent)
+                {
+                    if (e.RecurrentException)
+                    {
+                        e.Areas.Add(new Area().Right(5).Top(5).CssClass("area_recurring_ex"));
+                    }
+                    else
+                    {
+                        e.Areas.Add(new Area().Right(5).Top(5).CssClass("area_recurring"));
+                    }
+                }
+            }
+
+            protected override void OnBeforeTimeHeaderRender(BeforeTimeHeaderRenderArgs e)
+            {
+                if (e.Level == 0)
                 {
                     e.InnerHtml = String.Format("<span style=\"font - weight: bold\">{0} </span>", e.Start.ToShortDateString());
                 }
+            }
+        }
 
+        public ActionResult NavigatorBackend()
+        {
+            return new Dpn().CallBack(this);
+        }
+
+        public class Dpn : DayPilotNavigator
+        {
+            protected override void OnFinish()
+            {
+                Events = new EventManager().FilteredData(StartDate, StartDate.AddDays(1)).AsEnumerable();
+
+                DataIdField = "id";
+                DataStartField = "eventstart";
+                DataEndField = "eventend";
+                DataRecurrenceField = "recurrence"; // Nie działa!
             }
         }
     }

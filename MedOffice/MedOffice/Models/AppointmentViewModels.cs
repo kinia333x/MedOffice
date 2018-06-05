@@ -25,5 +25,17 @@ namespace MedOffice.Models
             [Display(Name = "Suma kosztów:")]
             public float TotalPrice { get; set; }              //suma ceny usługi i kosztów dodatkowych
         }
+
+        public class ServicesViewModel
+        {
+            public IList<int> SelectedServices { get; set; }
+            public IList<ServiceViewModel> AvailableServices { get; set; }
+
+            public ServicesViewModel()
+            {
+                SelectedServices = new List<int>();
+                AvailableServices = new List<ServiceViewModel>();
+            }
+        }
     }
 }

@@ -38,11 +38,6 @@
     <br style="clear: both;">
     <hr />
 
-    @if (ViewBag.RoleName == null)
-    {
-        ViewBag.RoleName = "administrator";
-    }
-
     <div class="row2"><h2><b>@Html.DisplayFor(model => model.Name) @Html.DisplayFor(model => model.Surname)</b>, @ViewBag.RoleName</h2></div>
 
     @Html.DayPilotMenu("menu", new DayPilotMenuConfig
@@ -55,42 +50,42 @@ new DayPilot.Web.Mvc.MenuItem { Text = "Usuń", Action = MenuItemAction.CallBack
     })
 
     @Html.DayPilotScheduler("dps", new DayPilotSchedulerConfig
-    {
+{
 
-        BackendUrl = Url.Content("~/Scheduler/Backend"),
-        EventResizeHandling = EventResizeHandlingType.CallBack,
-        EventMoveHandling = EventMoveHandlingType.CallBack,
-        CellGroupBy = GroupBy.Day,
-        CellDuration = 1440,
-        Days = 31,
-        Scale = TimeScale.Hour,
-        StartDate = new DateTime(DateTime.Today.Year, 1, 1),
-        BeforeRowHeaderRenderJavaScript = "row(args);", // LOL
-        CellWidth = 40,
-        EventHeight = 25,
+    BackendUrl = Url.Content("~/Scheduler/Backend"),
+    EventResizeHandling = EventResizeHandlingType.CallBack,
+    EventMoveHandling = EventMoveHandlingType.CallBack,
+    CellGroupBy = GroupBy.Day,
+    CellDuration = 1440,
+    Days = 31,
+    Scale = TimeScale.Hour,
+    StartDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day),
+    BeforeRowHeaderRenderJavaScript = "row(args);", // LOL
+    CellWidth = 40,
+    EventHeight = 25,
 
-        HeaderColumns = new RowHeaderColumnCollection {
+    HeaderColumns = new RowHeaderColumnCollection {
 new RowHeaderColumn("<center>Pesel</center>", 100),
 new RowHeaderColumn("<center>Personalia</center>", 100),
 //new RowHeaderColumn("<center><a href='javascript:dps.commandCallBack(\"sort\", { field: \"fsname\" });'>Personalia</a></center>", 100)
 },
-        TimeHeaders = new TimeHeaderCollection {
+    TimeHeaders = new TimeHeaderCollection {
 //new TimeHeader(GroupBy.Month, "MMMM yyyy"),
-new TimeHeader(GroupBy.Week),
+//new TimeHeader(GroupBy.Week),
 new TimeHeader(GroupBy.Day),
 new TimeHeader(GroupBy.Hour)
 },
 
-        ShowNonBusiness = false,
-        BusinessBeginsHour = 6,
-        BusinessEndsHour = 20,
+    ShowNonBusiness = false,
+    BusinessBeginsHour = 6,
+    BusinessEndsHour = 20,
 
-        EventClickHandling = EventClickHandlingType.JavaScript,
-        EventClickJavaScript = "ask(e);",
-        TimeRangeSelectedHandling = TimeRangeSelectedHandlingType.JavaScript,
-        TimeRangeSelectedJavaScript = "create(start, end, resource)",
-        ContextMenu = "menu",
-    })
+    EventClickHandling = EventClickHandlingType.JavaScript,
+    EventClickJavaScript = "ask(e);",
+    TimeRangeSelectedHandling = TimeRangeSelectedHandlingType.JavaScript,
+    TimeRangeSelectedJavaScript = "create(start, end, resource)",
+    ContextMenu = "menu",
+})
 
     <div class="row4"></div>
 
@@ -112,6 +107,14 @@ new TimeHeader(GroupBy.Hour)
     <div class="row3">
         <b>Uzyskanie zatrudnienia:</b> @Html.DisplayFor(model => model.Seniority)
     </div>
+</div>
+
+<div class="col-md-offset-0-5">
+    <p>
+        @Html.ActionLink("Edytuj", "Edit", "Search", new { id = Model.Id }, null) |
+        @Html.ActionLink("Usuń", "Delete", "Account", new { id = Model.Id }, null) |
+        @Html.ActionLink("Powrót do listy", "WorkerSearch", "Search")
+    </p>
 </div>
 
 
