@@ -59,9 +59,10 @@ namespace TutorialCS.Controllers
         }
 
         [Authorize(Roles = "Administrator, Kierownik, Rejestrujący, Lekarz")]
-        public ActionResult Appointments()
+        public ActionResult Appointments(string viewType)
         {
             Session["ID"] = "wizyty";
+            ViewBag.Type = viewType;
             return View();
         }
 
@@ -233,7 +234,7 @@ namespace TutorialCS.Controllers
             {
                 if (e.Level == 0)
                 {
-                    e.InnerHtml = String.Format("<span style=\"font - weight: bold\">{0} </span>", e.Start.ToShortDateString());
+                    e.InnerHtml = String.Format("<span style=\"font - weight: bold\">{0} - {1}</span>", e.Start.Day, e.Start.AddDays(6).ToShortDateString());
                 }
 
             }
