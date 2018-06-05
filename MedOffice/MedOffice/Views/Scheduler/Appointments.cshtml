@@ -36,55 +36,143 @@
     <hr />
 
     @Html.DayPilotMenu("menu", new DayPilotMenuConfig
-{
-    CssClassPrefix = "menu_default",
-    Items = new DayPilot.Web.Mvc.MenuItemCollection
+    {
+        CssClassPrefix = "menu_default",
+        Items = new DayPilot.Web.Mvc.MenuItemCollection
         {
             new DayPilot.Web.Mvc.MenuItem { Text = "Usuń", Action = MenuItemAction.CallBack, Command = "Delete"},
             new DayPilot.Web.Mvc.MenuItem { Text = "Edytuj", Action = MenuItemAction.CallBack, Command = "Edit"}
         }
-})
+    })
 
-    @Html.DayPilotScheduler("dps", new DayPilotSchedulerConfig
+    @if (ViewBag.Type == "year")
     {
-        BackendUrl = Url.Content("~/Scheduler/Backend"),
-        EventResizeHandling = EventResizeHandlingType.CallBack,
-        EventMoveHandling = EventMoveHandlingType.CallBack,
-        CellGroupBy = GroupBy.Day,
-        CellDuration = 1440,
-        Days = 31,
-        Scale = TimeScale.Hour,
-        StartDate = DateTime.Today,
-        BeforeRowHeaderRenderJavaScript = "row(args);",
-        CellWidth = 40,
-        EventHeight = 25,
+        <h3>Kalendarz na najbliższy rok</h3> <br />
+        @Html.DayPilotScheduler("dps", new DayPilotSchedulerConfig
+{
+    BackendUrl = Url.Content("~/Scheduler/Backend"),
+    EventResizeHandling = EventResizeHandlingType.CallBack,
+    EventMoveHandling = EventMoveHandlingType.CallBack,
+    //CellGroupBy = GroupBy.Week,
+    CellDuration = 40,
+    Days = 365,
+    Scale = TimeScale.Week,
+    StartDate = DateTime.Today,
+    BeforeRowHeaderRenderJavaScript = "row(args);",
+    CellWidth = 100,
+    EventHeight = 25,
 
-        HeaderColumns = new RowHeaderColumnCollection {
+    HeaderColumns = new RowHeaderColumnCollection {
             new RowHeaderColumn("<center></center>", 100),
             new RowHeaderColumn("<center></center>", 100),
-            //new RowHeaderColumn("<center><a href='javascript:dps.commandCallBack(\"sort\", { field: \"fsname\" });'>Personalia</a></center>", 100)
         },
-        TimeHeaders = new TimeHeaderCollection {
-            //new TimeHeader(GroupBy.Month, "MMMM yyyy"),
+    TimeHeaders = new TimeHeaderCollection {
+            new TimeHeader(GroupBy.Week),
+        },
+
+    ShowNonBusiness = false,
+    BusinessBeginsHour = 6,
+    BusinessEndsHour = 20,
+
+    EventClickHandling = EventClickHandlingType.JavaScript,
+    EventClickJavaScript = "show(e);",
+    TimeRangeSelectedHandling = TimeRangeSelectedHandlingType.JavaScript,
+    TimeRangeSelectedJavaScript = "create(start, end, resource)",
+    ContextMenu = "menu",
+})
+        <br />
+        @Html.ActionLink("Kalendarz wizyt na najbliższy miesiąc", "Appointments", "Scheduler", routeValues: new { viewType = "month" }, htmlAttributes: new { id = "SchedulerShowLink" }) <br />
+        @Html.ActionLink("Kalendarz wizyt na najbliższy tydzień", "Appointments", "Scheduler", routeValues: new { viewType = "week" }, htmlAttributes: new { id = "SchedulerShowLink" })
+    }
+
+    @if (ViewBag.Type == "month")
+    {
+        <h3>Kalendarz na najbliższy miesiąc</h3> <br />
+    @Html.DayPilotScheduler("dps", new DayPilotSchedulerConfig
+{
+    BackendUrl = Url.Content("~/Scheduler/Backend"),
+    EventResizeHandling = EventResizeHandlingType.CallBack,
+    EventMoveHandling = EventMoveHandlingType.CallBack,
+    //CellGroupBy = GroupBy.Week,
+    CellDuration = 40,
+    Days = 31,
+    Scale = TimeScale.Day,
+    StartDate = DateTime.Today,
+    BeforeRowHeaderRenderJavaScript = "row(args);",
+    CellWidth = 70,
+    EventHeight = 25,
+
+    HeaderColumns = new RowHeaderColumnCollection {
+            new RowHeaderColumn("<center></center>", 100),
+            new RowHeaderColumn("<center></center>", 100),
+        },
+    TimeHeaders = new TimeHeaderCollection {
             new TimeHeader(GroupBy.Week),
             new TimeHeader(GroupBy.Day),
-            new TimeHeader(GroupBy.Hour)
         },
 
-        ShowNonBusiness = false,
-        BusinessBeginsHour = 6,
-        BusinessEndsHour = 20,
+    ShowNonBusiness = false,
+    BusinessBeginsHour = 6,
+    BusinessEndsHour = 20,
 
-        EventClickHandling = EventClickHandlingType.JavaScript,
-        EventClickJavaScript = "show(e);",
-        TimeRangeSelectedHandling = TimeRangeSelectedHandlingType.JavaScript,
-        TimeRangeSelectedJavaScript = "create(start, end, resource)",
-        ContextMenu = "menu",
-    })
+    EventClickHandling = EventClickHandlingType.JavaScript,
+    EventClickJavaScript = "show(e);",
+    TimeRangeSelectedHandling = TimeRangeSelectedHandlingType.JavaScript,
+    TimeRangeSelectedJavaScript = "create(start, end, resource)",
+    ContextMenu = "menu",
+})
+        <br />
+        @Html.ActionLink("Kalendarz wizyt na najbliższy tydzień", "Appointments", "Scheduler", routeValues: new { viewType = "week" }, htmlAttributes: new { id = "SchedulerShowLink" }) <br />
+        @Html.ActionLink("Kalendarz wizyt na najbliższy rok", "Appointments", "Scheduler", routeValues: new { viewType = "year" }, htmlAttributes: new { id = "SchedulerShowLink" })
+    }
+
+
+    @if (ViewBag.Type == "week" || ViewBag.Type == null)
+    {
+        <h3>Kalendarz na najbliższy tydzień</h3> <br />
+       @Html.DayPilotScheduler("dps", new DayPilotSchedulerConfig
+       {
+
+           BackendUrl = Url.Content("~/Scheduler/Backend"),
+           EventResizeHandling = EventResizeHandlingType.CallBack,
+           EventMoveHandling = EventMoveHandlingType.CallBack,
+           CellGroupBy = GroupBy.Day,
+           CellDuration = 1440,
+           Days = 7,
+           Scale = TimeScale.Hour,
+           StartDate = DateTime.Today,
+           BeforeRowHeaderRenderJavaScript = "row(args);",
+           CellWidth = 40,
+           EventHeight = 25,
+
+           HeaderColumns = new RowHeaderColumnCollection {
+                new RowHeaderColumn("<center>Pesel</center>", 100),
+                new RowHeaderColumn("<center>Personalia</center>", 100),
+                //new RowHeaderColumn("<center><a href='javascript:dps.commandCallBack(\"sort\", { field: \"fsname\" });'>Personalia</a></center>", 100)
+                },
+           TimeHeaders = new TimeHeaderCollection {
+                new TimeHeader(GroupBy.Week),
+                new TimeHeader(GroupBy.Day),
+                new TimeHeader(GroupBy.Hour)
+                },
+
+           ShowNonBusiness = false,
+           BusinessBeginsHour = 6,
+           BusinessEndsHour = 20,
+
+           EventClickHandling = EventClickHandlingType.JavaScript,
+           EventClickJavaScript = "ask(e);",
+           TimeRangeSelectedHandling = TimeRangeSelectedHandlingType.JavaScript,
+           TimeRangeSelectedJavaScript = "create(start, end, resource)",
+           ContextMenu = "menu",
+       })
+        <br />
+       @Html.ActionLink("Kalendarz wizyt na najbliższy miesiąc", "Appointments", "Scheduler", routeValues: new { viewType = "month" }, htmlAttributes: new { id = "SchedulerShowLink" }) <br />
+       @Html.ActionLink("Kalendarz wizyt na najbliższy rok", "Appointments", "Scheduler", routeValues: new { viewType = "year" }, htmlAttributes: new { id = "SchedulerShowLink" })
+    }
 
     <div class="row4"></div>
 </div>
-
 
 <script type="text/javascript">
     function row(args) {
@@ -97,70 +185,3 @@
         modal.showUrl('/Appointments/Details/' + id);
     }
 </script>
-
-<script type="text/javascript">
-@*function create(start, end, resource) {
-	var m = new DayPilot.Modal();
-	m.closed = function() {
-        if (this.result == "OK") {
-            dps.commandCallBack('refresh');
-        }
-        else { dps.commandCallBack('refresh'); }
-        dps.clearSelection();
-	};
-	m.showUrl('/Event/Create?start=' + start + '&end=' + end + '&resource=' + resource);
-}
-
-
-/* Recurrence dialogs */
-
-function ask(e) {
-
-    // it's a normal event
-    if (!e.recurrent()) {
-        edit(e);
-        return;
-    }
-
-    // it's a recurrent event but it's an exception from the series
-    if (e.value() !== null) {
-        edit(e);
-        return;
-    }
-
-    var modal = new DayPilot.Modal();
-    modal.width = 300;
-    modal.height = 150;
-    modal.closed = function () {
-        if (this.result != "cancel") {
-            edit(e, this.result);
-        }
-    };
-
-    modal.showUrl('@Url.Action("RecurrentEditMode", "Event")');
-}
-
-function edit(e, mode) {
-    var modal = new DayPilot.Modal();
-    modal.closed = function () {
-        if (this.result === "OK") {
-            dps.commandCallBack('refresh');
-        }
-    };
-
-    var url = "@Url.Action("Edit", "Event")";
-    if (e.id() !== null) {
-        url += "/" + e.id();
-    }
-    url += "?";
-    if (e.recurrentMasterId()) {
-        url += "master=" + e.recurrentMasterId() + "&";
-    }
-    if (mode == "this") {
-        url += "start=" + e.start().toStringSortable();
-    }
-    modal.showUrl(url);
-    }*@
-</script>
-
-
