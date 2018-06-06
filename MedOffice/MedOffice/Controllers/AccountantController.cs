@@ -24,11 +24,19 @@ namespace MedOffice.Controllers
             ViewBag.AddPriceSortParm = sortOrder == "addPrice" ? "addPrice_desc" : "addPrice";
             ViewBag.TotalPriceSortParm = sortOrder == "totalPrice" ? "totalPrice_desc" : "totalPrice";
             ViewBag.DataSortParm = sortOrder == "data" ? "data_desc" : "data";
+            ViewBag.TypeSortParm = sortOrder == "type" ? "type_desc" : "type";
+
+            DateTime dateTime;
+            DateTime.TryParse(searching, out dateTime);
 
             var services = db.Appointments.Where(x => x.service_name.Contains(searching)
-                                          || x.service_price.ToString().Contains(searching)
-                                          || x.supplies_price.ToString().Contains(searching)
-                                          || (x.supplies_price + x.service_price).ToString().Contains(searching)
+                                          || (x.appoint_date.Year == dateTime.Year 
+                                          && x.appoint_date.Month == dateTime.Month
+                                          && x.appoint_date.Day == dateTime.Day)
+                                          || x.service_price.ToString() == searching
+                                          || x.supplies_price.ToString() == searching
+                                          || (x.supplies_price + x.service_price).ToString() == searching
+                                          || x.service_type.Contains(searching)
                                           || searching == null)
                                           .Select(a => new AppointmentViewModels.ServiceViewModel()
                                           {
@@ -52,6 +60,8 @@ namespace MedOffice.Controllers
                 case "totalPrice_desc": services = services.OrderByDescending(s => s.TotalPrice); break;
                 case "data": services = services.OrderBy(s => s.ServiceDate); break;
                 case "data_desc": services = services.OrderByDescending(s => s.ServiceDate); break;
+                case "type": services = services.OrderBy(s => s.ServiceType); break;
+                case "type_desc": services = services.OrderByDescending(s => s.ServiceType); break;
                 default: services = services.OrderBy(s => s.ServiceName); break;
             }
 
@@ -64,15 +74,44 @@ namespace MedOffice.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(ServicesViewModel model)
+        public ActionResult Index(string SubmitButton, string searching, string sortOrder, ServicesViewModel model)
+        {
+            switch (SubmitButton)
+            {
+                case "Szukaj":
+                    return (Index(searching, sortOrder));
+                case "Wygeneruj raport":
+                    return (Report(model, false));
+                case "Wygeneruj pełny raport":
+                    return (Report(model, true));
+                default:
+                    return (Index(searching, sortOrder));
+            }
+        }
+        
+        public ActionResult Report(ServicesViewModel model, Boolean isFullReport)
         {
             if (ModelState.IsValid)
             {
                 List<ServiceViewModel> Services = new List<ServiceViewModel>();
-                
+
+                if (isFullReport)
+                {
+                    Services = db.Appointments.ToList().Select(a => new AppointmentViewModels.ServiceViewModel()
+                    {
+                        Id = a.ID,
+                        ServiceType = a.service_type,
+                        ServiceName = a.service_name,
+                        ServiceDate = a.appoint_date,
+                        ServicePrice = a.service_price,
+                        SuppliesPrice = a.supplies_price,
+                        TotalPrice = a.service_price + a.supplies_price
+                    }).ToList();
+                    return new PdfActionResult("Report", Services);
+                }
+
                 foreach (var item in model.SelectedServices)
                 {
-
                     var s = db.Appointments.ToList().Where(a => a.ID == item).Select(a => new AppointmentViewModels.ServiceViewModel()
                     {
                         Id = a.ID,
@@ -86,10 +125,7 @@ namespace MedOffice.Controllers
 
                     Services.Add(s);
                 }
-                
-                Session["Services"] = Services.ToList();
-
-                return RedirectToAction("Report");
+                return new PdfActionResult("Report", Services);
             }
 
             var services = db.Appointments.ToList().Select(a => new AppointmentViewModels.ServiceViewModel()
@@ -106,29 +142,7 @@ namespace MedOffice.Controllers
             model.AvailableServices = services;
 
             return View(model);
-        }
-        public ActionResult Report()
-        {
-            List<ServiceViewModel> Services;
-            if (Session["Services"] == null)
-            {
-                Services = db.Appointments.ToList().Select(a => new AppointmentViewModels.ServiceViewModel()
-                {
-                    Id = a.ID,
-                    ServiceType = a.service_type,
-                    ServiceName = a.service_name,
-                    ServiceDate = a.appoint_date,
-                    ServicePrice = a.service_price,
-                    SuppliesPrice = a.supplies_price,
-                    TotalPrice = a.service_price + a.supplies_price
-                }).ToList();
-            }
-            else
-            {
-                Services = (List<ServiceViewModel>)Session["Services"];
-                Session.Clear();
-            }
-            return new PdfActionResult("Report", Services);
+           
         }
 
         [Authorize(Roles = "Administrator, Księgowa")]
