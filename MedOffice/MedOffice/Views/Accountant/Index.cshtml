@@ -7,19 +7,19 @@
 </div>
 <br style="clear: both;">
 
-<div class="col-md-offset-0-5 col-md-4regpt">
-    <p>
-        @Html.ActionLink("Wygeneruj pełny raport", "Report")
-    </p>
-</div>
-<br style="clear: both;"><br />
+<div class="form-group text-left">
+    <br />
+    <div class="form-group form-inline">
+        @using (Html.BeginForm("Index", "Accountant"))
+        {
+            @Html.TextBox("searching", null, new { @class = "form-control", @placeholder = "Szukana usługa" })
+            <input type="submit" name="SubmitButton" value="Szukaj" class="btn btn-default" />
+        }
+    </div>
 
-<div class="form-group form-inline">
-    @using (Html.BeginForm())
-    {
-        @Html.TextBox("searching", null, new { @class = "form-control", @placeholder = "Szukana usługa" })
-        <input type="submit" value="Szukaj" class="btn btn-default" />
-    }
+    <label class="btn btn-primary active">
+        <input type="checkbox" onclick="toggle(this)" /> Zaznacz/Odznacz Wszystkie
+    </label>
 </div>
 
 <table class="table">
@@ -29,7 +29,7 @@
             @Html.Label("Wybierz")
         </th>
         <th>
-            @Html.Label("Typ usługi")
+            @Html.ActionLink("Typ usługi", "Index", new { sortOrder = ViewBag.TypeSortParm })
         </th>
         <th>
             @Html.ActionLink("Nazwa usługi", "Index", new { sortOrder = ViewBag.NameSortParm })
@@ -66,7 +66,7 @@
             {
                 <tr>
                     <td>
-                      <input type="checkbox" name="SelectedServices" value="@item.Id" />
+                        <input type="checkbox" name="SelectedServices" value="@item.Id" />
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ServiceType)
@@ -94,9 +94,20 @@
                     }
                 </tr>
             }
-            <div class="form-group text-left">
-                <input type="submit" class="btn btn-primary" value="Wygeneruj raport" />
+            <div class="form-group form-inline">
+                <input type="submit" name="SubmitButton" class="btn btn-primary " value="Wygeneruj raport" />
+                <input type="submit" name="SubmitButton" value="Wygeneruj pełny raport" class="btn btn-primary" />
             </div>
         }
     }
 </table>
+
+<script>
+    function toggle(source) {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i] != source)
+                checkboxes[i].checked = source.checked;
+        }
+    }
+</script>
