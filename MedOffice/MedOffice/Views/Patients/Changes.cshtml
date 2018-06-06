@@ -5,87 +5,78 @@
 }
 <h2>Zmiany w danych pacjentów:</h2>
 
+<br /><br />
+@using (Html.BeginForm())
+{
+    @Html.TextBox("searching")<input type="submit" value="Szukaj" />
+}
+<br /><br />
 
 <table class="table">
     <tr>
-        <th>
-            Data zmiany
-        </th>
-        <th>
-            Autor zmiany
-        </th>
-        <th>
-            Typ zmiany
-        </th>
-        <th>
-            Pesel pacjenta
-        </th>
-        <th>
-            Imię
-        </th>
-        <th>
-            Nazwisko
-        </th>
-        <th>
-            Data urodzenia
-        </th>
-        <th>
-            Adres
-        </th>
+        <th>@Html.ActionLink("Data zmiany", "Changes", new { sortOrder = ViewBag.DateSortParm })</th>
+        <th>Autor zmiany</th>
+        <th>@Html.ActionLink("Typ zmiany", "Changes", new { sortOrder = ViewBag.ChangeTypeParm })</th>
+        <th>Pesel pacjenta</th>
+        <th>Imię</th>
+        <th>Nazwisko</th>
+        <th>Data urodzenia</th>
+        <th>Adres</th>
 
         <th></th>
     </tr>
-    @foreach (var item in Model)
+
+
+    @if (Model.Count() == 0)
     {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfChange)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DBUser)
-            </td>
-            <td>
-                @{
-                    if (item.TypeOfChange == "DELETED")
-                    {
-                        @:usuniecie
-                    }
-                    else
-                    {
-                        if (item.TypeOfChange == "INSERTED")
-                        {
-                            @:dodanie
-                        }
-                        else
-                        {
-                            if (item.TypeOfChange == "UPDATED-INSERTED")
-                            {
-                                @:edycja: dodanie
-                            }
-                            else
-                            {
-                                @:edycja: usuniecie
-                            }
-                        }
-                    }
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Pesel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Surname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BirthDate)
-            </td>
-                        <td>
-                @Html.DisplayFor(modelItem => item.Address)
+            <td colspan="13" style="color:red">
+                Brak wyników
             </td>
         </tr>
     }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.DateOfChange)</td>
+                <td>@Html.DisplayFor(modelItem => item.DBUser)</td>
+                <td>
+                    @{
+                        if (item.TypeOfChange == "DELETED")
+                        {
+                            @:usuniecie
+                        }
+                        else
+                        {
+                            if (item.TypeOfChange == "INSERTED")
+                            {
+                                @:dodanie
+                            }
+                            else
+                            {
+                                if (item.TypeOfChange == "UPDATED-INSERTED")
+                                {
+                                    @:edycja: dodanie
+                                }
+                                else
+                                {
+                                    @:edycja: usuniecie
+                                }
+                            }
+                        }
+                    }
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.Pesel)</td>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Surname)</td>
+                <td>@Html.DisplayFor(modelItem => item.BirthDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.Address)</td>
+            </tr>
+        }
+    }
+
+
 </table>
 
