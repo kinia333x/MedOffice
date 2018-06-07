@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MedOffice.Models
 {
@@ -17,8 +18,17 @@ namespace MedOffice.Models
         }
 
         public string Specialization { get; set; }
+
+        [Required(ErrorMessage = "Wprowadź imię pracownika.")]
+        [RegularExpression(@"^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+$", ErrorMessage = "Pole Imię może zawierać wyłącznie litery. Dopuszczalne są polskie znaki.")]
+        [Display(Name = "Imię:")]
         public string Name { get; set; }
+
+        [Required(ErrorMessage = "Wprowadź nazwisko pracownika.")]
+        [RegularExpression(@"^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+(?:[\s\-][A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+)?$", ErrorMessage = "Pole Nazwisko może zawierać wyłącznie litery. Dopuszczalne są nazwiska dwuczłonowe i zawierające polskie znaki.")]
+        [Display(Name = "Nazwisko:")]
         public string Surname { get; set; }
+
         public DateTime Experience { get; set; }
         public DateTime Seniority { get; set; }
 

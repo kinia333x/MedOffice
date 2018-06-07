@@ -228,6 +228,10 @@
     <Compile Include="Migrations\201804171655392_NextMigration.Designer.cs">
       <DependentUpon>201804171655392_NextMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806071451571_EditChanges.cs" />
+    <Compile Include="Migrations\201806071451571_EditChanges.Designer.cs">
+      <DependentUpon>201806071451571_EditChanges.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AppointmentDBContext\201805070816545_InitialCreate.cs" />
     <Compile Include="Migrations\AppointmentDBContext\201805070816545_InitialCreate.Designer.cs">
       <DependentUpon>201805070816545_InitialCreate.cs</DependentUpon>
@@ -372,17 +376,17 @@
     <Content Include="Views\Appointments\All.cshtml" />
     <Content Include="Views\Appointments\Particulars.cshtml" />
     <Content Include="Views\Account\Delete.cshtml" />
+    <Content Include="Views\Account\Edit.cshtml" />
     <None Include="Views\Error\PageNotFound.cshtml" />
     <Content Include="Views\Error\PermissionDenied.cshtml" />
-    <Content Include="Views\Scheduler\Index.cshtml" />
+    <Content Include="Views\Scheduler\PartialScheduler.cshtml" />
     <Content Include="Views\Event\Edit.cshtml" />
     <Content Include="Views\Event\Create.cshtml" />
     <Content Include="Views\Event\RecurrentDeleteMode.cshtml" />
     <Content Include="Views\Event\RecurrentEditMode.cshtml" />
     <Content Include="Views\Scheduler\Appointments.cshtml" />
-    <Content Include="Views\Search\Edit.cshtml" />
     <Content Include="Views\Patients\History.cshtml" />
-    <Content Include="Views\Scheduler\DailyScheduler.cshtml" />
+    <Content Include="Views\Scheduler\FullScheduler.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -412,6 +416,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804171655392_NextMigration.resx">
       <DependentUpon>201804171655392_NextMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806071451571_EditChanges.resx">
+      <DependentUpon>201806071451571_EditChanges.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\AppointmentDBContext\201805070816545_InitialCreate.resx">
       <DependentUpon>201805070816545_InitialCreate.cs</DependentUpon>

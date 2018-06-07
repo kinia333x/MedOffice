@@ -44,8 +44,8 @@ else
             <td>@roles</td>
             <td>@appUser.Specialization</td>
             <td>
-                @Html.ActionLink("Edytuj", "Edit", new { id = appUser.Id })
-                @Html.ActionLink("Szczegóły", "Index", "Scheduler", new { id = appUser.UserName }, null)
+                @Html.ActionLink("Edytuj", "Edit", "Account", new { id = appUser.Id }, null) |
+                @Html.ActionLink("Szczegóły", "PartialScheduler", "Scheduler", new { id = appUser.UserName }, null) |
                 @Html.ActionLink("Usuń", "Delete", "Account", new { id = appUser.Id }, null)
                     </td>
 

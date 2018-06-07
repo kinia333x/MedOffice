@@ -11,6 +11,8 @@ using Microsoft.Owin.Security;
 using MedOffice.Models;
 using System.Collections.Generic;
 using System.Net;
+using System.Data;
+using System.Data.Entity;
 
 namespace MedOffice.Controllers
 {
@@ -638,6 +640,80 @@ namespace MedOffice.Controllers
             return View(model);
         }
 
+        public ActionResult Edit(string id)
+        {
+            ApplicationDbContext context = new ApplicationDbContext();
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ApplicationUser user = context.Users.Find(id);
+
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(user);
+        }
+
+        // POST: Patients/Edit/5
+        // Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
+        // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ApplicationUser user)
+        {
+            ApplicationDbContext context = new ApplicationDbContext();
+            AppointmentDBContext Appdb = new AppointmentDBContext();
+
+            if (ModelState.IsValid)
+            {
+                double time = -1;
+                context.Entry(user).State = EntityState.Modified;
+
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+                {
+                    Exception raise = dbEx;
+                    foreach (var validationErrors in dbEx.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            string message = string.Format("{0}:{1}",
+                                validationErrors.Entry.Entity.ToString(),
+                                validationError.ErrorMessage);
+                            // raise a new exception nesting  
+                            // the current instance as InnerException  
+                            raise = new InvalidOperationException(message, raise);
+                        }
+                    }
+                    throw raise;
+                }
+
+                // Dodanie do archiwum użytkownika, który zmienił dane pacjenta:
+                string query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = " + user.UserName + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-INSERTED' AND UserName = " + user.UserName + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'"; ;
+                context.Database.ExecuteSqlCommand(query);
+
+                query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = " + user.UserName + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-DELETED' AND UserName = " + user.UserName + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'";
+                context.Database.ExecuteSqlCommand(query);
+
+                query = "UPDATE [dbo].[Resources] SET fsname = '" + user.Name + " " + user.Surname + "' WHERE name = '" + user.UserName + "'";
+                Appdb.Database.ExecuteSqlCommand(query);
+
+                return RedirectToAction("WorkerSearch", "Search");
+            }
+
+        return View(user);
+        }
+
+
         // GET: Search/Delete
         [Authorize(Roles = "Administrator, Rejestrujący")]
         public ActionResult Delete(string id)
@@ -672,7 +748,7 @@ namespace MedOffice.Controllers
             context.Users.Remove(user);
             context.SaveChanges();
 
-            string query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = '" + user.UserName + "'), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'DELETED' AND UserName = " + user.UserName;
+            string query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = '" + user.UserName + "'), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'DELETED' AND UserName = '" + user.UserName + "'";
             context.Database.ExecuteSqlCommand(query);
 
             query = "DELETE FROM [dbo].[WorkingTime] WHERE resource = (SELECT id FROM [dbo].[Resources] WHERE name = '" + user.UserName + "')";
