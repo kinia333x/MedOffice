@@ -260,7 +260,7 @@ namespace MedOffice.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.Specialization != "Lekarz")
+                if (model.UserRoles != "Lekarz")
                 {
                     model.Specialization = null;
                 }
