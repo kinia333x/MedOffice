@@ -6,26 +6,26 @@
 }
 
  <h2>Raport</h2>
-
- <table class="table">
+ <hr />
+ <table>
      <tr>
          <th>
-             @Html.DisplayNameFor(model => model.ServiceType)
+             @Html.Label("Typ uslugi") 
          </th>
          <th>
-             @Html.DisplayNameFor(model => model.ServiceName)
+             @Html.Label("Nazwa uslugi")
          </th>
          <th>
-             @Html.DisplayNameFor(model => model.ServiceDate)
+             @Html.Label("Data uslugi")
          </th>
          <th>
-             @Html.DisplayNameFor(model => model.ServicePrice)
+             @Html.Label("Cena uslugi")
          </th>
          <th>
-             @Html.DisplayNameFor(model => model.SuppliesPrice)
+             @Html.Label("Koszty dodatkowe")
          </th>
          <th>
-             @Html.DisplayNameFor(model => model.TotalPrice)
+             @Html.Label("Suma kosztow")
          </th>
      </tr>
      @foreach (var item in Model)
