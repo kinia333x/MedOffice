@@ -1,11 +1,14 @@
 ﻿@model IEnumerable<MedOffice.Models.Appointment>
-
-<br /><br />
-@using (Html.BeginForm())
-{
-    @Html.TextBox("searching")<input type="submit" value="Szukaj" />
+@{
+    ViewBag.Title = "Wyszukiwanie usług";
 }
-
+<br /><br />
+<div class="form-group form-inline">
+    @using (Html.BeginForm())
+    {
+        @Html.TextBox("searching", null, new { @class = "form-control", @placeholder = "Szukana usługa" })<input type="submit" value="Szukaj" class="btn btn-default" />
+    }
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -33,18 +36,18 @@
         {
             foreach (var item in Model)
             {
-            <tr>
-                <td>@item.patients_pesel</td>
-                <td>@item.real_disease</td>
-                <td>@item.dis_descript</td>
-                <td>@item.appoint_date</td>
-                <td>@item.docs_pesel</td>
-                <td>@item.service_name</td>
-                <td>@item.service_price</td>
-                <td>@item.supplies_price</td>
-                <td>@(item.supplies_price + item.service_price)</td>
-                <td>@Html.ActionLink("Szczegóły", "Details", new { id = item.ID })</td>
-            </tr>
+                <tr>
+                    <td>@item.patients_pesel</td>
+                    <td>@item.real_disease</td>
+                    <td>@item.dis_descript</td>
+                    <td>@item.appoint_date</td>
+                    <td>@item.docs_pesel</td>
+                    <td>@item.service_name</td>
+                    <td>@item.service_price</td>
+                    <td>@item.supplies_price</td>
+                    <td>@(item.supplies_price + item.service_price)</td>
+                    <td>@Html.ActionLink("Szczegóły", "Details", new { id = item.ID })</td>
+                </tr>
             }
         }
     </tbody>
