@@ -1,11 +1,16 @@
 ﻿@model IEnumerable<MedOffice.Models.Patient>
 
-<br /><br />
-@using (Html.BeginForm())
-{
-    @Html.TextBox("searching")<input type="submit" value="Szukaj" />
+@{
+    ViewBag.Title = "Wyszukiwanie pacjentów";
 }
 
+<br /><br />
+<div class="form-group form-inline">
+    @using (Html.BeginForm())
+    {
+        @Html.TextBox("searching", null, new { @class = "form-control", @placeholder = "Szukany pacjent" })<input type="submit" value="Szukaj" class="btn btn-default" />
+    }
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -27,16 +32,16 @@
         {
             foreach (var item in Model)
             {
-            <tr>
-                <td>@item.Name</td>
-                <td>@item.Surname</td>
-                <td>@item.Pesel</td>
-                <td style="text-align: center">
-                    @Html.ActionLink("Edytuj", "../Patients/Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Szczegóły", "../Patients/Details", new { id = item.Id }) |
-                    @Html.ActionLink("Usuń", "../Patients/Delete", new { id = item.Id })
-                </td>
-            </tr>
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Surname</td>
+                    <td>@item.Pesel</td>
+                    <td style="text-align: center">
+                        @Html.ActionLink("Edytuj", "../Patients/Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Szczegóły", "../Patients/Details", new { id = item.Id }) |
+                        @Html.ActionLink("Usuń", "../Patients/Delete", new { id = item.Id })
+                    </td>
+                </tr>
             }
         }
     </tbody>
