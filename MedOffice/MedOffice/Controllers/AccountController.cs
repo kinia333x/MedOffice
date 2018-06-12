@@ -260,7 +260,7 @@ namespace MedOffice.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.Specialization != "Lekarz")
+                if (model.UserRoles != "Lekarz")
                 {
                     model.Specialization = null;
                 }
@@ -715,7 +715,7 @@ namespace MedOffice.Controllers
 
 
         // GET: Search/Delete
-        [Authorize(Roles = "Administrator, Rejestrujący")]
+        [Authorize(Roles = "Administrator, Kierownik, Rejestrujący")]
         public ActionResult Delete(string id)
         {
             ApplicationDbContext context = new ApplicationDbContext();
@@ -738,7 +738,7 @@ namespace MedOffice.Controllers
         // POST: 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator, Rejestrujący")]
+        [Authorize(Roles = "Administrator, Kierownik, Rejestrujący")]
         public ActionResult DeleteConfirmed(string id)
         {
             ApplicationDbContext context = new ApplicationDbContext();
