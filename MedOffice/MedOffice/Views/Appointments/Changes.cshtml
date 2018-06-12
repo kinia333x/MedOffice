@@ -6,10 +6,12 @@
 <h2>Zmiany w wizytach:</h2>
 
 <br /><br />
+<div class="form-group form-inline">
 @using (Html.BeginForm())
 {
-    @Html.TextBox("searching")<input type="submit" value="Szukaj" />
+    @Html.TextBox("searching", null, new { @class = "form-control", @placeholder = "Szukana zmiana" })<input type="submit" value="Szukaj" class="btn btn-default"  />
 }
+</div>
 <br /><br />
 
 <table class="table">
@@ -78,4 +80,3 @@
         }
     }
 </table>
-

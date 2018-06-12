@@ -1,17 +1,17 @@
 ﻿@{
-    ViewBag.Title = "WorkerSearch";
+    ViewBag.Title = "Wyszukiwanie pracowników";
 }
 
-<h2>WorkerSearch</h2>
 
 @model IEnumerable<MedOffice.Models.UserSearchModel>
 
 <br /><br />
+<div class="form-group form-inline">
 @using (Html.BeginForm())
 {
-    @Html.TextBox("searching")<input type="submit" value="Szukaj" />
+    @Html.TextBox("searching", null, new { @class = "form-control", @placeholder = "Szukany pracownik" })<input type="submit" value="Szukaj" class="btn btn-default"/>
 }
-
+</div>
 <table class="table">
     <thead>
         <tr>
