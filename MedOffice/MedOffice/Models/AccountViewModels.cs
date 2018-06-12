@@ -118,30 +118,6 @@ namespace MedOffice.Models
         public string Specialization { get; set; }
     }
 
-    public class EditViewModel
-    {
-        [Required(ErrorMessage = "Wprowadź imię pracownika.")]
-        [RegularExpression(@"^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+$", ErrorMessage = "Pole Imię może zawierać wyłącznie litery. Dopuszczalne są polskie znaki.")]
-        [Display(Name = "Imię:")]
-        public string Name { get; set; }
-
-        [Required(ErrorMessage = "Wprowadź nazwisko pracownika.")]
-        [RegularExpression(@"^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+(?:[\s\-][A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+)?$", ErrorMessage = "Pole Nazwisko może zawierać wyłącznie litery. Dopuszczalne są nazwiska dwuczłonowe i zawierające polskie znaki.")]
-        [Display(Name = "Nazwisko:")]
-        public string Surname { get; set; }
-        
-        public string UserName { get; set; }
-
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        [DataType(DataType.Date)]
-        public DateTime Seniority { get; set; }
-
-    }
-
     public class ResetPasswordViewModel
     {
         [Required]

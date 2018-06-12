@@ -28,7 +28,7 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li>@Html.ActionLink("Harmonogram pracy", "DailyScheduler", "Scheduler", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
+                    <li>@Html.ActionLink("Harmonogram pracy", "FullScheduler", "Scheduler", routeValues: new { viewType = "day" }, htmlAttributes: new { id = "SchedulerShowLink" })</li>
                     <li>@Html.ActionLink("Wyszukaj", "WorkerSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
                     <li>@Html.ActionLink("Zarejestruj", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
                 </ul>
@@ -44,9 +44,10 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li>@Html.ActionLink("Harmonogram pracy", "DailyScheduler", "Scheduler", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
-                    <li>@Html.ActionLink("Wyszukaj", "WorkerSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
-                    <li>@Html.ActionLink("Zarejestruj", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+                    <li>@Html.ActionLink("Harmonogram pracy", "FullScheduler", "Scheduler", routeValues: new { viewType = "day" }, htmlAttributes: new { id = "SchedulerShowLink" })</li>
+                    @*?????????????????????????????????????*@
+                    @*<li>@Html.ActionLink("Wyszukaj", "WorkerSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
+        <li>@Html.ActionLink("Zarejestruj", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>*@
                 </ul>
             </li>
         </ul>

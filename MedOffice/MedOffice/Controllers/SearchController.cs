@@ -134,77 +134,76 @@ namespace MedOffice.Controllers
             return View(appointmentsList.ToList());
         }
 
+        //[Authorize(Roles = "Administrator, Rejestrujący")]
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    AppointmentDBContext db = new AppointmentDBContext();
+        //    Appointment appointment = db.Appointments.Find(id);
+        //    if (appointment == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(appointment);
+        //}
 
-        [Authorize(Roles = "Administrator, Rejestrujący")]
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppointmentDBContext db = new AppointmentDBContext();
-            Appointment appointment = db.Appointments.Find(id);
-            if (appointment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(appointment);
-        }
+        //// GET: Search/Edit/5
+        //public ActionResult Edit(string Id)
+        //{
+        //    ApplicationDbContext context = new ApplicationDbContext();
 
-        // GET: Search/Edit/5
-        public ActionResult Edit(string Id)
-        {
-            ApplicationDbContext context = new ApplicationDbContext();
+        //    if (Id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
 
-            if (Id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+        //    ApplicationUser user = context.Users.Find(Id);
 
-            ApplicationUser user = context.Users.Find(Id);
+        //    // VV EMAIL i SENIORITY nie dzialaja
+        //    var usr = new EditViewModel { Email = user.Email, UserName = user.UserName, Name = user.Name, Surname = user.Surname, Seniority = user.Seniority };
 
-            // VV EMAIL i SENIORITY nie dzialaja
-            var usr = new EditViewModel { Email = user.Email, UserName = user.UserName, Name = user.Name, Surname = user.Surname, Seniority = user.Seniority };
+        //    if (user == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
 
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-
-            //}
-            return View(usr);
-        }
+        //    //}
+        //    return View(usr);
+        //}
 
 
-        // POST: Search/Edit/5 
-        // Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
-        // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Email,Name,Surname,UserName,Specialization,Roles")] ApplicationUser user)
-        {
-            ApplicationDbContext context = new ApplicationDbContext();
-            AppointmentDBContext Appdb = new AppointmentDBContext();
+        //// POST: Search/Edit/5 
+        //// Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
+        //// Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit([Bind(Include = "Id,Email,Name,Surname,UserName,Specialization,Roles")] ApplicationUser user)
+        //{
+        //    ApplicationDbContext context = new ApplicationDbContext();
+        //    AppointmentDBContext Appdb = new AppointmentDBContext();
 
-            if (ModelState.IsValid)
-            {
-                double time = -1;
+        //    if (ModelState.IsValid)
+        //    {
+        //        double time = -1;
 
-                context.Entry(user).State = EntityState.Modified;
-                context.SaveChanges();
+        //        context.Entry(user).State = EntityState.Modified;
+        //        context.SaveChanges();
 
-                string query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = " + user.UserName + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-INSERTED' AND UserName = " + user.UserName + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'"; ;
-                context.Database.ExecuteSqlCommand(query);
+        //        string query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = " + user.UserName + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-INSERTED' AND UserName = " + user.UserName + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'"; ;
+        //        context.Database.ExecuteSqlCommand(query);
 
-                query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = " + user.UserName + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-DELETED' AND UserName = " + user.UserName + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'";
-                context.Database.ExecuteSqlCommand(query);
+        //        query = "UPDATE [dbo].[UsersArch] SET RId = (SELECT RId FROM [dbo].[UsersArch] WHERE TypeOfChange = 'INSERTED' AND UserName = " + user.UserName + "), DBUSer = '" + CurrentUser + "' WHERE TypeOfChange = 'UPDATED-DELETED' AND UserName = " + user.UserName + " AND DateOfChange >= '" + DateTime.Now.AddSeconds(time) + "'";
+        //        context.Database.ExecuteSqlCommand(query);
 
-                query = "UPDATE [dbo].[Resources] SET fsname = '" + user.Name + " " + user.Surname + "' WHERE name = " + user.UserName + "";
-                Appdb.Database.ExecuteSqlCommand(query);
+        //        query = "UPDATE [dbo].[Resources] SET fsname = '" + user.Name + " " + user.Surname + "' WHERE name = " + user.UserName + "";
+        //        Appdb.Database.ExecuteSqlCommand(query);
 
-                return RedirectToAction("WorkerSearch");
-            }
-            return View(user);
-        }
+        //        return RedirectToAction("WorkerSearch");
+        //    }
+        //    return View(user);
+        //}
     }
 }

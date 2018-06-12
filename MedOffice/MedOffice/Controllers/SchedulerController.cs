@@ -17,13 +17,14 @@ using Microsoft.Owin.Security;
 using MedOffice.Models;
 using System.Net;
 using Microsoft.AspNet.Identity.EntityFramework;
+using DayPilot.Web.Mvc.Events.Navigator;
 
 namespace TutorialCS.Controllers
 {
     public class SchedulerController : Controller
     {
         // GET: /Scheduler/id
-        public ActionResult Index(string Id)
+        public ActionResult PartialScheduler(string Id)
         {
             string name = Id;
 
@@ -112,9 +113,12 @@ namespace TutorialCS.Controllers
                 Resources.Clear();
                 foreach (DataRow r in new EventManager().GetResourcesOneUser(ID).Rows)
                 {
-                    Resource res = new Resource((string)r["name"], Convert.ToString(r["id"]));
-                    res.DataItem = r;
-                    Resources.Add(res);
+                    if ((string)r["name"] == ID)
+                    {
+                        Resource res = new Resource((string)r["name"], Convert.ToString(r["id"]));
+                        res.DataItem = r;
+                        Resources.Add(res);
+                    }
                 }
             }
 
@@ -234,7 +238,7 @@ namespace TutorialCS.Controllers
             {
                 if (e.Level == 0)
                 {
-                    e.InnerHtml = String.Format("<span style=\"font - weight: bold\">{0} - {1}</span>", e.Start.Day, e.Start.AddDays(6).ToShortDateString());
+                    e.InnerHtml = String.Format("<span style=\"font - weight: bold\">{0} </span>", e.Start.ToShortDateString());
                 }
 
             }
@@ -242,8 +246,9 @@ namespace TutorialCS.Controllers
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public ActionResult DailyScheduler()
+        public ActionResult FullScheduler(string viewType)
         {
+            ViewBag.Type = viewType;
             return View();
         }
 
@@ -266,6 +271,11 @@ namespace TutorialCS.Controllers
 
                 foreach (DataRow r in new EventManager().GetResources(orderBy).Rows)
                 {
+                    if ((string)r["name"] == "wizyty")
+                    {
+                        continue;
+                    }
+
                     Resource res = new Resource((string)r["name"], Convert.ToString(r["id"]));
 
                     res.DataItem = r;
@@ -400,9 +410,19 @@ namespace TutorialCS.Controllers
 
         public class Dpn : DayPilotNavigator
         {
+            protected override void OnBeforeEventRecurrence(DayPilot.Web.Mvc.Events.Navigator.BeforeEventRecurrenceArgs e)
+            {
+                Events = new EventManager().FilteredData(StartDate, StartDate.AddDays(31)).AsEnumerable();
+
+                DataIdField = "id";
+                DataStartField = "eventstart";
+                DataEndField = "eventend";
+                DataRecurrenceField = "recurrence"; // Nie działa!
+            }
+
             protected override void OnFinish()
             {
-                Events = new EventManager().FilteredData(StartDate, StartDate.AddDays(1)).AsEnumerable();
+                Events = new EventManager().FilteredData(StartDate, StartDate.AddDays(31)).AsEnumerable();
 
                 DataIdField = "id";
                 DataStartField = "eventstart";
