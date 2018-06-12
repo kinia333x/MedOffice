@@ -155,6 +155,7 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Wyszukaj", "AppointmentSearch", "Search", routeValues: null, htmlAttributes: new { id = "searchLink" })</li>
                     <li>@Html.ActionLink("Wyświetl wszystkie", "All", "Appointments", routeValues: null, htmlAttributes: new { id = "patientShowLink" })</li>
                     <li>@Html.ActionLink("Kalendarz wizyt", "Appointments", "Scheduler", routeValues: new { viewType = "week" }, htmlAttributes: new { id = "SchedulerShowLink" })</li>
                     <li>@Html.ActionLink("Zmiany w wizytach", "Changes", "Appointments", routeValues: null, htmlAttributes: new { id = "AppointmentsShowLink" })</li>

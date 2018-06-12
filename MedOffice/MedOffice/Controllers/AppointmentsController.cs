@@ -118,7 +118,7 @@ namespace MedOffice.Controllers
         }
 
         // GET: Appointments
-        [Authorize(Roles = "Administrator, Rejestrujący")]
+        [Authorize(Roles = "Administrator, Kierownik, Rejestrujący, Lekarz")]
         public ActionResult Index()
         {
             return View(db.Appointments.ToList());
@@ -145,7 +145,7 @@ namespace MedOffice.Controllers
 
 
         // GET: Appointments/Details/5
-        [Authorize(Roles = "Administrator, Rejestrujący")]
+        [Authorize(Roles = "Administrator, Kierownik, Rejestrujący,Lekarz")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -487,7 +487,7 @@ namespace MedOffice.Controllers
 
 
         // GET: Appointments/Edit/5
-        [Authorize(Roles = "Administrator, Rejestrujący")]
+        [Authorize(Roles = "Administrator, Kierownik, Rejestrujący, , Lekarz")]
         public ActionResult Edit(int? id)
         {
             List<SelectListItem> Specializations = new List<SelectListItem>()
@@ -606,7 +606,7 @@ namespace MedOffice.Controllers
         // POST: Appointments/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator, Rejestrujący")]
+        [Authorize(Roles = "Administrator,  Kierownik, Rejestrujący, Lekarz")]
         public ActionResult Edit([Bind(Include ="ID,patients_pesel,estim_disease,real_disease,dis_descript,appoint_date,specialization,docs_pesel,service_type,service_name,service_price,is_paid,supplies_price")] Appointment appointment)
         {
 
@@ -753,7 +753,7 @@ namespace MedOffice.Controllers
 
 
         // GET: Appointments/Delete/5
-        [Authorize(Roles = "Administrator, Rejestrujący")]
+        [Authorize(Roles = "Administrator,  Kierownik, Rejestrujący, , Lekarz")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -772,7 +772,7 @@ namespace MedOffice.Controllers
         // POST: Appointments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator, Rejestrujący")]
+        [Authorize(Roles = "Administrator,  Kierownik, Rejestrujący, Lekarz")]
         public ActionResult DeleteConfirmed(int id)
         {
             Appointment appointment = db.Appointments.Find(id);
