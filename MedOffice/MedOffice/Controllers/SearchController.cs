@@ -115,7 +115,7 @@ namespace MedOffice.Controllers
                                             || (x.service_price.ToString() == searching)
                                             || (x.supplies_price.ToString() == searching)
                                             || ((x.supplies_price + x.service_price).ToString() == searching)
-                                            || searching == null);
+                                            || searching == null || searching == "\0");
 
             switch (sortOrder)
             {
