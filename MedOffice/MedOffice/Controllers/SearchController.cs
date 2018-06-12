@@ -115,7 +115,7 @@ namespace MedOffice.Controllers
                                             || (x.service_price.ToString() == searching)
                                             || (x.supplies_price.ToString() == searching)
                                             || ((x.supplies_price + x.service_price).ToString() == searching)
-                                            || searching == null);
+                                            || searching == null || searching == "\0");
 
             switch (sortOrder)
             {
@@ -132,6 +132,23 @@ namespace MedOffice.Controllers
             }
 
             return View(appointmentsList.ToList());
+        }
+
+
+        [Authorize(Roles = "Administrator, Rejestrujący")]
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            AppointmentDBContext db = new AppointmentDBContext();
+            Appointment appointment = db.Appointments.Find(id);
+            if (appointment == null)
+            {
+                return HttpNotFound();
+            }
+            return View(appointment);
         }
 
         // GET: Search/Edit/5

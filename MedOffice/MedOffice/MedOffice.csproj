@@ -383,6 +383,7 @@
     <Content Include="Views\Search\Edit.cshtml" />
     <Content Include="Views\Patients\History.cshtml" />
     <Content Include="Views\Scheduler\DailyScheduler.cshtml" />
+    <Content Include="Views\Search\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

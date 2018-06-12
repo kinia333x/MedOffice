@@ -10,18 +10,14 @@
     <thead>
         <tr>
             <th>Pesel pacjenta</th>
-            <th>Szacowany problem</th>
             <th>Zdiagnozowana choroba</th>
             <th>Opis dolegliwości</th>
             <th>@Html.ActionLink("Data wizyty", "AppointmentSearch", new { sortOrder = ViewBag.DateSortParm })</th>
-            <th>Specjalizacja</th>
             <th>Pesel lekarza</th>
-            <th>Typ usługi</th>
             <th>@Html.ActionLink("Nazwa usługi", "AppointmentSearch", new { sortOrder = ViewBag.NameSortParm })</th>
             <th>@Html.ActionLink("Cena usługi", "AppointmentSearch", new { sortOrder = ViewBag.PriceSortParm })</th>
             <th>@Html.ActionLink("Koszty dodatkowe", "AppointmentSearch", new { sortOrder = ViewBag.AddPriceSortParm })</th>
             <th>@Html.ActionLink("Całkowita cena", "AppointmentSearch", new { sortOrder = ViewBag.TotalPriceSortParm })</th>
-            <th>Czy usługa jest opłacona?</th>
         </tr>
     </thead>
     <tbody>
@@ -39,18 +35,15 @@
             {
             <tr>
                 <td>@item.patients_pesel</td>
-                <td>@item.estim_disease</td>
                 <td>@item.real_disease</td>
                 <td>@item.dis_descript</td>
                 <td>@item.appoint_date</td>
-                <td>@item.specialization</td>
                 <td>@item.docs_pesel</td>
-                <td>@item.service_type</td>
                 <td>@item.service_name</td>
                 <td>@item.service_price</td>
                 <td>@item.supplies_price</td>
                 <td>@(item.supplies_price + item.service_price)</td>
-                <td>@item.is_paid</td>
+                <td>@Html.ActionLink("Szczegóły", "Details", new { id = item.ID })</td>
             </tr>
             }
         }
